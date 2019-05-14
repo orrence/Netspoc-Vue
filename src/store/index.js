@@ -8,11 +8,13 @@ export default new Vuex.Store({
 		loggedIn: false,
 		owners: [],
 		activeOwner: null,
+		history: [],
+		activePolicy: null,
 	},
 	getters: {
 		loggedIn: (state) => {
 			return state.loggedIn;
-		}
+		},
 	},
 	mutations: {
 		setLoggedIn (state, loggedIn) {
@@ -23,22 +25,29 @@ export default new Vuex.Store({
 		},
 		setActiveOwner (state, activeOwner) {
 			state.activeOwner = activeOwner;
+		},
+		setHistory (state, history) {
+			state.history = history;
+		},
+		setActivePolicy (state, policy) {
+			state.activePolicy = policy;
 		}
 	},
 	actions: {
 		setLoggedIn ({ commit }){
-			axios.get('/get_owner')
+			return Vue.axios.get('/set')
 				.then(function (response) {
 					let recurare = response.data.success;
 					commit('setLoggedIn', recurare);
 				})
-				.catch(function (error) {
+				// .catch(function (error) {
+				.catch(function () {
 					commit('setLoggedIn', false);
-					// alert('get_owner for check logged-in status: ' + error);
+					//alert('get_owner for check logged-in status: ' + error);
 				});
 		},
 		getOwners ({ commit }) {
-			axios.get('/get_owners')
+			return Vue.axios.get('/get_owners')
 				.then(function (response) {
 					var recurare = response.data.records;
 					for (var i = 0; i < recurare.length; i++) {
@@ -51,7 +60,7 @@ export default new Vuex.Store({
 				});
 		},
 		getActiveOwner ({ commit }) {
-			axios.get('/get_owner')
+			return Vue.axios.get('/get_owner')
 				.then(function (response) {
 					let recurare = response.data.records[0].name;
 					commit('setActiveOwner', recurare);
@@ -61,7 +70,7 @@ export default new Vuex.Store({
 				});
 		},
 		setActiveOwner ({ commit }, newActiveOwner) {
-			axios.get('/set', {
+			Vue.axios.get('/set', {
 					params: {
 						owner: newActiveOwner
 					}
@@ -75,7 +84,21 @@ export default new Vuex.Store({
 				.catch(function (error) {
 					alert('setActiveOwner: ' + error);
 				});
-
-		}
+		},
+		getHistory ({ commit }) {
+			return Vue.axios.get('/get_history', {
+					params: {
+						active_owner: this.state.activeOwner,
+						history: 'none'
+					}
+				})
+				.then(function (response) {
+					let recurare = response.data.records;
+					commit('setHistory', recurare);
+				})
+				.catch(function (error) {
+					alert('get_history: ' + error);
+				});
+		},
 	}
 });

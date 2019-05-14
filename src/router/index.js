@@ -9,9 +9,26 @@ import Entitlements from '@/components/Entitlements'
 import Login from '@/components/Login'
 import PageNotFound from '@/components/PageNotFound'
 
+import TableTest from '@/components/testkram/MasterTable'
+import LayPlay from '@/components/testkram/LayoutPlayground'
+
 Vue.use(VueRouter)
 
 const routes = [
+	{
+		path: '/test',
+		component: TableTest,
+		meta: {
+			title: 'TableTest'
+		}
+	},
+	{
+		path: '/layplay',
+		component: LayPlay,
+		meta: {
+			title: 'LayPlay'
+		}
+	},
 	{
 		path: '/services',
 		component: Services,
@@ -63,7 +80,17 @@ const router = new VueRouter ({
 
 router.beforeEach ((to, from, next) => {
 	if (!store.state.loggedIn && to.path != '/login') {
-		router.push('/login');
+		// when reloading in browser without this,
+		// the login component and the apptoolbar get 
+		// rendered at the same time (for unkown reason)
+		store.dispatch('setLoggedIn')
+			.then(() => {
+				if (!store.state.loggedIn) {
+					router.push('/login');
+				} else {
+					next();
+				}
+			});
 	} else {
 		next();
 	}
