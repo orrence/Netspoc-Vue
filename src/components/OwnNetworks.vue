@@ -9,7 +9,7 @@
 			</div>
 
 			<div item elevation-4 v-if="selected">
-				<ResourceTable :title="'Enthaltene Ressourcen'" v-bind:active="selected"></ResourceTable>
+				<ResourceTable :title="'Enthaltene Ressourcen'" v-bind:selection="selected"></ResourceTable>
 			</div>
 
 		</v-layout>
@@ -21,72 +21,67 @@ import { mapState } from 'vuex';
 import Tabulator from './tables/Tabulator';
 import ResourceTable from './tables/ResourceTable';
 
-	export default {
-		components: {
-			Tabulator,
-			ResourceTable
-		},
-		data: () => ({
-			networks: {},
-			selected: null,
-			config : {
-				columns: [
-					{ title: 'IP-Addresse', field: 'ip', sorter: 'ip' },
-					{ title: 'Name', field: 'name' },
-					{ title: 'Verantwortungsbereich', field: 'owner' },
-				],
-				data: [],
-				layoutColumnsOnNewData:true,
+export default {
+	components: {
+		Tabulator,
+		ResourceTable
+	},
+	data: () => ({
+		networks: {},
+		selected: null,
+		config : {
+			columns: [
+				{ title: 'IP-Addresse', field: 'ip', sorter: 'ip' },
+				{ title: 'Name', field: 'name' },
+				{ title: 'Verantwortungsbereich', field: 'owner' },
+			],
+			data: [],
+			layoutColumnsOnNewData:true,
+		}
+	}),
+	mounted () {
+		this.getNetworks();
+	},
+	computed: mapState(['active']),
+	watch : {
+		active: {
+			deep: true,
+			handler () {
+				this.getNetworks();
+				this.selected = null;
 			}
-		}),
-		mounted () {
-			this.getNetworks();
+		}
+	},
+	methods: {
+		getConfig: function () {
+			var c = this.config;
+			c.rowClick = function(e, row) {
+				this.selected = row.getData().name;
+			}.bind(this);
+			return c;
 		},
-		computed: mapState(['activeOwner', 'activePolicy']),
-		watch : {
-			activeOwner (val, oldVal) {
-				if (val !== oldVal) {
-					this.getNetworks();
-					this.selected = null;
-				}
-			},
-			activePolicy (val, oldVal) {
-				if (val !== oldVal) {
-					this.getNetworks();
-					this.selected = null;
-				}
+		getNetworks () {
+			var vm = this;	// get vue instance
+			if (!vm.active.owner) {
+				return;
 			}
-		},
-		methods: {
-			getConfig: function () {
-				var c = this.config;
-				c.rowClick = function(e, row) {
-					this.selected = row.getData().name;
-				}.bind(this);
-				return c;
-			},
-			getNetworks () {
-				var vm = this;	// get vue instance
-				if (!vm.activeOwner || !vm.activePolicy) {
-					return;
+			vm.axios.get('/get_networks', {
+				params: {
+					chosen_networks: '',
+					active_owner: vm.active.owner,
+					history: vm.active.policy.date
 				}
-				vm.axios.get('/get_networks', {
-					params: {
-						chosen_networks: '',
-						active_owner: vm.activeOwner,
-						history: vm.activePolicy.date
-					}
-				}).then(function (response) {
-					vm.networks = response.data.records;
-					vm.config.data = response.data.records;
-				}).catch(function (error) {
-					vm.networks = {};
-					vm.config.data = {};
-					alert('get_networks: ' + error);
-				});
-			}
-    }
-  }
+			}).then(function (response) {
+				vm.networks = response.data.records;
+				vm.config.data = response.data.records;
+			}).catch(function (error) {
+				vm.networks = {};
+				vm.config.data = {};
+				alert('get_networks: ' + error);
+			});
+		}
+   }
+ }
 </script>
 
 <style>

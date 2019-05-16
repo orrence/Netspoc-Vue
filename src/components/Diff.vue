@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import comboPolicyCompare from './combos/PolicyCompare';
 import diffTree from './DiffTree';
 
@@ -32,30 +33,23 @@ export default {
 		this.getOlderPolicies()
 	},
 	watch : {
-		activePolicy (val, oldVal) {
+		'active.policy' (val, oldVal) {
 			if (val !== oldVal) {
 				this.getOlderPolicies();
 				this.oldPolicy = '';
 			}
 		}
 	},
-	computed: {
-		history () {
-			return this.$store.state.history;
-		},
-		activePolicy () {
-			return this.$store.state.activePolicy;
-		}
-	},
+	computed: mapState(['history', 'active']),
 	methods: {
 		updateOldPolicy (value) {
 			this.oldPolicy = value.date;
 		},
 		getOlderPolicies () {
-			if (!this.activePolicy) {
+			if (!this.active.policy) {
 				return;
 			}
-			var active = this.$store.state.activePolicy.date;
+			var active = this.active.policy.date;
 			var newOld = [];
 			for (let i = 0; i < this.history.length; i++) {
 				if (active > this.history[i].date) {

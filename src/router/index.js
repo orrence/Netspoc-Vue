@@ -11,6 +11,7 @@ import PageNotFound from '@/components/PageNotFound'
 
 import TableTest from '@/components/testkram/MasterTable'
 import LayPlay from '@/components/testkram/LayoutPlayground'
+import StoreTest from '@/components/testkram/StoreTest'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,13 @@ const routes = [
 		component: LayPlay,
 		meta: {
 			title: 'LayPlay'
+		}
+	},
+	{
+		path: '/storetest',
+		component: StoreTest,
+		meta: {
+			title: 'StoreTest'
 		}
 	},
 	{

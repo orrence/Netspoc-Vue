@@ -7,9 +7,11 @@ export default new Vuex.Store({
 	state: {
 		loggedIn: false,
 		owners: [],
-		activeOwner: null,
 		history: [],
-		activePolicy: null,
+		active: {
+			owner: null,
+			policy: null
+		}
 	},
 	getters: {
 		loggedIn: (state) => {
@@ -23,14 +25,14 @@ export default new Vuex.Store({
 		setOwners (state, owners) {
 			state.owners = owners;
 		},
-		setActiveOwner (state, activeOwner) {
-			state.activeOwner = activeOwner;
+		setActive (state, active) {
+			state.active = active;
 		},
 		setHistory (state, history) {
 			state.history = history;
 		},
-		setActivePolicy (state, policy) {
-			state.activePolicy = policy;
+		setActivePolicy (state, activePolicy) {
+			state.active.policy = activePolicy;
 		}
 	},
 	actions: {
@@ -40,10 +42,8 @@ export default new Vuex.Store({
 					let recurare = response.data.success;
 					commit('setLoggedIn', recurare);
 				})
-				// .catch(function (error) {
 				.catch(function () {
 					commit('setLoggedIn', false);
-					//alert('get_owner for check logged-in status: ' + error);
 				});
 		},
 		getOwners ({ commit }) {
@@ -59,36 +59,55 @@ export default new Vuex.Store({
 					alert('get_owners: ' + error);
 				});
 		},
-		getActiveOwner ({ commit }) {
+		getActive ({ commit, dispatch, state}) {
 			return Vue.axios.get('/get_owner')
 				.then(function (response) {
-					let recurare = response.data.records[0].name;
-					commit('setActiveOwner', recurare);
+					let newActiveOwner = response.data.records[0].name;
+					dispatch('getHistory', newActiveOwner)
+					.then( () => {
+						commit('setActive', 
+						{
+							owner: newActiveOwner, 
+							policy: state.history[0]
+						});
+					})
+						.catch(function (error) {
+							alert('get_history in setActive: ' + error);
+						});
 				})
 				.catch(function (error) {
 					alert('get_owner: ' + error);
 				});
 		},
-		setActiveOwner ({ commit }, newActiveOwner) {
+		setActive ({ commit, dispatch, state}, newActiveOwner) {
 			Vue.axios.get('/set', {
 					params: {
 						owner: newActiveOwner
 					}
 				})
 				.then(function (response) {
-					let recurare = response.data.success;
-					if(recurare){
-						commit('setActiveOwner', newActiveOwner);
+					if(response.data.success){
+						dispatch('getHistory', newActiveOwner)
+						.then( () => {
+							commit('setActive', 
+							{
+								owner: newActiveOwner, 
+								policy: state.history[0]
+							});
+						})
+							.catch(function (error) {
+								alert('get_history in setActive: ' + error);
+							});
 					}
 				})
 				.catch(function (error) {
 					alert('setActiveOwner: ' + error);
 				});
 		},
-		getHistory ({ commit }) {
+		getHistory ({ commit }, owner) {
 			return Vue.axios.get('/get_history', {
 					params: {
-						active_owner: this.state.activeOwner,
+						active_owner: owner || this.state.active.owner,
 						history: 'none'
 					}
 				})

@@ -1,13 +1,8 @@
 <template>
 <v-flex>
   <div v-if="title">
-    <!-- 
-    <v-toolbar>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-    </v-toolbar> 
-    -->
     <v-card>
-      <v-tab>{{ title }}</v-tab>
+      <h2>{{ title }}</h2>
       <slot></slot>
     </v-card>
   </div>

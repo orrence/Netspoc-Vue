@@ -15,9 +15,10 @@ export default {
   data: () => ({
     config : {
       columns: [
-        { title: 'IP-Addresse', field: 'ip', sorter: 'ip' },
-        { title: 'Name', field: 'name' },
-        { title: 'Verantwortungsbereich', field: 'owner' },
+        { title: 'Aktion', field: 'action' },
+        { title: 'Quelle', field: 'src', sorter: 'ip'},
+        { title: 'Ziel', field: 'dst', sorter: 'ip' },
+        { title: 'Protokoll', field: 'prt' },
       ],
       data: [],
       layoutColumnsOnNewData:true,
@@ -26,17 +27,23 @@ export default {
   computed: mapState(['active']),
   watch: {
     selection: function () {
-      this.getHosts()
+      this.getRules();
+      // this.getAdmins();
+      // this.getUsers();
     }
   },
   methods: {
-    getHosts: function () {
+    getRules: function () {
       var vm = this;	// get vue instance
-      vm.axios.get('/get_hosts', {
+      vm.axios.get('/get_rules', {
         params: {
-          network: vm.selection,
+          expand_users: 1,
+          display_property: 'ip',
+          filter_rules: 1,
           active_owner: vm.active.owner,
-          history: vm.active.policy.date
+          history: vm.active.policy.date,
+          chosen_networks: '',
+          service: this.selection
         }})
         .then(function (response) {
             vm.config.data = response.data.records;

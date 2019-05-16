@@ -1,6 +1,12 @@
 <template>
 <v-toolbar v-if="loggedIn" app>
 
+  <router-link to="/services">
+    <v-btn flat>
+      <span>Dienste</span>
+    </v-btn>
+  </router-link>
+ 
   <router-link to="/networks">
     <v-btn flat>
       <span>Netze</span>
@@ -12,17 +18,18 @@
       <span>Diff</span>
     </v-btn>
   </router-link>
-<!--
-  <router-link to="/entitlements">
+
+  <router-link to="/storetest">
     <v-btn flat>
-      <span>Berechtigungen</span>
+      <span>StoreTest</span>
     </v-btn>
   </router-link>
- -->
   <v-spacer></v-spacer>
 
+  <v-spacer></v-spacer>
+  
   <combo-policy></combo-policy>
-  <!-- <v-spacer/> -->
+  +
   <combo-owner></combo-owner>
 
   <v-btn @click="logout">logout</v-btn>
@@ -55,7 +62,7 @@ export default {
       ).then(function (response) {
         vm.networks = response.data.records;
       }).catch(function (error) {
-        alert('get_networks: ' + error);
+        alert('logout: ' + error);
       });
       vm.$store.dispatch('setLoggedIn');
       vm.$router.push('/login');
@@ -63,3 +70,7 @@ export default {
   }
 }
 </script>
+
+<style>
+  a { text-decoration: none; }
+</style>

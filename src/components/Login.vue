@@ -42,36 +42,20 @@ export default {
     submit () {
       var vm = this;
       if (vm.email) {
-        if (vm.password) {
-          vm.axios.post(`/login?email=${vm.email}&pass=${vm.email}&app=foo`, 
-            { 
-              crossdomain: true, 
-              maxRedirects: 5 
-            })
-            .then(function (response) {
-              vm.valid = /Unknown\spath/.test(response.data);
-              vm.clear();
-              if (vm.valid) vm.$router.push('/networks');
-            })
-            .catch(function (error) {
-              alert('login: ' + error);
-              vm.valid = false;
-            });
-        } else {
-          vm.axios.post(`/login?email=${vm.email}&app=foo`, 
-            { 
-              crossdomain: true, 
-              maxRedirects: 5 
-            })
-            .then(function (response) {
-              vm.valid = /Unknown\spath/.test(response.data);
-              vm.clear();
-              if (vm.valid) vm.$router.push('/networks');
-            }).catch(function (error) {
-              alert('login: ' + error);
-              vm.valid = false;
-            });
-        }
+        vm.axios.post(`/login?email=${vm.email}&pass=${vm.email}&app=foo`, 
+          { 
+            crossdomain: true, 
+            maxRedirects: 5 
+          })
+          .then(function (response) {
+            vm.valid = /Unknown\spath/.test(response.data);
+            vm.clear();
+            if (vm.valid) vm.$router.push('/networks');
+          })
+          .catch(function (error) {
+            alert('login: ' + error);
+            vm.valid = false;
+          });
       }
       else {
         vm.valid = false;

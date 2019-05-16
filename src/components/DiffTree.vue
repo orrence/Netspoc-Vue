@@ -18,7 +18,7 @@ export default {
 	data: () => ({
 		tree: null
 	}),
-	computed: mapState(['activeOwner', 'activePolicy']),
+	computed: mapState(['active']),
 	mounted () {
 		this.getDiff();
 	},
@@ -28,17 +28,16 @@ export default {
 		},
 		getDiff () {
 			var vm = this;	// get vue instance
-			if (!vm.activeOwner || !vm.activePolicy) {
+			if (!vm.active.owner) {
 				return;
 			}
 			vm.axios.get('/get_diff', {
 				params: {
-					active_owner: vm.$store.state.activeOwner,
-					history: vm.$store.state.activePolicy.date,
+					active_owner: vm.active.owner,
+					history: vm.active.policy.date,
 					version: vm.oldPolicy
 				}
 			}).then(function (response) {
-				console.log(response.data);
 				vm.tree = response.data;
 			}).catch(function (error) {
 				vm.tree = {};

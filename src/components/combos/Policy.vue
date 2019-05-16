@@ -1,9 +1,9 @@
 <template>
-<v-flex xs2 v-if="loaded">
+<v-flex xs2>
   <v-combobox
     label="Policy"
-    v-model="activePolicy"
-    :items="policies"
+    v-model="policy"
+    :items="history"
     item-text="date"
     return-object
     full-width
@@ -15,37 +15,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'combo-policy',
-  data: () => ({
-    loaded: false
-  }),
   computed: {
-    policies () {
-      return this.$store.state.history;
-    },
-    activePolicy: {
-      get () {
-        return this.$store.state.activePolicy;   
-      },
-      set (newValue) {
-        this.$store.commit('setActivePolicy', newValue);
-      }
+    ...mapState({ history: 'history' }),
+    policy: {
+      get () { return this.$store.state.active.policy; },
+      set (val) { this.$store.commit('setActivePolicy', val); }
     }
-  },
-  mounted () {
-    this.$store.dispatch('getActiveOwner')
-      .then(() => {
-        this.$store.dispatch('getHistory')
-        .then(() => {
-          this.loaded = true;
-          if (!this.activePolicy) {
-            this.activePolicy = this.policies[0];
-          }
-        }); 
-      });
-  },
-  methods:  {
   }
 }
 </script>

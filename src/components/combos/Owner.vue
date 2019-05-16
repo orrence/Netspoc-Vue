@@ -21,17 +21,11 @@ export default {
   }),
   computed: {
     select: {
-      get () {
-        return this.$store.state.activeOwner;
-      },
-      set (newValue) {
-        this.$store.dispatch('setActiveOwner', newValue);
-      }
+      get () { return this.$store.state.active.owner; },
+      set (val) { this.$store.dispatch('setActive', val); }
     },
     owners: {
-      get () {
-        return this.$store.state.owners;
-      }
+      get () { return this.$store.state.owners; }
     }
   },
   mounted () {
@@ -39,7 +33,7 @@ export default {
       .then(() => {
         this.loadedOwner = true;
       });
-    this.$store.dispatch('getActiveOwner')
+    this.$store.dispatch('getActive')
       .then(() => {
         this.loadedActiveOwner = true;
       });
