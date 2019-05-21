@@ -47,8 +47,9 @@ export default {
 		active: {
 			deep: true,
 			handler () {
-				this.getNetworks();
+				this.networks = {};
 				this.selected = null;
+				this.getNetworks();
 			}
 		}
 	},

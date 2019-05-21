@@ -3,9 +3,9 @@
     <app-toolbar></app-toolbar>
     <v-content>
       <v-container>
-        <keep-alive>
+        <!-- <keep-alive> -->
           <router-view/>
-        </keep-alive>
+        <!-- </keep-alive> -->
       </v-container>
     </v-content>
   </v-app>

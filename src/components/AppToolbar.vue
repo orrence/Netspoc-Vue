@@ -19,18 +19,10 @@
     </v-btn>
   </router-link>
 
-  <router-link to="/storetest">
-    <v-btn flat>
-      <span>StoreTest</span>
-    </v-btn>
-  </router-link>
-  <v-spacer></v-spacer>
-
   <v-spacer></v-spacer>
   
-  <combo-policy></combo-policy>
-  +
-  <combo-owner></combo-owner>
+  <combo-policy class="mx-1"></combo-policy>
+  <combo-owner class="mx-1"></combo-owner>
 
   <v-btn @click="logout">logout</v-btn>
 </v-toolbar>

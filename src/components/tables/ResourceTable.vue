@@ -26,8 +26,11 @@ export default {
   computed: mapState(['active']),
   watch: {
     selection: function () {
-      this.getHosts()
+      this.getHosts();
     }
+  },
+  mounted () {
+    this.getHosts();
   },
   methods: {
     getHosts: function () {

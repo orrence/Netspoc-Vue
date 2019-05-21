@@ -32,6 +32,9 @@ export default {
       // this.getUsers();
     }
   },
+  mounted () {
+    this.getRules();
+  },
   methods: {
     getRules: function () {
       var vm = this;	// get vue instance

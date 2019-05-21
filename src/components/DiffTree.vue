@@ -1,6 +1,9 @@
 <template>
 <v-container >
-	{{ printPlain() }}
+	<v-treeview 
+		:items="bTree"
+		open-all
+	></v-treeview>
 </v-container>
 </template>
 
@@ -16,15 +19,41 @@ export default {
 		}
 	},
 	data: () => ({
-		tree: null
+		bTree: [],
+		ic: 0
 	}),
 	computed: mapState(['active']),
 	mounted () {
 		this.getDiff();
 	},
 	methods: {
-		printPlain () {
-			return this.tree;
+		morphTree (backendTree) {
+			if (backendTree.length == 0) { return; }
+			for (let i = 0; i < backendTree.length; i++){ 
+				Object.defineProperty(
+					backendTree[i], 'id', {
+						value: this.ic++,
+						writable: false
+						}
+					); 
+				if (backendTree[i].text) {
+					Object.defineProperty(
+						backendTree[i], 'name',
+						Object.getOwnPropertyDescriptor(backendTree[i], "text")
+						);
+				} else {
+					Object.defineProperty(
+						backendTree[i], 'name',
+						Object.getOwnPropertyDescriptor(backendTree[i], "iconCls")
+						);
+				}
+				
+				delete backendTree[i]["text"];
+
+				if (!backendTree[i].leaf) {
+					this.morphTree(backendTree[i].children);
+				}
+			}
 		},
 		getDiff () {
 			var vm = this;	// get vue instance
@@ -38,9 +67,10 @@ export default {
 					version: vm.oldPolicy
 				}
 			}).then(function (response) {
-				vm.tree = response.data;
+				vm.bTree = response.data;
+				vm.morphTree(vm.bTree);
 			}).catch(function (error) {
-				vm.tree = {};
+				vm.bTree = [];
 				alert('get_networks: ' + error);
 			});
 		}

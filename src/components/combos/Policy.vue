@@ -1,5 +1,5 @@
 <template>
-<v-flex xs2>
+<v-flex id="combo_policy" xs2>
   <v-combobox
     label="Policy"
     v-model="policy"

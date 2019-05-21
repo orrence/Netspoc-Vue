@@ -2,11 +2,11 @@
 <v-container>
 	
 	<v-card v-if="olderPolicies.length > 0">
-		<v-tab>Compare with {{olderPolicies.length}} older policies</v-tab>
+		<h3>Compare with {{olderPolicies.length}} older policies</h3>
 		<combo-policy-compare :history="olderPolicies" :updateFunc="updateOldPolicy"></combo-policy-compare>  
 	</v-card>
 	<v-card v-else>
-		<div>No older policies found.</div>
+		<h1>No older policies found.</h1>
 	</v-card>
 	<br/>
 	<v-card>

@@ -2,14 +2,17 @@
 	<v-container tableContainer>
 		<v-layout fill-height justify-space-between>
 
-			<div item elevation-4 v-if="Object.keys(networks).length > 0">
+			<div item elevation-4 v-if="Object.keys(services).length > 0">
 				<Tabulator :title="'Eigene'" :config="getConfig()">
 				<!-- hier kann zeug rein -->
 				</Tabulator> 
 			</div>
 
 			<div item elevation-4 v-if="selected">
-				<DetailsTable :title="'Details zum Dienst'" v-bind:selection="selected"></DetailsTable>
+				<DetailsTable 
+					:title="'Details zum Dienst'" 
+					v-bind:selection="selected"
+				></DetailsTable>
 			</div>
 
 		</v-layout>
@@ -27,7 +30,7 @@ import DetailsTable from './tables/DetailsTable';
 			DetailsTable
 		},
 		data: () => ({
-			networks: {},
+			services: {},
 			selected: null,
 			config : {
 				columns: [
@@ -45,8 +48,9 @@ import DetailsTable from './tables/DetailsTable';
 			active: {
 				deep: true,
 				handler () {
-					this.getServices();
+					this.services = {};
 					this.selected = null;
+					this.getServices();
 				}
 			}
 		},
@@ -71,10 +75,10 @@ import DetailsTable from './tables/DetailsTable';
 						relation: 'owner'
 					}
 				}).then(function (response) {
-					vm.networks = response.data.records;
+					vm.services = response.data.records;
 					vm.config.data = response.data.records;
 				}).catch(function (error) {
-					vm.networks = {};
+					vm.services = {};
 					vm.config.data = {};
 					alert('service_list: ' + error);
 				});
