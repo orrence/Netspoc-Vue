@@ -8,7 +8,6 @@
     return-object
     full-width
     box
-    background-color="grey darken-3"
     color="orange"
   ></v-combobox>
 </v-flex>

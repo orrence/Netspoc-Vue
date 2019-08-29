@@ -1,6 +1,17 @@
 <template>
-  <v-app dark>
-    <app-toolbar></app-toolbar>
+  <v-app :dark="dark">
+    <app-toolbar>
+      <v-switch 
+      append-icon
+      v-model="dark"
+      color="orange"
+      >
+        <template v-slot:label>
+          <v-icon v-if="dark" color="pink">favorite</v-icon>
+          <v-icon v-else large>invert_colors</v-icon>
+        </template>
+      </v-switch>
+    </app-toolbar>
     <v-content>
       <v-container>
         <!-- <keep-alive> -->
@@ -19,10 +30,8 @@ export default {
   components: {
     AppToolbar
   },
-  data () {
-    return {
-      //
-    }
-  }
+  data: () => ({
+    dark: true
+  })
 }
 </script>

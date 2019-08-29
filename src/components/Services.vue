@@ -58,7 +58,7 @@ import DetailsTable from './tables/DetailsTable';
 			getConfig: function () {
 				var c = this.config;
 				c.rowClick = function(e, row) {
-					this.selected = row.getData().name;
+					this.selected = row.getData();
 				}.bind(this);
 				return c;
 			},

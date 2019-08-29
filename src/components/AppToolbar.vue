@@ -19,10 +19,14 @@
     </v-btn>
   </router-link>
 
-  <v-spacer></v-spacer>
+  <v-spacer/>
   
   <combo-policy class="mx-1"></combo-policy>
   <combo-owner class="mx-1"></combo-owner>
+
+  <v-layout align-center>
+    <slot/>
+  </v-layout>
 
   <v-btn @click="logout">logout</v-btn>
 </v-toolbar>
