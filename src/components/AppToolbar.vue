@@ -1,19 +1,27 @@
 <template>
 <v-toolbar v-if="loggedIn" app>
 
-  <router-link to="/services">
+  <router-link 
+  to="/services"
+  id="rl_services">
     <v-btn flat>
       <span>Dienste</span>
     </v-btn>
   </router-link>
  
-  <router-link to="/networks">
+  <router-link 
+  to="/networks"
+  id="rl_networks"
+  >
     <v-btn flat>
       <span>Netze</span>
     </v-btn>
   </router-link>
  
-  <router-link to="/diff">
+  <router-link 
+  to="/diff"
+  id="rl_diff"
+  >
     <v-btn flat>
       <span>Diff</span>
     </v-btn>
@@ -21,14 +29,16 @@
 
   <v-spacer/>
   
-  <combo-policy class="mx-1"></combo-policy>
-  <combo-owner class="mx-1"></combo-owner>
+  <combo-policy id="comb_policy" class="mx-1"/>
+  <combo-owner id="comb_owner" class="mx-1"/>
 
-  <v-layout align-center>
+  <v-spacer></v-spacer>
+
+  <v-layout>
     <slot/>
   </v-layout>
 
-  <v-btn @click="logout">logout</v-btn>
+  <v-btn id="btn_logout" @click="logout">logout</v-btn>
 </v-toolbar>
 </template>
 

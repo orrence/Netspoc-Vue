@@ -1,49 +1,80 @@
 <template>
 <v-container>
 	
-	<v-card v-if="olderPolicies.length > 0">
-		<h3>Compare with {{olderPolicies.length}} older policies</h3>
-		<combo-policy-compare :history="olderPolicies" :updateFunc="updateOldPolicy"></combo-policy-compare>  
-	</v-card>
-	<v-card v-else>
-		<h1>No older policies found.</h1>
-	</v-card>
+	<h3>Vergleiche den ausgewählten Stand mit einem älteren</h3>
 	<br/>
+
+	<v-card v-if="olderPolicies.length > 0">		
+		<v-card-text v-if="olderPolicies.length == 1">
+			1 älterer Stand verfügbar.
+		</v-card-text>
+		<v-card-text v-else>
+			{{olderPolicies.length}} ältere Stände verfügbar.
+		</v-card-text>
+
+		<v-combobox v-if="olderPolicies.length > 0"
+    label="Vergleichsstand"
+    :items="olderPolicies"
+    v-model="oldPolicy"
+    item-text="date"
+    return-object
+    full-width
+    box
+    color="orange"
+  ></v-combobox>
+	</v-card>
+
+	<v-card else>
+		<v-card-text>Keine älteren Stände verfügbar.</v-card-text>
+	</v-card>
+
+	<br/>
+	
 	<v-card>
-		<diff-tree v-if="oldPolicy" :oldPolicy="oldPolicy"></diff-tree>
+		<diff-tree v-if="!isEmpty(oldPolicy)" :oldPolicy="oldPolicy.date"></diff-tree>
 	</v-card>
 </v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import comboPolicyCompare from './combos/PolicyCompare';
 import diffTree from './DiffTree';
 
 export default {
 	components: {
-		comboPolicyCompare,
 		diffTree
 	},
 	data: () => ({
 		olderPolicies: [],
-		oldPolicy: ''
+		oldPolicy: null
 	}),
 	mounted () {
-		this.getOlderPolicies()
+		this.getOlderPolicies();
 	},
 	watch : {
 		'active.policy' (val, oldVal) {
 			if (val !== oldVal) {
 				this.getOlderPolicies();
-				this.oldPolicy = '';
+
+				if (this.olderPolicies.length > 0) {
+					this.oldPolicy = this.olderPolicies[0];
+				} else {
+					this.oldPolicy = null;
+				}
 			}
 		}
 	},
 	computed: mapState(['history', 'active']),
 	methods: {
-		updateOldPolicy (value) {
-			this.oldPolicy = value.date;
+		isEmpty(obj) {
+			for(var prop in obj) {
+				if(obj.hasOwnProperty(prop))
+					return false;
+			}
+			return true;
+		},
+		childMessageReceived (newSelected) {
+			this.oldPolicy = newSelected;
 		},
 		getOlderPolicies () {
 			if (!this.active.policy) {
