@@ -2,15 +2,17 @@
 	<v-container tableContainer>
 		<v-layout fill-height justify-space-between>
 
-			<div item elevation-4 v-if="Object.keys(networks).length > 0">
-				<Tabulator :title="'Netzauswahl'" :config="getConfig()">
-				<!-- hier kann zeug rein -->
+			<v-container item>
+				<h2>Netzauswahl</h2>
+				<Tabulator v-if="Object.keys(networks).length > 0" :config="getConfig()">
 				</Tabulator> 
-			</div>
+			</v-container>
 
-			<div item elevation-4 v-if="selected">
-				<ResourceTable :title="'Enthaltene Ressourcen'" v-bind:selection="selected"></ResourceTable>
-			</div>
+			<v-container item>
+				<h2>Enthaltene Ressourcen</h2>
+				<ResourceTable v-if="selected" :selection="selected">
+				</ResourceTable>
+			</v-container>
 
 		</v-layout>
 	</v-container>

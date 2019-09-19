@@ -1,11 +1,5 @@
 <template>
 <v-flex>
-  <div v-if="title">
-    <v-card>
-      <h2>{{ title }}</h2>
-      <slot></slot>
-    </v-card>
-  </div>
   <div ref="table" class="mytable"></div>
 </v-flex>
 </template>
@@ -15,7 +9,7 @@
 import Tabulator from 'tabulator-tables';
 
 export default {
-  props: ['config', 'title'],
+  props: ['config'],
   data: () => ({
     tabulator: null, //variable to hold your table
   }),

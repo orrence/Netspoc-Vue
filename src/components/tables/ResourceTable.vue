@@ -1,6 +1,6 @@
 <template>
 <div>
-  <Tabulator :title="title" :config="config"></Tabulator>
+  <Tabulator :config="config"></Tabulator>
 </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   components: {
     Tabulator,
   },
-  props:['selection', 'title'],
+  props:['selection'],
   data: () => ({
     config : {
       columns: [
