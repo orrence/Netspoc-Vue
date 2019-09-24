@@ -1,10 +1,10 @@
 <template>
-<v-toolbar v-if="loggedIn" app>
+<v-app-bar v-if="loggedIn" app>
 
   <router-link 
   to="/services"
   id="rl_services">
-    <v-btn flat>
+    <v-btn text>
       <span>Dienste</span>
     </v-btn>
   </router-link>
@@ -13,7 +13,7 @@
   to="/networks"
   id="rl_networks"
   >
-    <v-btn flat>
+    <v-btn text>
       <span>Netze</span>
     </v-btn>
   </router-link>
@@ -22,7 +22,7 @@
   to="/diff"
   id="rl_diff"
   >
-    <v-btn flat>
+    <v-btn text>
       <span>Diff</span>
     </v-btn>
   </router-link>
@@ -39,7 +39,7 @@
   </v-layout>
 
   <v-btn id="btn_logout" @click="logout">logout</v-btn>
-</v-toolbar>
+</v-app-bar>
 </template>
 
 <script>

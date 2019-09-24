@@ -3,7 +3,7 @@
   <h1>Netspoc-Web</h1>
   
   <v-card
-  :loading="true"
+  :loading="false"
   class="mx-auto"
   > 
 
@@ -77,6 +77,8 @@ export default {
     submit () {
       var vm = this;
 
+      vm.loading = true;
+
       // TODO: change "/login" to "/ldap_login_or_something" if login is not an email
 
       if (vm.login) {
@@ -87,12 +89,14 @@ export default {
           })
           .then(function (response) {
             vm.valid = /Unknown\spath/.test(response.data);
+            vm.loading = false;
             vm.clear();
             if (vm.valid) vm.$router.push('/networks');
           })
           .catch(function (error) {
             alert('login: ' + error);
             vm.valid = false;
+            vm.loading = false;
           });
       }
       else {

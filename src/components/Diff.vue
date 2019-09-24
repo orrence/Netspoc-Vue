@@ -19,7 +19,7 @@
     item-text="date"
     return-object
     full-width
-    box
+    filled
     color="orange"
   ></v-combobox>
 	</v-card>

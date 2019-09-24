@@ -1,13 +1,13 @@
 <template>
-<v-flex id="combo_policy" xs2>
+<v-flex xs2>
   <v-combobox
+    id="combo_policy"
     label="Policy"
     v-model="policy"
     :items="history"
     item-text="date"
     return-object
-    full-width
-    box
+    filled
     color="orange"
   ></v-combobox>
 </v-flex>

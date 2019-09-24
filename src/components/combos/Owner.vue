@@ -4,8 +4,7 @@
     label="Owner"
     v-model="select"
     :items="owners"
-    full-width
-    box
+    filled
     color="orange"
   ></v-combobox>
 </v-flex>

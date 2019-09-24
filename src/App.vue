@@ -1,10 +1,11 @@
 <template>
-  <v-app :dark="dark">
+  <!-- <v-app :dark="dark"> -->
+  <v-app dark>
     <app-toolbar>
-      <v-btn icon @click="invert">
+      <!-- <v-btn icon @click="invert">
         <v-icon v-if="dark" color="pink">favorite</v-icon>
         <v-icon v-else>invert_colors</v-icon>
-      </v-btn>
+      </v-btn> -->
     </app-toolbar>
     <v-content>
       <v-container>

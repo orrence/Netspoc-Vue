@@ -1,14 +1,15 @@
 <template>
 	<v-container tableContainer>
-		<v-expansion-panel>
-			<v-expansion-panel-content>
-				<template v-slot:actions>
-					<v-icon>search</v-icon>
-				</template>
-				<template v-slot:header>
-					<div>Suche</div>
-				</template>
-				<v-card>
+		<v-expansion-panels>	
+			<v-expansion-panel>
+				<v-expansion-panel-header 
+				>
+					Suche
+					<template v-slot:actions>
+						<v-icon color="teal">search</v-icon>
+					</template>
+				</v-expansion-panel-header>
+				<v-expansion-panel-content>
 					<v-tabs 
 					v-model="tab_search"
 					:height="20"
@@ -20,7 +21,7 @@
 					</v-tabs>
 					<v-tabs-items v-model="tab_search">
 						<v-tab-item>
-							Wonach soll gesucht werden?
+							<v-subheader>Wonach soll gesucht werden?</v-subheader>
 							<v-text-field label="IP 1" v-model="txtf_search_ip1" id="txtf_search_ip1"></v-text-field>
 							<v-text-field label="IP 2" v-model="txtf_search_ip2" id="txtf_search_ip2"></v-text-field>
 							<v-text-field label="Protokoll" v-model="txtf_search_proto" id="txtf_search_proto"></v-text-field>
@@ -41,7 +42,7 @@
 						</v-tab-item>
 				
 						<v-tab-item>
-							Suchbegriff
+							<v-subheader>Suchbegriff</v-subheader>
 							<v-text-field label="Suchbegriff" id="txtf_search_string"></v-text-field>
 							<v-checkbox 
 							v-model="cb_search_description"
@@ -50,7 +51,7 @@
 						</v-tab-item>
 					</v-tabs-items>
 				
-					In welchen Diensten suchen?
+					<v-subheader>In welchen Diensten suchen?</v-subheader>
 					<v-layout row wrap>
 						<v-checkbox 
 						v-model="cb_search_own"
@@ -70,7 +71,7 @@
 						></v-checkbox>
 					</v-layout>
 				
-					Allgemeine Optionen
+					<v-subheader>Allgemeine Optionen</v-subheader>
 					<v-layout row wrap>				
 						<v-checkbox 
 						v-model="cb_search_case_sensitive"
@@ -83,9 +84,9 @@
 					</v-layout>
 				
 					<v-btn color="success" @click="refreshOpenedTabs">suchen</v-btn>
-				</v-card>
-			</v-expansion-panel-content>
-		</v-expansion-panel>
+				</v-expansion-panel-content>
+			</v-expansion-panel>
+		</v-expansion-panels>
 		<v-layout fill-height justify-space-between>
 
 			<v-container item	>

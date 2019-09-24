@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import router from './router'
 import store from './store'
+import vuetify from './plugins/vuetify';
 
 import './plugins/axios'
-import './plugins/vuetify'
+// import './plugins/vuetify'
 
+import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 import 'tabulator-tables/dist/css/tabulator.min.css'
 import Tabulator from 'tabulator-tables';
 
 import App from './App.vue'
+
 
 Tabulator.prototype.extendModule("sort", "sorters", {
     ip:function(a, b){
@@ -29,12 +32,11 @@ Tabulator.prototype.extendModule("sort", "sorters", {
 });
 
 
-
-
 Vue.config.productionTip = true
 
 new Vue({
 	router,
 	store,
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')
