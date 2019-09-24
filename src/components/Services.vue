@@ -1,8 +1,91 @@
 <template>
 	<v-container tableContainer>
-		<v-card>
-			Search
-		</v-card>
+		<v-expansion-panel>
+			<v-expansion-panel-content>
+				<template v-slot:actions>
+					<v-icon>search</v-icon>
+				</template>
+				<template v-slot:header>
+					<div>Suche</div>
+				</template>
+				<v-card>
+					<v-tabs 
+					v-model="tab_search"
+					:height="20"
+					slider-color="teal"
+					grow
+					>
+						<v-tab>Ende-zu-Ende</v-tab>
+						<v-tab>Allgemein</v-tab>
+					</v-tabs>
+					<v-tabs-items v-model="tab_search">
+						<v-tab-item>
+							Wonach soll gesucht werden?
+							<v-text-field label="IP 1" v-model="txtf_search_ip1" id="txtf_search_ip1"></v-text-field>
+							<v-text-field label="IP 2" v-model="txtf_search_ip2" id="txtf_search_ip2"></v-text-field>
+							<v-text-field label="Protokoll" v-model="txtf_search_proto" id="txtf_search_proto"></v-text-field>
+							<v-layout row wrap>
+								<v-checkbox 
+								v-model="cb_search_supernet" value="cb_search_supernet"
+								label="Übergeordnete Netze einbeziehen" 
+								></v-checkbox>
+								<v-checkbox 
+								v-model="cb_search_subnet" value="cb_search_subnet"
+								label="Enthaltene Netze einbeziehen" 
+								></v-checkbox>
+								<v-checkbox 
+								v-model="cb_search_range" value="cb_search_range"
+								label="Port-Ranges einbeziehen" 
+								></v-checkbox>
+							</v-layout>
+						</v-tab-item>
+				
+						<v-tab-item>
+							Suchbegriff
+							<v-text-field label="Suchbegriff" id="txtf_search_string"></v-text-field>
+							<v-checkbox 
+							v-model="cb_search_description"
+							label="Suche auch in Dienstbeschreibungen" 
+							></v-checkbox>
+						</v-tab-item>
+					</v-tabs-items>
+				
+					In welchen Diensten suchen?
+					<v-layout row wrap>
+						<v-checkbox 
+						v-model="cb_search_own"
+						label="Eigene" 
+						></v-checkbox>
+						<v-checkbox 
+						v-model="cb_search_used"
+						label="Genutzte" 
+						></v-checkbox>
+						<v-checkbox 
+						v-model="cb_search_usable"
+						label="Nutzbare" 
+						></v-checkbox>
+						<v-checkbox 
+						v-model="cb_search_limited"
+						label="Nur befristete Dienste suchen" 
+						></v-checkbox>
+					</v-layout>
+				
+					Allgemeine Optionen
+					<v-layout row wrap>				
+						<v-checkbox 
+						v-model="cb_search_case_sensitive"
+						label="Groß-/Kleinschreibung beachten" 
+						></v-checkbox>
+						<v-checkbox 
+						v-model="cb_search_exact"
+						label="Suchergebnisse nur mit exakter Übereinstimmung" 
+						></v-checkbox>
+					</v-layout>
+				
+					<v-btn color="success" @click="refreshOpenedTabs">suchen</v-btn>
+				</v-card>
+			</v-expansion-panel-content>
+		</v-expansion-panel>
 		<v-layout fill-height justify-space-between>
 
 			<v-container item	>
@@ -17,26 +100,26 @@
 					<v-tab>Nutzbare</v-tab>
 				</v-tabs>
 				<!-- tabulator in tab is not loaded sometimes -->
-				<div><!-- <v-tabs-items v-model="tab"> -->
-					<div><!-- <v-tab-item> -->
+				<div>
+					<div>
 						<Tabulator 
 						v-if="tab_services == 0 && Object.keys(own.data).length > 0" 
 						:config="own"
 						></Tabulator>
-					</div><!-- </v-tab-item> -->
-					<div><!-- <v-tab-item> -->
+					</div>
+					<div>
 						<Tabulator 
 						v-if="tab_services == 1 && Object.keys(used.data).length	 > 0" 
 						:config="used"
 						></Tabulator>
-					</div><!-- </v-tab-item> -->
-					<div><!-- <v-tab-item> -->
+					</div>
+					<div>
 						<Tabulator 
 						v-if="tab_services == 2 && Object.keys(usable.data).	length > 0"
 						:config="usable"
 						></Tabulator> 
-					</div><!-- </v-tab-item> -->
-				</div><!-- </v-tabs-items> -->
+					</div>
+				</div>
 			</v-container>
 
 			<v-container item >
@@ -120,8 +203,23 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			ServiceUsersTable
 		},
 		data: () => ({
+			tab_search: 0,
 			tab_services: -1,
 			tab_details: 0,
+			txtf_search_ip1: "",
+			txtf_search_ip2: "",
+			txtf_search_proto: "",
+			txtf_search_string: "",
+			cb_search_description: true,
+			cb_search_supernet: false,
+			cb_search_subnet: true,
+			cb_search_range: false,
+			cb_search_own: true,
+			cb_search_used: true,
+			cb_search_usable: false,
+			cb_search_limited: false,
+			cb_search_case_sensitive: false,
+			cb_search_exact: false,
 			services: {},
 			own: {
 				columns: [
@@ -159,17 +257,8 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			active: {
 				deep: true,
 				handler (/*newActive, oldActive*/) {
-					if(this.tabOpenedBefore[0]) {
-						this.getServices(this.own, 'owner');
-					}
-					if(this.tabOpenedBefore[1]) {
-						this.getServices(this.used, 'user');
-					}
-					if(this.tabOpenedBefore[2]) {
-						this.getServices(this.usable, 'visible');
-					}
+					this.refreshOpenedTabs();
 
-					this.selected = null;
 					/*
 					if (this.selected) {
 						if (oldActive.owner !== newActive.owner) {
@@ -227,6 +316,19 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 					this.selected = row.getData();
 				}.bind(this);
 			},
+			refreshOpenedTabs () {
+				if(this.tabOpenedBefore[0]) {
+						this.getServices(this.own, 'owner');
+					}
+					if(this.tabOpenedBefore[1]) {
+						this.getServices(this.used, 'user');
+					}
+					if(this.tabOpenedBefore[2]) {
+						this.getServices(this.usable, 'visible');
+					}
+
+					this.selected = null;
+			},
 			getServices (serviceObject, relation) {
 				var vm = this;	// get vue instance
 				if (!vm.active.owner) {
@@ -238,6 +340,20 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 						active_owner: vm.active.owner,
 						history: vm.active.policy.date,
 						relation: relation,
+						search_ip1: vm.txtf_search_ip1,
+						search_ip2: vm.txtf_search_ip2,
+						search_proto: vm.txtf_search_proto,
+						search_string: vm.txtf_search_string,
+						search_in_desc: vm.cb_search_description ? 'on' : '',
+						search_supernet: vm.cb_search_supernet ? 'on' : '',
+						search_subnet: vm.cb_search_subnet ? 'on' : '',
+						search_range: vm.cb_search_range ? 'on' : '',
+						search_own: vm.cb_search_own ? 'on' : '',
+						search_used: vm.cb_search_used ? 'on' : '',
+						search_visible: vm.cb_search_usable ? 'on' : '',
+						search_disable_at: vm.cb_search_limited ? 'on' : '',
+						search_case_sensitive: vm.cb_search_case_sensitive ? 'on' : '',
+						search_exact: vm.cb_search_exact ? 'on' : '',
 					}
 				}).then(function (response) {
 					serviceObject.data = response.data.records;

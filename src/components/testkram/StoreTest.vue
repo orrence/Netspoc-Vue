@@ -14,6 +14,8 @@
 		</v-switch>
 	</v-card>
 
+	<testing-test :initial-count="2">uff</testing-test>
+
   <v-card>{{ loggedIn }}</v-card>
   <br/>
   <v-card>{{ owners }}</v-card>
@@ -26,7 +28,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import testingTest from './TestingTest';
 export default {
+	components: { testingTest },
   computed: mapState(['loggedIn', 'owners', 'history', 'active']),
   data: () => ({
     switchMe: false
