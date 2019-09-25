@@ -1,6 +1,6 @@
 <template>
 	<v-container tableContainer>
-		<v-expansion-panels>	
+		<v-expansion-panels v-if="tab_services === 3">	
 			<v-expansion-panel>
 				<v-expansion-panel-header 
 				>
@@ -27,15 +27,15 @@
 							<v-text-field label="Protokoll" v-model="txtf_search_proto" id="txtf_search_proto"></v-text-field>
 							<v-layout row wrap>
 								<v-checkbox 
-								v-model="cb_search_supernet" value="cb_search_supernet"
+								v-model="cb_search_supernet"
 								label="Übergeordnete Netze einbeziehen" 
 								></v-checkbox>
 								<v-checkbox 
-								v-model="cb_search_subnet" value="cb_search_subnet"
+								v-model="cb_search_subnet"
 								label="Enthaltene Netze einbeziehen" 
 								></v-checkbox>
 								<v-checkbox 
-								v-model="cb_search_range" value="cb_search_range"
+								v-model="cb_search_range"
 								label="Port-Ranges einbeziehen" 
 								></v-checkbox>
 							</v-layout>
@@ -43,7 +43,7 @@
 				
 						<v-tab-item>
 							<v-subheader>Suchbegriff</v-subheader>
-							<v-text-field label="Suchbegriff" id="txtf_search_string"></v-text-field>
+							<v-text-field label="Suchbegriff" v-model="txtf_search_string" id="txtf_search_string"></v-text-field>
 							<v-checkbox 
 							v-model="cb_search_description"
 							label="Suche auch in Dienstbeschreibungen" 
@@ -83,14 +83,13 @@
 						></v-checkbox>
 					</v-layout>
 				
-					<v-btn color="success" @click="refreshOpenedTabs">suchen</v-btn>
+					<v-btn color="success" @click="getSearchedServices">suchen</v-btn>
 				</v-expansion-panel-content>
 			</v-expansion-panel>
 		</v-expansion-panels>
 		<v-layout fill-height justify-space-between>
 
-			<v-container item	>
-
+			<v-container item>
 				<v-tabs
 				v-model="tab_services"
 				grow
@@ -99,6 +98,7 @@
 					<v-tab>Eigene</v-tab>
 					<v-tab>Genutzte</v-tab>
 					<v-tab>Nutzbare</v-tab>
+					<v-tab><v-icon>search</v-icon></v-tab>
 				</v-tabs>
 				<!-- tabulator in tab is not loaded sometimes -->
 				<div>
@@ -110,20 +110,26 @@
 					</div>
 					<div>
 						<Tabulator 
-						v-if="tab_services == 1 && Object.keys(used.data).length	 > 0" 
+						v-if="tab_services == 1 && Object.keys(used.data).length > 0" 
 						:config="used"
 						></Tabulator>
 					</div>
 					<div>
 						<Tabulator 
-						v-if="tab_services == 2 && Object.keys(usable.data).	length > 0"
+						v-if="tab_services == 2 && Object.keys(usable.data).length > 0"
 						:config="usable"
+						></Tabulator> 
+					</div>
+					<div>
+						<Tabulator 
+						v-if="tab_services == 3 && Object.keys(search.data).length > 0"
+						:config="search"
 						></Tabulator> 
 					</div>
 				</div>
 			</v-container>
 
-			<v-container item >
+			<v-container item>
 				<v-tabs
 					v-model="tab_details"
 					slider-color="orange"
@@ -146,7 +152,8 @@
 						label="mehr Details" v-model="showDetails"
 						></v-checkbox>
 						<v-checkbox class="mx-1" height="0px" 
-						label="Filtern nach Suche" v-model="filterBySearch" disabled
+						label="Filtern nach Suche" v-model="filterBySearch" 
+						:disabled="tab_services!==3 || tab_search!==0"
 						></v-checkbox>
 					</v-layout>
 					<v-container v-if="selected && showDetails" fluid grid-list-xl>
@@ -174,12 +181,28 @@
 					</v-container>
 				</div>
 
+
+				<!-- property :filterBySearch evaluates to false, if the user 
+					is not searching on tab_search === 1, because filtering the details 
+					by a service name or owner is pointless -->
 				<service-rules-table 
 				v-if="selected && tab_details === 0"
 				:selection="selected"
 				:expandUser="expandUser"
 				:IPAsName="IPAsName"
-				:filterBySearch="filterBySearch"
+				:filterBySearch="tab_search === 0 && filterBySearch"
+				:search_ip1="txtf_search_ip1"
+				:search_ip2="txtf_search_ip2"
+				:search_proto="txtf_search_proto"
+				:search_supernet="cb_search_supernet"
+				:search_subnet="cb_search_subnet"
+				:search_range="cb_search_range"
+				:search_own="cb_search_own"
+				:search_used="cb_search_used"
+				:search_usable="cb_search_usable"
+				:search_limited="cb_search_limited"
+				:search_case_sensitive="cb_search_case_sensitive"
+				:search_exact="cb_search_exact"
 				></service-rules-table>
 				<service-users-table 
 				v-else-if="selected && tab_details === 1"
@@ -237,6 +260,13 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 				layoutColumnsOnNewData:true,
 			},
 			usable: {
+				columns: [
+					{ title: 'Name', field: 'name' },
+				],
+				data: [],
+				layoutColumnsOnNewData:true,
+			},
+			search: {
 				columns: [
 					{ title: 'Name', field: 'name' },
 				],
@@ -303,6 +333,9 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 							case 2:
 								this.getServices(this.usable, 'visible');
 								break;
+							case 3:
+								// we don't want the search result reload itself
+								break;
 							default:
 								alert("woopsie while changing tabs");
 						}
@@ -318,17 +351,22 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 				}.bind(this);
 			},
 			refreshOpenedTabs () {
-				if(this.tabOpenedBefore[0]) {
-						this.getServices(this.own, 'owner');
-					}
-					if(this.tabOpenedBefore[1]) {
-						this.getServices(this.used, 'user');
-					}
-					if(this.tabOpenedBefore[2]) {
-						this.getServices(this.usable, 'visible');
-					}
+				if (this.tabOpenedBefore[0]) {
+					this.getServices(this.own, 'owner');
+				}
+				if (this.tabOpenedBefore[1]) {
+					this.getServices(this.used, 'user');
+				}
+				if (this.tabOpenedBefore[2]) {
+					this.getServices(this.usable, 'visible');
+				}
 
-					this.selected = null;
+				if (this.tab_services === 3) {
+					// we want to refresh the search result only, if the user is looking at it
+					this.getSearchedServices();
+				}
+
+				this.selected = null;
 			},
 			getServices (serviceObject, relation) {
 				var vm = this;	// get vue instance
@@ -340,15 +378,35 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 						chosen_networks: '',
 						active_owner: vm.active.owner,
 						history: vm.active.policy.date,
-						relation: relation,
-						search_ip1: vm.txtf_search_ip1,
-						search_ip2: vm.txtf_search_ip2,
-						search_proto: vm.txtf_search_proto,
-						search_string: vm.txtf_search_string,
-						search_in_desc: vm.cb_search_description ? 'on' : '',
-						search_supernet: vm.cb_search_supernet ? 'on' : '',
-						search_subnet: vm.cb_search_subnet ? 'on' : '',
-						search_range: vm.cb_search_range ? 'on' : '',
+						relation: relation
+					}
+				}).then(function (response) {
+					serviceObject.data = response.data.records;
+					vm.addClickEvent(serviceObject);
+				}).catch(function (error) {
+					serviceObject.data = [];
+					alert('service_list: ' + error);
+				});
+			},
+			getSearchedServices () {
+				var vm = this;	// get vue instance
+				if (!vm.active.owner) {
+					return;
+				}
+				vm.axios.get('/service_list', {
+					params: {
+						chosen_networks: '',
+						active_owner: vm.active.owner,
+						history: vm.active.policy.date,
+						relation: '',
+						search_ip1: vm.tab_search === 0 ? vm.txtf_search_ip1 : '',
+						search_ip2: vm.tab_search === 0 ? vm.txtf_search_ip2 : '',
+						search_proto: vm.tab_search === 0 ? vm.txtf_search_proto : '',
+						search_string: vm.tab_search === 1 ? vm.txtf_search_string : '',
+						search_in_desc: vm.tab_search === 1 ? (vm.cb_search_description ? 'on' : '') : '',
+						search_supernet: vm.tab_search === 0 ? (vm.cb_search_supernet ? 'on' : '') : '',
+						search_subnet: vm.tab_search === 0 ? (vm.cb_search_subnet ? 'on' : '') : '',
+						search_range: vm.tab_search === 0 ? (vm.cb_search_range ? 'on' : '') : '',
 						search_own: vm.cb_search_own ? 'on' : '',
 						search_used: vm.cb_search_used ? 'on' : '',
 						search_visible: vm.cb_search_usable ? 'on' : '',
@@ -357,10 +415,10 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 						search_exact: vm.cb_search_exact ? 'on' : '',
 					}
 				}).then(function (response) {
-					serviceObject.data = response.data.records;
-					vm.addClickEvent(serviceObject);
+					vm.search.data = response.data.records;
+					vm.addClickEvent(vm.search);
 				}).catch(function (error) {
-					serviceObject.data = [];
+					vm.search.data = [];
 					alert('service_list: ' + error);
 				});
 			}
