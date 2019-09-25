@@ -20,5 +20,5 @@ yarn-error.log*
 *.sln
 *.sw?
 
-backdata/users/*
-backdata/sessions/*
+# added .gitignore files to backdata/users/ and backdata/sessions/
+# so the folders stay empty
