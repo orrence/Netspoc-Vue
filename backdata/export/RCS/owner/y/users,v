@@ -1,0 +1,81 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2019.05.02.10.43.45;	author marker;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.05.01.10.43.42;	author marker;	state Exp;
+branches;
+next	;
+
+
+desc
+@init
+@
+
+
+1.2
+log
+@p2
+@
+text
+@{
+   "Test1" : [
+      "network:Sub"
+   ],
+   "Test11" : [
+      "network:Sub"
+   ],
+   "Test12" : [
+      "network:Sub"
+   ],
+   "Test2" : [
+      "any:Sub1",
+      "network:Big"
+   ],
+   "Test3" : [
+      "network:Sub"
+   ],
+   "Test3a" : [
+      "network:Sub"
+   ],
+   "Test4" : [
+      "host:B10",
+      "host:Range",
+      "host:k",
+      "interface:u.Big",
+      "network:DMZ"
+   ],
+   "Test5" : [
+      "any:Big"
+   ],
+   "Test6" : [
+      "host:B10"
+   ],
+   "Test9" : [
+      "host:B10",
+      "host:k"
+   ]
+}
+@
+
+
+1.1
+log
+@p1
+@
+text
+@d5 1
+a5 1
+   "Test10" : [
+d8 1
+a8 1
+   "Test11" : [
+@

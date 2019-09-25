@@ -1,0 +1,59 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2019.05.02.10.43.45;	author marker;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.05.01.10.43.42;	author marker;	state Exp;
+branches;
+next	;
+
+
+desc
+@init
+@
+
+
+1.2
+log
+@p2
+@
+text
+@{
+   "owner" : [
+      "Test4",
+      "Test9"
+   ],
+   "user" : [
+      "Test1",
+      "Test11",
+      "Test12",
+      "Test2",
+      "Test3",
+      "Test3a",
+      "Test5",
+      "Test6",
+      "Test7",
+      "Test8"
+   ],
+   "visible" : []
+}
+@
+
+
+1.1
+log
+@p1
+@
+text
+@a7 1
+      "Test10",
+d9 1
+@

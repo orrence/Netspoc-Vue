@@ -1,0 +1,127 @@
+{
+   "any:Big" : {
+      "ip" : "0.0.0.0",
+      "is_supernet" : 1,
+      "owner" : "x",
+      "zone" : "any:Big"
+   },
+   "any:DMZ10" : {
+      "ip" : "10.0.0.0/255.0.0.0",
+      "is_supernet" : 1,
+      "owner" : "x",
+      "zone" : "any:[network:DMZ]"
+   },
+   "any:Kunde" : {
+      "ip" : "0.0.0.0",
+      "is_supernet" : 1,
+      "owner" : "y",
+      "zone" : "any:Kunde"
+   },
+   "any:Sub1" : {
+      "ip" : "10.1.2.0/255.255.254.0",
+      "owner" : "x",
+      "zone" : "any:Big"
+   },
+   "any:Sub2" : {
+      "ip" : "10.1.1.0/255.255.255.128",
+      "owner" : "z",
+      "zone" : "any:Big"
+   },
+   "host:B10" : {
+      "ip" : "10.1.0.10",
+      "owner" : "z"
+   },
+   "host:K" : {
+      "ip" : "10.2.3.3",
+      "owner" : "y"
+   },
+   "host:K1" : {
+      "ip" : "10.2.4.4",
+      "owner" : "y"
+   },
+   "host:Range" : {
+      "ip" : "10.1.0.90-10.1.0.99",
+      "owner" : "x"
+   },
+   "host:k" : {
+      "ip" : "10.2.2.2",
+      "owner" : "y"
+   },
+   "interface:asa.Big" : {
+      "ip" : "10.1.0.1",
+      "owner" : null
+   },
+   "interface:asa.DMZ" : {
+      "ip" : "10.9.9.1",
+      "owner" : null
+   },
+   "interface:asa.KUNDE" : {
+      "ip" : "10.2.3.1",
+      "owner" : null
+   },
+   "interface:asa.KUNDE1" : {
+      "ip" : "10.2.4.1",
+      "owner" : null
+   },
+   "interface:asa.Kunde" : {
+      "ip" : "10.2.2.1",
+      "owner" : null
+   },
+   "interface:inet.DMZ" : {
+      "ip" : "short",
+      "owner" : "x"
+   },
+   "interface:inet.Internet" : {
+      "ip" : "short",
+      "owner" : "x"
+   },
+   "interface:u.Big" : {
+      "ip" : "10.1.0.2",
+      "owner" : "x"
+   },
+   "interface:u.L" : {
+      "ip" : "10.3.3.3",
+      "owner" : "x",
+      "zone" : "any:Big"
+   },
+   "interface:u.Sub" : {
+      "ip" : "short",
+      "owner" : "z"
+   },
+   "network:Big" : {
+      "ip" : "10.1.0.0/255.255.0.0",
+      "owner" : "x",
+      "zone" : "any:Big"
+   },
+   "network:DMZ" : {
+      "ip" : "10.9.9.0/255.255.255.0",
+      "owner" : "x",
+      "zone" : "any:[network:DMZ]"
+   },
+   "network:Internet" : {
+      "ip" : "0.0.0.0/0.0.0.0",
+      "is_supernet" : 1,
+      "owner" : "x",
+      "zone" : "any:[network:DMZ]"
+   },
+   "network:KUNDE" : {
+      "ip" : "10.2.3.0/255.255.255.0",
+      "owner" : "y",
+      "zone" : "any:[network:KUNDE]"
+   },
+   "network:KUNDE1" : {
+      "ip" : "10.2.4.0/255.255.255.0",
+      "owner" : "y",
+      "zone" : "any:[network:KUNDE1]"
+   },
+   "network:Kunde" : {
+      "ip" : "10.2.2.0/255.255.255.0",
+      "owner" : "y",
+      "zone" : "any:Kunde"
+   },
+   "network:Sub" : {
+      "ip" : "10.1.1.0/255.255.255.0",
+      "owner" : "z",
+      "zone" : "any:Big"
+   }
+}

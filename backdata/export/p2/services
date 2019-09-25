@@ -1,0 +1,279 @@
+{
+   "Test1" : {
+      "details" : {
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:Kunde"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 80"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test11" : {
+      "details" : {
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:KUNDE1"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 83"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test12" : {
+      "details" : {
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:KUNDE1"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 83"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test2" : {
+      "details" : {
+         "description" : "My foo",
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "host:k"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "udp 80"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test3" : {
+      "details" : {
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:Kunde"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 81"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test3a" : {
+      "details" : {
+         "owner" : [
+            "x",
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:Kunde"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 80"
+            ],
+            "src" : []
+         },
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:DMZ"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 81"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test4" : {
+      "details" : {
+         "description" : "Your foo",
+         "owner" : [
+            "y",
+            "z"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "host:k"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 81"
+            ],
+            "src" : []
+         },
+         {
+            "action" : "permit",
+            "dst" : [
+               "host:B10"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 82"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test5" : {
+      "details" : {
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "host:k"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "tcp 82"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test6" : {
+      "details" : {
+         "owner" : [
+            "y"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "any:Kunde"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "udp 82"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test7" : {
+      "details" : {
+         "owner" : [
+            "x"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:Internet"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "udp 82"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test8" : {
+      "details" : {
+         "owner" : [
+            "x"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [
+               "any:DMZ10"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "udp 82"
+            ],
+            "src" : []
+         }
+      ]
+   },
+   "Test9" : {
+      "details" : {
+         "owner" : [
+            "x",
+            "y",
+            "z"
+         ]
+      },
+      "rules" : [
+         {
+            "action" : "permit",
+            "dst" : [],
+            "has_user" : "both",
+            "prt" : [
+               "udp 83"
+            ],
+            "src" : []
+         },
+         {
+            "action" : "permit",
+            "dst" : [
+               "network:DMZ"
+            ],
+            "has_user" : "src",
+            "prt" : [
+               "udp 83"
+            ],
+            "src" : []
+         }
+      ]
+   }
+}

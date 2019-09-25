@@ -1,0 +1,53 @@
+{
+   "anys" : {
+      "any:Big" : {
+         "networks" : {
+            "interface:u.L" : [],
+            "network:Big" : [
+               "host:B10",
+               "host:Range",
+               "interface:asa.Big",
+               "interface:u.Big"
+            ],
+            "network:Sub" : [
+               "interface:u.Sub"
+            ]
+         }
+      },
+      "any:Kunde" : {
+         "networks" : {
+            "network:Kunde" : [
+               "host:k",
+               "interface:asa.Kunde"
+            ]
+         }
+      },
+      "any:[network:DMZ]" : {
+         "networks" : {
+            "network:DMZ" : [
+               "interface:asa.DMZ",
+               "interface:inet.DMZ"
+            ],
+            "network:Internet" : [
+               "interface:inet.Internet"
+            ]
+         }
+      },
+      "any:[network:KUNDE1]" : {
+         "networks" : {
+            "network:KUNDE1" : [
+               "host:K1",
+               "interface:asa.KUNDE1"
+            ]
+         }
+      },
+      "any:[network:KUNDE]" : {
+         "networks" : {
+            "network:KUNDE" : [
+               "host:K",
+               "interface:asa.KUNDE"
+            ]
+         }
+      }
+   }
+}

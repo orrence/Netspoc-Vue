@@ -1,0 +1,28 @@
+{
+   "anys" : {
+      "any:Kunde" : {
+         "networks" : {
+            "network:Kunde" : [
+               "host:k",
+               "interface:asa.Kunde"
+            ]
+         }
+      },
+      "any:[network:KUNDE1]" : {
+         "networks" : {
+            "network:KUNDE1" : [
+               "host:K1",
+               "interface:asa.KUNDE1"
+            ]
+         }
+      },
+      "any:[network:KUNDE]" : {
+         "networks" : {
+            "network:KUNDE" : [
+               "host:K",
+               "interface:asa.KUNDE"
+            ]
+         }
+      }
+   }
+}

@@ -1,0 +1,41 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2019.05.02.10.43.45;	author marker;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.05.01.10.43.42;	author marker;	state Exp;
+branches;
+next	;
+
+
+desc
+@init
+@
+
+
+1.2
+log
+@p2
+@
+text
+@# p2 #
+@
+
+
+1.1
+log
+@p1
+@
+text
+@d1 1
+a1 1
+# p1 #
+@

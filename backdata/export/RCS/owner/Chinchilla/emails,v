@@ -1,0 +1,29 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2019.05.01.10.43.42;	author marker;	state Exp;
+branches;
+next	;
+
+
+desc
+@init
+@
+
+
+1.1
+log
+@p1
+@
+text
+@[
+   {
+      "email" : "guest"
+   }
+]
+@
