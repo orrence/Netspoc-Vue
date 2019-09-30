@@ -1,13 +1,13 @@
 <template>
 	<v-container tableContainer>
 		<v-expansion-panels v-if="tab_services === 3">	
-			<v-expansion-panel>
+			<v-expansion-panel :value="1">
 				<v-expansion-panel-header 
 				>
 					Suche
-					<template v-slot:actions>
+					<!-- <template v-slot:actions>
 						<v-icon color="teal">search</v-icon>
-					</template>
+					</template> -->
 				</v-expansion-panel-header>
 				<v-expansion-panel-content>
 					<v-tabs 
@@ -151,9 +151,10 @@
 						<v-checkbox class="mx-1" height="0px" 
 						label="mehr Details" v-model="showDetails"
 						></v-checkbox>
-						<v-checkbox class="mx-1" height="0px" 
+						<v-checkbox 
+						v-if="tab_services===3 && tab_search===0"
+						class="mx-1" height="0px" 
 						label="Filtern nach Suche" v-model="filterBySearch" 
-						:disabled="tab_services!==3 || tab_search!==0"
 						></v-checkbox>
 					</v-layout>
 					<v-container v-if="selected && showDetails" fluid grid-list-xl>
@@ -181,12 +182,17 @@
 					</v-container>
 				</div>
 
-
+				<service-rules-table 
+				v-if="selected && tab_details === 0 && tab_services !== 3"
+				:selection="selected"
+				:expandUser="expandUser"
+				:IPAsName="IPAsName"
+				></service-rules-table>
 				<!-- property :filterBySearch evaluates to false, if the user 
 					is not searching on tab_search === 1, because filtering the details 
 					by a service name or owner is pointless -->
 				<service-rules-table 
-				v-if="selected && tab_details === 0"
+				v-else-if="selected && tab_details === 0"
 				:selection="selected"
 				:expandUser="expandUser"
 				:IPAsName="IPAsName"
@@ -281,7 +287,12 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			showDetails: false,
 		}),
 		mounted () {
-			this.tab_services = 0;
+			if (this.$route.params.search,length > 1) {
+				this.tab_services = 0;
+			} else {
+				this.setSearchParams();
+				this.tab_services = 3;
+			}
 		},
 		computed: mapState(['active']),
 		watch : {
@@ -345,6 +356,29 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			}
 		},
 		methods: {
+			setSearchParams () {
+				var param = this.$route.params.search;
+				var regex = /(?:ip1:)(,?\d+\.\d+\.\d+\.\d+)(\\\d+\.\d+\.\d+\.\d+)?(?:;)/;
+				var result = regex.exec(param);
+				this.txtf_search_ip1 = result ? result[1] + result[2].replace('\\', '/') : '';
+				
+				regex = /(?:ip2:)(,?\d+\.\d+\.\d+\.\d+)(\\\d+\.\d+\.\d+\.\d+)?(?:;)/;
+				result = regex.exec(param);
+				this.txtf_search_ip2 = result ? result[1] + result[2].replace('\\', '/') : '';
+
+				regex = /(?:proto:)(((udp|tcp)\\)?\d+)(?:;)/;
+				result = regex.exec(param);
+				this.txtf_search_proto = result ? result[1].replace('\\', ' ') : '';
+				
+
+				regex = /super;/;
+				this.cb_search_supernet = regex.test(param);
+
+				regex = /sub;/;
+				this.cb_search_subnet = regex.test(param);
+
+				// console.log(regex.test(param));
+			},
 			addClickEvent (serviceObject) {
 				serviceObject.rowClick = function (e, row) {
 					this.selected = row.getData();
@@ -434,6 +468,6 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 	.item {
 		/*min-height: 50px;*/
 		/*min-width: 80px;*/
-		margin: 8px;
+		/*margin: 8px;*/
 	}
 </style>

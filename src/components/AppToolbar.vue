@@ -2,7 +2,7 @@
 <v-app-bar v-if="loggedIn" app>
 
   <router-link 
-  to="/services"
+  to="/services/0"
   id="rl_services">
     <v-btn text>
       <span>Dienste</span>

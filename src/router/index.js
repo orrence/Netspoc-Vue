@@ -39,7 +39,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/services',
+		path: '/services/:search',
 		component: Services,
 		meta: {
 			title: 'Services'
