@@ -19,12 +19,13 @@ export default {
 	data: () => ({
 		config : {
 			columns: [
-				{ title: 'Aktion', field: 'action' },
-				{ title: 'Quelle', field: 'src', sorter: 'ip'},
-				{ title: 'Ziel', field: 'dst', sorter: 'ip' },
-				{ title: 'Protokoll', field: 'prt' },
+				{ title: 'Aktion', 		field: 'action', 	formatter: "textarea", width: 77 },
+				{ title: 'Quelle', 		field: 'src', 		formatter: "textarea", sorter: 'ip'},
+				{ title: 'Ziel', 			field: 'dst', 		formatter: "textarea", sorter: 'ip' },
+				{ title: 'Protokoll', field: 'prt', 		formatter: "textarea", width: 92 },
 			],
 			data: [],
+			layout: "fitColumns",
 			layoutColumnsOnNewData:true,
 		},
 	}),
@@ -66,6 +67,7 @@ export default {
 				.then(function (response) {
 					var resdata = response.data.records;
 					for (let i = 0; i < resdata.length; i++) {
+						resdata[i].src = resdata[i].src.join("\n");
 						switch (resdata[i].has_user) {
 							case "both":
 								resdata[i].src = "User";

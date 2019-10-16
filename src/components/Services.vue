@@ -1,7 +1,10 @@
 <template>
 	<v-container tableContainer>
-		<v-expansion-panels v-if="tab_services === 3">	
-			<v-expansion-panel :value="1">
+		<v-expansion-panels 
+		v-if="tab_services === 3"
+		v-model="pnl_search"
+		>	
+			<v-expansion-panel>
 				<v-expansion-panel-header 
 				>
 					Suche
@@ -22,9 +25,9 @@
 					<v-tabs-items v-model="tab_search">
 						<v-tab-item>
 							<v-subheader>Wonach soll gesucht werden?</v-subheader>
-							<v-text-field label="IP 1" v-model="txtf_search_ip1" id="txtf_search_ip1"></v-text-field>
-							<v-text-field label="IP 2" v-model="txtf_search_ip2" id="txtf_search_ip2"></v-text-field>
-							<v-text-field label="Protokoll" v-model="txtf_search_proto" id="txtf_search_proto"></v-text-field>
+							<v-text-field label="IP 1" v-model="txtf_search_ip1" id="txtf_search_ip1" color="orange"></v-text-field>
+							<v-text-field label="IP 2" v-model="txtf_search_ip2" id="txtf_search_ip2" color="orange"></v-text-field>
+							<v-text-field label="Protokoll" v-model="txtf_search_proto" id="txtf_search_proto" color="orange"></v-text-field>
 							<v-layout row wrap>
 								<v-checkbox 
 								v-model="cb_search_supernet"
@@ -83,7 +86,9 @@
 						></v-checkbox>
 					</v-layout>
 				
-					<v-btn color="success" @click="getSearchedServices">suchen</v-btn>
+					<v-layout align-right>
+						<v-btn color="success" @click="searchUpdate">suchen</v-btn>
+					</v-layout>
 				</v-expansion-panel-content>
 			</v-expansion-panel>
 		</v-expansion-panels>
@@ -158,24 +163,31 @@
 						></v-checkbox>
 					</v-layout>
 					<v-container v-if="selected && showDetails" fluid grid-list-xl>
-						<v-layout row justify-space-between>
+						<!-- <v-layout row justify-space-between>
 							<div>name:</div>
 							<div>{{ selected.name }}</div>
-						</v-layout>
+						</v-layout> -->
 						<v-layout row justify-space-between>
-							<div>description:</div>
+							<div>Beschreibung:</div>
 							<div>{{ selected.description }}</div>
 						</v-layout>
 						<v-layout row justify-space-between>
-							<div>owner:</div>
+							<div>Verantwortung:</div>
+							<br/>
 							<v-flex>
 								<v-layout column wrap>
-									<div align="right" 
-									v-for="item in selected.owner"
-									:key="item.name"
-									>
-									{{item.name}}
-									</div>
+									<v-expansion-panels accordion multiple>
+										<v-expansion-panel 
+										v-for="item in selected.owner"
+										:key="item.name"
+										align="right"
+										>
+										<v-expansion-panel-header>{{item.name}}</v-expansion-panel-header>
+										<v-expansion-panel-content>
+											{{item}}
+										</v-expansion-panel-content>
+										</v-expansion-panel>
+									</v-expansion-panels>
 								</v-layout>
 							</v-flex>
 						</v-layout>
@@ -233,9 +245,11 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			ServiceUsersTable
 		},
 		data: () => ({
+			pnl_search: 0,
 			tab_search: 0,
 			tab_services: -1,
 			tab_details: 0,
+			txtf_url: "http://localhost/?#/services/0",
 			txtf_search_ip1: "",
 			txtf_search_ip2: "",
 			txtf_search_proto: "",
@@ -256,6 +270,7 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 					{ title: 'Name', field: 'name' },
 				],
 				data: [],
+				layout: "fitColumns",
 				layoutColumnsOnNewData:true,
 			},
 			used: {
@@ -263,6 +278,7 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 					{ title: 'Name', field: 'name' },
 				],
 				data: [],
+				layout: "fitColumns",
 				layoutColumnsOnNewData:true,
 			},
 			usable: {
@@ -270,6 +286,7 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 					{ title: 'Name', field: 'name' },
 				],
 				data: [],
+				layout: "fitColumns",
 				layoutColumnsOnNewData:true,
 			},
 			search: {
@@ -277,6 +294,7 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 					{ title: 'Name', field: 'name' },
 				],
 				data: [],
+				layout: "fitColumns",
 				layoutColumnsOnNewData:true,
 			},
 			tabOpenedBefore: [],
@@ -287,11 +305,19 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			showDetails: false,
 		}),
 		mounted () {
-			if (this.$route.params.search,length > 1) {
+			if (this.$route.params.search.length === 1) {
 				this.tab_services = 0;
 			} else {
-				this.setSearchParams();
 				this.tab_services = 3;
+				this.setSearchParams(this.$route);
+				if (this.txtf_search_string) { this.tab_search = 1 }
+			}
+		},
+		beforeRouteUpdate (to) {
+			if (this.$route.params.search.length > 1) {
+				this.setSearchParams(to);
+				if (this.txtf_search_string) { this.tab_search = 1 }
+				else { this.tab_search = 0 }
 			}
 		},
 		computed: mapState(['active']),
@@ -356,28 +382,33 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			}
 		},
 		methods: {
-			setSearchParams () {
-				var param = this.$route.params.search;
-				var regex = /(?:ip1:)(,?\d+\.\d+\.\d+\.\d+)(\\\d+\.\d+\.\d+\.\d+)?(?:;)/;
-				var result = regex.exec(param);
-				this.txtf_search_ip1 = result ? result[1] + result[2].replace('\\', '/') : '';
-				
-				regex = /(?:ip2:)(,?\d+\.\d+\.\d+\.\d+)(\\\d+\.\d+\.\d+\.\d+)?(?:;)/;
-				result = regex.exec(param);
-				this.txtf_search_ip2 = result ? result[1] + result[2].replace('\\', '/') : '';
-
-				regex = /(?:proto:)(((udp|tcp)\\)?\d+)(?:;)/;
-				result = regex.exec(param);
-				this.txtf_search_proto = result ? result[1].replace('\\', ' ') : '';
-				
-
-				regex = /super;/;
-				this.cb_search_supernet = regex.test(param);
-
-				regex = /sub;/;
-				this.cb_search_subnet = regex.test(param);
-
-				// console.log(regex.test(param));
+			setSearchParams (route) {
+				var vm = this;
+				var params = route.params.search.split(';');
+				vm.txtf_search_ip1 = '';
+				vm.txtf_search_ip2 = '';
+				vm.txtf_search_proto = '';
+				vm.txtf_search_string = '';
+				vm.cb_search_description = false;
+				vm.cb_search_subnet = false;
+				vm.cb_search_own = false;
+				vm.cb_search_used = false;
+				params.forEach( function (str)  {
+					if (str.includes("ip1")) { vm.txtf_search_ip1 = str.match(/:(.*)/)[1].replace('\\','/'); }
+					else if (str.includes("ip2")) { vm.txtf_search_ip2 = str.match(/:(.*)/)[1].replace('\\','/'); }
+					else if (str.includes("prt")) { vm.txtf_search_proto = str.match(/:(.*)/)[1].replace('\\',' '); }
+					else if (str.includes("sea")) { vm.txtf_search_string = str.match(/:(.*)/)[1].replace('\\',' '); }
+					else if (str==="des") { vm.cb_search_description = true }
+					else if (str==="sup") { vm.cb_search_supernet = true }
+					else if (str==="sub") { vm.cb_search_subnet = true }
+					else if (str==="ran") { vm.cb_search_range = true }
+					else if (str==="own") { vm.cb_search_own = true }
+					else if (str==="use") { vm.cb_search_used = true }
+					else if (str==="usa") { vm.cb_search_usable = true }
+					else if (str==="lim") { vm.cb_search_limited = true }
+					else if (str==="sen") { vm.cb_search_case_sensitive = true }
+					else if (str==="exa") { vm.cb_search_exact = true }
+				});
 			},
 			addClickEvent (serviceObject) {
 				serviceObject.rowClick = function (e, row) {
@@ -422,6 +453,39 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 					alert('service_list: ' + error);
 				});
 			},
+			searchUpdate () {
+				var search = "";
+
+				if (this.txtf_search_ip1) {
+					let str = "ip1:" + this.txtf_search_ip1 + ";";
+					search += str.replace('/', '\\');
+				}
+				if (this.txtf_search_ip2) {
+					let str = "ip2:" + this.txtf_search_ip2 + ";";
+					search += str.replace('/', '\\');
+				}
+				if (this.txtf_search_proto) {
+					let str = "ptr:" + this.txtf_search_proto + ";";
+					search +=  str.replace(' ', '\\');
+				}
+				if (this.txtf_search_string) {
+					let str = "ptr:" + this.txtf_search_string + ";";
+					search +=  str.replace(' ', '\\');
+				}
+				if (this.cb_search_description) { search += "des;" }
+				if (this.cb_search_supernet) { search += "sup;" }
+				if (this.cb_search_subnet) { search += "sub;" }
+				if (this.cb_search_range) { search += "ran;" }
+				if (this.cb_search_own) { search += "own;" }
+				if (this.cb_search_used) { search += "use;" }
+				if (this.cb_search_usable) { search += "usa;" }
+				if (this.cb_search_limited) { search += "lim;" }
+				if (this.cb_search_case_sensitive) { search += "sen;" }
+				if (this.cb_search_exact) { search += "exa;" }
+
+				window.history.pushState('services', 'Suche', `/services/${search}`);
+				this.getSearchedServices();
+			},
 			getSearchedServices () {
 				var vm = this;	// get vue instance
 				if (!vm.active.owner) {
@@ -461,13 +525,18 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 </script>
 
 <style>
+	.compactForm {
+		transform: scale(0.5);
+		transform-origin: left;
+	}
+
 	.tableContainer {
-		height: 100%;
+		height: 50%;
 	}
 
 	.item {
-		/*min-height: 50px;*/
-		/*min-width: 80px;*/
-		/*margin: 8px;*/
+		min-height: 50px;
+		min-width: 80px;
+		margin: 8px;
 	}
 </style>

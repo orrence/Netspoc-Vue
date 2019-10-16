@@ -9,7 +9,7 @@ import Entitlements from '@/components/Entitlements'
 import Login from '@/components/Login'
 import PageNotFound from '@/components/PageNotFound'
 
-// import TableTest from '@/components/testkram/MasterTable'
+import TableTest from '@/components/testkram/Tablator'
 import expansion from '@/components/testkram/expansionTest'
 import LayPlay from '@/components/testkram/LayoutPlayground'
 import StoreTest from '@/components/testkram/StoreTest'
@@ -32,6 +32,13 @@ const routes = [
 		}
 	},
 	{
+		path: '/tabletest',
+		component: TableTest,
+		meta: {
+			title: 'Tablator test'
+		}
+	},
+	{
 		path: '/storetest',
 		component: StoreTest,
 		meta: {
@@ -41,6 +48,8 @@ const routes = [
 	{
 		path: '/services/:search',
 		component: Services,
+		props: true,
+		name: 'services',
 		meta: {
 			title: 'Services'
 		}
@@ -84,6 +93,7 @@ const routes = [
 
 const router = new VueRouter ({
 	routes,
+	mode: 'history'
 	// base: '/login'
 });
 

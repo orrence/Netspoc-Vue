@@ -38,6 +38,7 @@ export default {
 				{ title: 'Verantwortungsbereich', field: 'owner' },
 			],
 			data: [],
+			layout: "fitColumns",
 			layoutColumnsOnNewData:true,
 		}
 	}),
