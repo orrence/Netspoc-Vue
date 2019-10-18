@@ -4,8 +4,11 @@
 	<h3>Vergleiche den ausgewählten Stand mit einem älteren</h3>
 	<br/>
 
-	<v-card v-if="olderPolicies.length > 0">		
-		<v-card-text v-if="olderPolicies.length == 1">
+	<v-card>		
+		<v-card-text v-if="olderPolicies.length === 0">
+			Keine älteren Stände verfügbar.
+		</v-card-text>
+		<v-card-text v-else-if="olderPolicies.length === 1">
 			1 älterer Stand verfügbar.
 		</v-card-text>
 		<v-card-text v-else>
@@ -22,10 +25,6 @@
     filled
     color="orange"
   ></v-combobox>
-	</v-card>
-
-	<v-card else>
-		<v-card-text>Keine älteren Stände verfügbar.</v-card-text>
 	</v-card>
 
 	<br/>
