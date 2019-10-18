@@ -178,13 +178,21 @@
 								<v-layout column wrap>
 									<v-expansion-panels accordion multiple>
 										<v-expansion-panel 
-										v-for="item in selected.owner"
-										:key="item.name"
+										v-for="owner in selected.owner"
+										:key="owner.name"
 										align="right"
 										>
-										<v-expansion-panel-header>{{item.name}}</v-expansion-panel-header>
+										<v-expansion-panel-header>{{owner.name}}</v-expansion-panel-header>
 										<v-expansion-panel-content>
-											{{item}}
+											<v-list>
+												<v-list-item
+												v-for="admin in admins[owner.name]"
+												:key="admin"
+												align="right"
+												>
+													<v-list-item-title>{{admin}}</v-list-item-title>
+												</v-list-item>
+											</v-list>
 										</v-expansion-panel-content>
 										</v-expansion-panel>
 									</v-expansion-panels>
@@ -303,6 +311,7 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 			IPAsName: false,
 			filterBySearch: true,
 			showDetails: false,
+			admins: {},
 		}),
 		mounted () {
 			if (this.$route.params.search.length === 1) {
@@ -379,6 +388,16 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 						this.tabOpenedBefore[newTab] = true;
 					}
 				}
+			},
+			selected: {
+				handler (newSelected) {
+					this.admins = {};
+					if (newSelected !== null) {
+						for (let i = 0; i < this.selected.owner.length; i++) {
+							this.getAdmins(this.selected.owner[i].name);
+						}
+					}
+				}
 			}
 		},
 		methods: {
@@ -393,7 +412,7 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 				vm.cb_search_subnet = false;
 				vm.cb_search_own = false;
 				vm.cb_search_used = false;
-				params.forEach( function (str)  {
+				params.forEach( function (str)	{
 					if (str.includes("ip1")) { vm.txtf_search_ip1 = str.match(/:(.*)/)[1].replace('\\','/'); }
 					else if (str.includes("ip2")) { vm.txtf_search_ip2 = str.match(/:(.*)/)[1].replace('\\','/'); }
 					else if (str.includes("prt")) { vm.txtf_search_proto = str.match(/:(.*)/)[1].replace('\\',' '); }
@@ -466,11 +485,11 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 				}
 				if (this.txtf_search_proto) {
 					let str = "ptr:" + this.txtf_search_proto + ";";
-					search +=  str.replace(' ', '\\');
+					search +=	str.replace(' ', '\\');
 				}
 				if (this.txtf_search_string) {
 					let str = "ptr:" + this.txtf_search_string + ";";
-					search +=  str.replace(' ', '\\');
+					search +=	str.replace(' ', '\\');
 				}
 				if (this.cb_search_description) { search += "des;" }
 				if (this.cb_search_supernet) { search += "sup;" }
@@ -518,6 +537,27 @@ import ServiceUsersTable from './tables/ServiceUsersTable';
 				}).catch(function (error) {
 					vm.search.data = [];
 					alert('service_list: ' + error);
+				});
+			},
+			getAdmins (owner) {
+				var vm = this;
+				if (!vm.active.owner) {
+					return;
+				}
+				vm.axios.get('/get_admins', {
+					params: {
+						chosen_networks: '',
+						active_owner: vm.active.owner,
+						history: vm.active.policy.date,
+						owner: owner
+					}
+				}).then(function (response) {
+					vm.admins[owner] = response.data.records;
+					for (let i = 0; i < vm.admins[owner].length; i++) {
+						vm.admins[owner][i] = vm.admins[owner][i].email;
+					}
+				}).catch(function (error) {
+					alert(`get_admins(${owner}): ` + error);
 				});
 			}
 		}
