@@ -19,8 +19,9 @@
 					slider-color="teal"
 					grow
 					>
-						<v-tab>Ende-zu-Ende</v-tab>
-						<v-tab>Allgemein</v-tab>
+						<v-tab>Regeln</v-tab>
+						<v-tab>Beschreibung</v-tab>
+						<v-tab>Netzauswahl</v-tab>
 					</v-tabs>
 					<v-tabs-items v-model="tab_search">
 						<v-tab-item>
@@ -51,6 +52,11 @@
 							v-model="cb_search_description"
 							label="Suche auch in Dienstbeschreibungen" 
 							></v-checkbox>
+						</v-tab-item>
+
+						<v-tab-item>
+							<v-subheader>Eigene Netze zur Auswahl</v-subheader>
+							<network-selection-table></network-selection-table>
 						</v-tab-item>
 					</v-tabs-items>
 				
@@ -245,12 +251,14 @@ import { mapState } from 'vuex';
 import Tabulator from './tables/Tabulator';
 import ServiceRulesTable from './tables/ServiceRulesTable';
 import ServiceUsersTable from './tables/ServiceUsersTable';
+import NetworkSelectionTable from './tables/NetworkSelectionTable';
 
 	export default {
 		components: {
 			Tabulator,
 			ServiceRulesTable,
-			ServiceUsersTable
+			ServiceUsersTable,
+			NetworkSelectionTable,
 		},
 		data: () => ({
 			pnl_search: 0,
