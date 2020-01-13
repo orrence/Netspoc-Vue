@@ -1,5 +1,5 @@
 <template>
-<v-container >
+<v-container>
 	<v-treeview 
 		v-if="loaded"
 		open-all

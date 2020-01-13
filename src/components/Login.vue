@@ -6,6 +6,9 @@
   :loading="false"
   class="mx-auto"
   > 
+    <v-card-title primary-title>
+      <h4>Login</h4>
+    </v-card-title>
 
     <v-system-bar 
     v-if="!valid"
@@ -23,13 +26,18 @@
       Anmeldedaten eingeben
     </v-system-bar>
 
-    <v-form class="mx-2" @submit="submit">
+    <v-form 
+    class="mx-2" 
+    @submit="submit"
+    onSubmit="return false"
+    >
       <v-text-field
         id="txt_login"
         v-model="login"
         :rules="[v => !!v || 'Darf nicht leer sein']"
         required
         label="Benutzername / E-Mail"
+        prepend-icon="person"
       ></v-text-field>
   
       <v-text-field
@@ -40,6 +48,7 @@
         @click:append="show = !show"
         required
         label="Passwort"
+        prepend-icon="lock"
       ></v-text-field>
       
       <v-card-actions>
@@ -47,6 +56,7 @@
           <v-btn
           id="btn_login"
           type="submit"
+          primary large block
           >Login</v-btn>  
         </v-flex>
       </v-card-actions>
@@ -75,14 +85,12 @@ export default {
   }),
   methods: {
     submit () {
+      // TODO: change "/login" to "/ldap_login_or_something" if login is not an email
       var vm = this;
 
-      vm.loading = true;
-
-      // TODO: change "/login" to "/ldap_login_or_something" if login is not an email
-
       if (vm.login) {
-        vm.axios.post(`/login?email=${vm.login}&pass=${vm.login}&app=foo`, 
+        vm.loading = true;
+        vm.axios.post(`/login?email=${vm.login}&pass=${vm.password}&app=${'foo'}`, 
           { 
             crossdomain: true, 
             maxRedirects: 5 
@@ -91,7 +99,10 @@ export default {
             vm.valid = /Unknown\spath/.test(response.data);
             vm.loading = false;
             vm.clear();
-            if (vm.valid) vm.$router.push('/networks');
+            if (vm.valid) {
+              vm.$store.dispatch('setLoggedIn');
+              vm.$router.push('networks');
+            }
           })
           .catch(function (error) {
             alert('login: ' + error);
@@ -102,7 +113,6 @@ export default {
       else {
         vm.valid = false;
       }
-      this.$store.dispatch('setLoggedIn');
     },
     clear () {
       this.password = null;
