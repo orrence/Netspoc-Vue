@@ -1,49 +1,47 @@
 <template>
-	<v-container tableContainer>
-		<v-layout fill-height justify-space-between>
+	<v-container>
+		<v-row class="row">
 
-			<v-container item>
-				<h2>Netzauswahl</h2>
-				<Tabulator v-if="Object.keys(networks).length > 0" :config="getConfig()">
-				</Tabulator> 
-			</v-container>
+        <v-col class="item">
+          <h2>Netzauswahl</h2>
+          <div class="tablediv">
+            <NetworkTable
+               v-if="Object.keys(networks).length > 0" :input="networkData"
+               @clicked="onRowClick">
+            </NetworkTable>
+          </div>
+        </v-col>
 
-			<v-container item>
-				<h2>Enthaltene Ressourcen</h2>
-				<ResourceTable v-if="selected" :selection="selected">
-				</ResourceTable>
-			</v-container>
+        <v-col class="item">
+           <h2>Enthaltene Ressourcen</h2>
+           <div class="tablediv">
+             <ResourceTable
+                v-if="selected" :selection="selected">
+             </ResourceTable>
+           </div>
+        </v-col>
 
-		</v-layout>
+		</v-row>
 	</v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Tabulator from './tables/Tabulator';
+import NetworkTable from './tables/NetworkTable';
 import ResourceTable from './tables/ResourceTable';
 
 export default {
 	components: {
-		Tabulator,
+		NetworkTable,
 		ResourceTable
 	},
 	data: () => ({
-		networks: {},
-		selected: null,
-		config : {
-			columns: [
-				{ title: 'IP-Addresse', field: 'ip', sorter: 'ip' },
-				{ title: 'Name', field: 'name' },
-				{ title: 'Verantwortungsbereich', field: 'owner' },
-			],
-			data: [],
-			layout: "fitColumns",
-			layoutColumnsOnNewData:true,
-		}
+       networks: {},
+       selected: null,
+       networkData: {},
 	}),
 	mounted () {
-		this.getNetworks();
+       this.getNetworks();
 	},
 	computed: mapState(['active']),
 	watch : {
@@ -53,49 +51,51 @@ export default {
 				this.networks = {};
 				this.selected = null;
 				this.getNetworks();
-			}
-		}
-	},
-	methods: {
-		getConfig: function () {
-			var c = this.config;
-			c.rowClick = function(e, row) {
-				this.selected = row.getData().name;
-			}.bind(this);
-			return c;
-		},
-		getNetworks () {
-			var vm = this;	// get vue instance
-			if (!vm.active.owner) {
-				return;
-			}
-			vm.axios.get('/get_networks', {
-				params: {
-					chosen_networks: '',
-					active_owner: vm.active.owner,
-					history: vm.active.policy.date
-				}
-			}).then(function (response) {
-				vm.networks = response.data.records;
-				vm.config.data = response.data.records;
-			}).catch(function (error) {
-				vm.networks = {};
-				vm.config.data = {};
-				alert('get_networks: ' + error);
-			});
-		}
-   }
- }
+         }
+      }
+   },
+    methods: {
+        getNetworks () {
+            var vm = this;	// get vue instance
+            if (!vm.active.owner) {
+                return;
+            }
+            vm.axios.get('/get_networks', {
+                params: {
+                    chosen_networks: '',
+                    active_owner: vm.active.owner,
+                    history: vm.active.policy.date
+                }
+            }).then(function (response) {
+                vm.networks = response.data.records;
+                vm.networkData = response.data.records;
+            }).catch(function (error) {
+                vm.networks = {};
+                vm.networkData = {};
+                alert('get_networks: ' + error);
+            });
+        },
+        onRowClick(rowData) {
+            this.selected = rowData;
+            }
+    }
+}
 </script>
 
 <style>
-	.tableContainer {
+.row {
     height: 100%;
-  }
-
-	.item {
-    /*min-height: 50px;*/
-    /*min-width: 80px;*/
-    margin: 8px;
-  }
+}
+.container {
+    height: 100%;
+}
+.item {
+    height: 100%;
+}
+.tablediv {
+    /*wenn die Höhe zu groß für den umgebenden Container ist,
+      wird die Tabelle nicht gerendert! - Warum? Default - lösung?*/
+    /*besser schrifthöhe nehmen als pixel*/
+    height: calc(100% - 6ex);
+    }
 </style>
