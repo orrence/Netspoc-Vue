@@ -1,5 +1,5 @@
 <template>
-<v-flex xs2 v-if="loadedOwner && loadedActiveOwner">
+<v-flex xs5 v-if="loadedOwner && loadedActiveOwner">
   <v-combobox
     label="Owner"
     v-model="select"
@@ -38,3 +38,11 @@ export default {
   }
 }
 </script>
+
+<style>
+/* remove unwanted margins made by vuetify */
+.v-select-list .v-list .v-input__slot { 
+  margin-bottom: 0 !important;
+  margin-top: 20;
+}
+</style>

@@ -16,7 +16,7 @@
 					<v-tabs 
 					v-model="tab_search"
 					:height="20"
-					slider-color="teal"
+					slider-color="orange"
 					grow
 					>
 						<v-tab>Regeln</v-tab>
@@ -586,5 +586,13 @@ import NetworkSelectionTable from './tables/NetworkSelectionTable';
 		min-height: 50px;
 		min-width: 80px;
 		margin: 8px;
+	}
+
+	/*.v-tabs-bar.v-tabs-bar--is-mobile .v-tab {*/
+		/*margin-left: 0px !important;*/
+	/*}*/
+
+	.v-slide-group__prev {
+		display: none !important;
 	}
 </style>

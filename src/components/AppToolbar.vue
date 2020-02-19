@@ -1,42 +1,36 @@
 <template>
-<v-app-bar v-if="loggedIn" app>
-
-  <router-link 
-  to="/services/0"
-  id="rl_services">
-    <v-btn text>
-      <span>Dienste</span>
-    </v-btn>
-  </router-link>
- 
-  <router-link 
-  to="/networks"
-  id="rl_networks"
-  >
-    <v-btn text>
-      <span>Netze</span>
-    </v-btn>
-  </router-link>
- 
-  <router-link 
-  to="/diff"
-  id="rl_diff"
-  >
-    <v-btn text>
-      <span>Diff</span>
-    </v-btn>
-  </router-link>
-
-  <v-spacer/>
+<v-app-bar
+app
+v-if="loggedIn"
+elevate-on-scroll
+>
   
-  <combo-policy id="comb_policy" class="mx-1"/>
-  <combo-owner id="comb_owner" class="mx-1"/>
+  <v-tabs
+  slider-color="orange"
+  > 
+    <v-tab
+    id="rl_services" 
+    to="/services/0"
+    > Dienste
+    </v-tab>
+    
+    <v-tab
+    id="rl_networks"
+    to="/networks"
+    > Netze
+    </v-tab>
+  
+    <v-tab
+    id="rl_diff"
+    to="/diff"
+    > Diff
+    </v-tab>
+   </v-tabs>
+ 
+  <v-spacer/>
 
-  <v-spacer></v-spacer>
-
-  <v-layout>
-    <slot/>
-  </v-layout>
+  <combo-policy id="comb_policy"/>
+  <combo-owner id="comb_owner" class="mx-2"/>
 
   <v-btn id="btn_logout" @click="logout">logout</v-btn>
 </v-app-bar>
