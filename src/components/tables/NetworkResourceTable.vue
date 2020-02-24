@@ -1,6 +1,6 @@
 <template>
 <div class="tabbox" ref="tabbox">
-  <Tabulator :config="config"></Tabulator>
+    <Tabulator :config="config"/>
 </div>
 </template>
 
@@ -39,6 +39,7 @@ export default {
     computed: mapState(['active']),
     watch: {
         selection: function () {
+            this.config.data = [];
             this.getHosts();
         }
     },
@@ -46,20 +47,21 @@ export default {
         this.getHosts();
     },
     methods: {
-        getHosts: function () {
+        getHosts () {
+            if (!this.selection) return;
+
             var vm = this;	// get vue instance
             vm.axios.get('/get_hosts', {
                 params: {
                     network: vm.selection,
                     active_owner: vm.active.owner,
                     history: vm.active.policy.date
-                }})
-                .then(function (response) {
-                    vm.config.data = response.data.records;
-                })
-                .catch(function (error) {
-                    alert('get_hosts: ' + error);
-                });
+                }
+            }).then(function (response) {
+                vm.config.data = response.data.records;
+            }).catch(function (error) {
+                alert('get_hosts: ' + error);
+            });
         }
     }
 }

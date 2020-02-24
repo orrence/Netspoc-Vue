@@ -13,7 +13,7 @@ export default {
 		'selection', 'expandUser', 'IPAsName', 
 		'filterBySearch', 'search_ip1', 'search_ip2', 
 		'search_proto', 'search_supernet', 'search_subnet', 
-		'search_range', 'search_own', 'search_used', 'search_usable', 
+		'search_range', 'search_own', 'search_used', 'search_visible', 
 		'search_limited', 'search_case_sensitive', 'search_exact'
 		],
 	data: () => ({
@@ -59,8 +59,8 @@ export default {
 					search_range: vm.filterBySearch ? vm.search_range : null,
 					search_own: vm.filterBySearch ? vm.search_own : null,
 					search_used: vm.filterBySearch ? vm.search_used : null,
-					search_usable: vm.filterBySearch ? vm.search_usable : null,
-					search_limited: vm.filterBySearch ? vm.search_limited : null,
+					search_visible: vm.filterBySearch ? vm.search_visible : null,
+					search_disable_at: vm.filterBySearch ? vm.search_limited : null,
 					search_case_sensitive: vm.filterBySearch ? vm.search_case_sensitive : null,
 					search_exact: vm.filterBySearch ? vm.search_exact : null,
 				}})

@@ -12,28 +12,17 @@ export default {
 	components: {
 		Tabulator,
 	},
+	props:['relation'],
 	data: () => ({
 		config : {
 			columns: [
-				{
-					title: 'IP-Addresse',
-					field: 'ip',
-					sorter: 'ip',
-				},
-				{
-					title:'Name',
-					field:'name',
-				},
-				{
-					title:'Verantwortungsbereich',
-					field:'owner',
-				},
+				{ title: 'Name', field: 'name' },
 			],
 			data: [],
 			layout: "fitColumns",
 			layoutColumnsOnNewData:true,
 			placeholder:"No Data Available",
-			height: "0",
+			// height: "0",
 		},
 	}),
 	computed: mapState(['active']),
@@ -42,30 +31,31 @@ export default {
 			deep: true,
 			handler () {
 				this.$emit('clicked', null);
-				this.getNetworks();
+				this.getServices();
 			}
 		}
 	},
 	mounted () {
-		this.getNetworks()
+		this.getServices()
 	},
 	methods: {
-		getNetworks () {
-			var vm = this;   // get vue instance
+		getServices () {
+			var vm = this;  // get vue instance
 			if (!vm.active.owner) {
 				return;
 			}
-			vm.axios.get('/get_networks', {
+			vm.axios.get('/service_list', {
 				params: {
 					chosen_networks: '',
 					active_owner: vm.active.owner,
-					history: vm.active.policy.date
+					history: vm.active.policy.date,
+					relation: vm.relation,
 				}
 			}).then(function (response) {
 				vm.config.data = response.data.records;
 			}).catch(function (error) {
-				vm.config.data = {};
-				alert('get_networks: ' + error);
+				vm.config.data = [];
+				alert('service_list: ' + error);
 			});
 		},
 
@@ -75,7 +65,7 @@ export default {
 		getFullConfig: function () {
 			var c = this.config;
 			c.rowClick = function(e, row) {
-				this.$emit('clicked', row.getData().name);
+				this.$emit('clicked', row.getData());
 			}.bind(this);
 			return c;
 		},

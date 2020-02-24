@@ -32,6 +32,17 @@ export default {
 	mounted () {
 		this.getDiff();
 	},
+	watch : {
+		active: {
+			deep: true,
+			handler () {
+				this.getDiff();
+			}
+		},
+		oldPolicy () {
+			this.getDiff();
+		}
+	},
 	methods: {
 		morphTree (backendTree) {
 			if (backendTree.length == 0) { return; }
@@ -70,7 +81,7 @@ export default {
 			if (node.leaf) { return; }
 			if (node.children.length == 1 && !node.children[0].leaf) {
 				if (!node.children[0].iconCls) {
-					node.name += " / " + node.children[0].name;
+					node.name += "/" + node.children[0].name;
 					node.children = node.children[0].children;
 					this.helpExtraMorphTree(node);
 				} else {	
