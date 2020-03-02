@@ -1,6 +1,6 @@
 <template>
 <v-container>
-	<v-row class="row">
+	<v-row class="r">
 
 		<v-col class="item">
 			<h2>Netzauswahl</h2>
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style>
-.row {
+.r {
 	height: 100%;
 }
 .container {

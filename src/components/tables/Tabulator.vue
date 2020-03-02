@@ -18,6 +18,7 @@ export default {
 		"config.data": {
 			handler: function (newData) {
 				this.tabulator.replaceData(newData);
+				this.tabulator.redraw();	
 			},
 		},
 	},
@@ -43,6 +44,10 @@ export default {
 		}, 100)
 		window.addEventListener('resize',
 								_.debounce(this.handleWindowResize, 100))
+	},
+	updated () {
+		alert('jo');
+		this.$refs.table.redraw(true);
 	},
 	beforeDestroy: function() {
 		window.removeEventListener('resize', this.handleWindowResize)

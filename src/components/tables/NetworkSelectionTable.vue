@@ -1,16 +1,25 @@
 <template>
 <v-container>
-	<h3> {{selectedRows}} Netze ausgewaehlt </h3>
-	<br/>
-	<v-btn color="red lighten-2" @click="selectAll">
-		alle Netze auswaehlen
-	</v-btn>
-	.
-	<v-btn color="red lighten-2" @click="deselectAll">
-		alle Netze abwaehlen
-	</v-btn>
-	<br/><br/>
-	<div v-show="data.length > 0" id="network-selection-table"></div>
+	<v-row>
+		<v-col>
+			<h3> {{selectedRows}} Netze ausgewaehlt </h3>
+		</v-col>
+		<v-col>
+			<v-btn color="red lighten-2" @click="selectAll">
+				alle Netze auswaehlen
+			</v-btn>
+		</v-col>
+		<v-col>
+			<v-btn color="red lighten-2" @click="deselectAll">
+				alle Netze abwaehlen
+			</v-btn>
+		</v-col>
+	</v-row>
+	<v-row>
+		<v-col>
+			<div v-show="data.length > 0" id="network-selection-table"></div>
+		</v-col>
+	</v-row>
 </v-container>
 </template>
 
