@@ -1,0 +1,36 @@
+global
+
+	global colors primary and secondary
+
+	switch for dark mode
+
+	morph tabs into menu button for small window size
+
+	store search requests in url
+
+	read search request from url
+
+
+components/tables/Tabulator.vue
+
+	icons for select all, deselect all
+
+	keybindings for selection (ctrl is pressed => select multiple)
+
+	exel export
+
+	print
+
+	minimal height option
+
+
+components/DiffTree.vue
+
+	fix collapsedTree
+
+	switch between trees keeps them open
+
+
+views/Services.vue
+
+	handle admin information for multiple selected services

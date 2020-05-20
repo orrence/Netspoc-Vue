@@ -1,16 +1,15 @@
 <template>
-<v-flex xs5>
-  <v-combobox
-    id="combo_policy"
-    label="Policy"
-    v-model="policy"
-    :items="history"
-    item-text="date"
-    return-object
-    filled
-    color="orange"
-  ></v-combobox>
-</v-flex>
+<v-combobox
+id="combo_policy"
+label="Policy"
+v-model="policy"
+:items="history"
+item-text="date"
+return-object
+outlined
+dense
+color="orange"
+/>
 </template>
 
 <script>

@@ -1,7 +1,25 @@
 <template>
-<div class="tabbox" ref="tabbox">
-	<Tabulator :config="getFullConfig()"/>
-</div>
+<Tabulator
+:columns="[
+	{
+		title: 'IP-Addresse',
+		field: 'ip',
+		sorter: 'ip',
+	},
+	{
+		title:'Name',
+		field:'name',
+	},
+	{
+		title:'Verantwortungsbereich',
+		field:'owner',
+	},
+]"
+:data="data"
+:selectable="true"
+:groupBy="''"
+@selectionUpdate="passOnSelectionUpdate"
+/>
 </template>
 
 <script>
@@ -13,35 +31,13 @@ export default {
 		Tabulator,
 	},
 	data: () => ({
-		config : {
-			columns: [
-				{
-					title: 'IP-Addresse',
-					field: 'ip',
-					sorter: 'ip',
-				},
-				{
-					title:'Name',
-					field:'name',
-				},
-				{
-					title:'Verantwortungsbereich',
-					field:'owner',
-				},
-			],
-			data: [],
-			layout: "fitColumns",
-			layoutColumnsOnNewData:true,
-			placeholder:"No Data Available",
-			height: "0",
-		},
+		data: [],
 	}),
 	computed: mapState(['active']),
 	watch : {
 		active: {
 			deep: true,
 			handler () {
-				this.$emit('clicked', null);
 				this.getNetworks();
 			}
 		}
@@ -53,6 +49,7 @@ export default {
 		getNetworks () {
 			var vm = this;   // get vue instance
 			if (!vm.active.owner) {
+				vm.data = [];
 				return;
 			}
 			vm.axios.get('/get_networks', {
@@ -62,29 +59,15 @@ export default {
 					history: vm.active.policy.date
 				}
 			}).then(function (response) {
-				vm.config.data = response.data.records;
+				vm.data = response.data.records;
 			}).catch(function (error) {
-				vm.config.data = {};
+				vm.data = [];
 				alert('get_networks: ' + error);
 			});
 		},
-
-		/* Die rowclick-funktion ist nicht direkt in der Config spezifiziert,
-		   weil ich sonst nicht mit this an die Daten rankomme -
-		   gibt es einen anderen Weg? */
-		getFullConfig: function () {
-			var c = this.config;
-			c.rowClick = function(e, row) {
-				this.$emit('clicked', row.getData().name);
-			}.bind(this);
-			return c;
-		},
-	},
+		passOnSelectionUpdate(data) {
+			this.$emit('selectionUpdate', data.map(row => row.name));
+		}
+	}
 }
 </script>
-
-<style>
-.tabbox {
-	height: 100%;
-}
-</style>

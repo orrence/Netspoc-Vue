@@ -1,13 +1,13 @@
 <template>
-<v-flex xs5 v-if="loadedOwner && loadedActiveOwner">
-  <v-combobox
-    label="Owner"
-    v-model="select"
-    :items="owners"
-    filled
-    color="orange"
-  ></v-combobox>
-</v-flex>
+<v-combobox
+v-if="loadedOwner && loadedActiveOwner"
+label="Owner"
+v-model="select"
+:items="owners"
+outlined
+dense
+color="orange"
+/>
 </template>
 
 <script>

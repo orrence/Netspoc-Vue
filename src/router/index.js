@@ -2,12 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
 
-import Services from '@/components/Services'
-import OwnNetworks from '@/components/OwnNetworks'
-import Diff from '@/components/Diff'
-import Entitlements from '@/components/Entitlements'
-import Login from '@/components/Login'
-import PageNotFound from '@/components/PageNotFound'
+import Services from '@/views/Services'
+import Networks from '@/views/Networks'
+import Diff from '@/views/Diff'
+import Entitlements from '@/views/Entitlements'
+import Login from '@/views/Login'
+import PageNotFound from '@/views/PageNotFound'
 
 import TableTest from '@/components/testkram/Tablator'
 import expansion from '@/components/testkram/expansionTest'
@@ -51,35 +51,35 @@ const routes = [
 		props: true,
 		name: 'services',
 		meta: {
-			title: 'Services'
+			title: 'Dienste'
 		}
 	},
 	{
 		path: '/networks',
-		component: OwnNetworks,
+		component: Networks,
 		meta: {
-			title: 'Own Networks'
+			title: 'Netze'
 		}		
 	},
 	{
 		path: '/diff',
 		component: Diff,
 		meta: {
-			title: 'Diff'
+			title: 'Unterschiede'
 		}
 	},
 	{
 		path: '/entitlements',
 		component: Entitlements,
 		meta: {
-			title: 'Entitlements'
+			title: 'Berechtigungen'
 		}
 	},
 	{
 		path: '/login',
 		component: Login,
 		meta: {
-			title: 'Login'
+			title: 'Anmeldung'
 			}		
 	},
 	{

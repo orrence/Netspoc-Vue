@@ -1,79 +1,57 @@
 <template>
-<v-container>
-	<v-row>
-		<v-col>
-			<h3> {{selectedRows}} Netze ausgewaehlt </h3>
-		</v-col>
-		<v-col>
-			<v-btn color="red lighten-2" @click="selectAll">
-				alle Netze auswaehlen
-			</v-btn>
-		</v-col>
-		<v-col>
-			<v-btn color="red lighten-2" @click="deselectAll">
-				alle Netze abwaehlen
-			</v-btn>
-		</v-col>
-	</v-row>
-	<v-row>
-		<v-col>
-			<div v-show="data.length > 0" id="network-selection-table"></div>
-		</v-col>
-	</v-row>
-</v-container>
+<Tabulator
+:columns="[
+	{
+		title: 'IP-Addresse',
+		field: 'ip',
+		sorter: 'ip',
+	},
+	{
+		title:'Name',
+		field:'name',
+	},
+	{
+		title:'Verantwortungsbereich',
+		field:'owner',
+	},
+]"
+:data="data"
+:selectable="true"
+:groupBy="''"
+@selectionUpdate="passOnSelectionUpdate"
+:height="'311px'"
+/>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Tabulator from 'tabulator-tables';
+import Tabulator from './Tabulator';
 
 export default {
+	components: {
+		Tabulator,
+	},
 	data: () => ({
 		table: null,
 		data: [],
-		selected: [],
-		selectedRows: 0
 	}),
-	mounted () {
-		this.getNetworks();
-
-		var vm = this;
-		vm.table = new Tabulator("#network-selection-table", {
-			height: "311px",
-			layout: "fitColumns",
-			selectable: true,
-			data: vm.data,
-			columns: [
-				{ title: 'IP-Addresse', field: 'ip', sorter: 'ip' },
-				{ title: 'Name', field: 'name' },
-				{ title: 'Verantwortungsbereich', field: 'owner' },
-			],
-			rowSelectionChanged: function(selected){
-				vm.selectedRows = selected.length;
-			}
-		});
-	},
 	computed: mapState(['active']),
 	watch : {
 		active: {
 			deep: true,
 			handler () {
-				this.data = {};
-				this.selected = [];
 				this.getNetworks();
 			}
 		}
 	},
+	mounted () {
+		this.getNetworks();
+	},
 	methods: {
-		selectAll () {
-			this.table.selectRow();
-		},
-		deselectAll () {
-			this.table.deselectRow();
-		},
 		getNetworks () {
 			var vm = this;	// get vue instance
 			if (!vm.active.owner) {
+				vm.data = [];
 				return;
 			}
 			vm.axios.get('/get_networks', {
@@ -85,9 +63,12 @@ export default {
 			}).then(function (response) {
 				vm.data = response.data.records;
 			}).catch(function (error) {
-				vm.data = {};
+				vm.data = [];
 				alert('get_networks: ' + error);
 			});
+		},
+		passOnSelectionUpdate(data) {
+			this.$emit('selectionUpdate', data.map(row => row.name));
 		}
 	}
 }

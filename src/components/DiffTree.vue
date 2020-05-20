@@ -1,13 +1,24 @@
 <template>
-<v-container>
-	<v-treeview 
-		v-if="loaded"
+<div v-if="loaded">
+	<!-- <v-checkbox 
+	v-model="collapse"
+	label="Nodes Zusammenfassen" 
+	/>
+		<v-treeview
+		:items="collapsedTree"
 		open-all
-		:items="bTree"
 		dense
 		open-on-click
-	></v-treeview>
-</v-container>
+		/> -->
+			
+		<v-treeview 
+		:items="tree"
+		open-all
+		dense
+		open-on-click
+		/>
+		<!-- {{ collapsedTree }} -->
+</div>
 </template>
 
 <script>
@@ -22,7 +33,9 @@ export default {
 		}
 	},
 	data: () => ({
-		bTree: [],
+		collapse: true,
+		tree: [],
+		collapsedTree: [],
 		loaded:false,
 		ic: 1
 	}),
@@ -44,37 +57,38 @@ export default {
 		}
 	},
 	methods: {
-		morphTree (backendTree) {
-			if (backendTree.length == 0) { return; }
-			for (let i = 0; i < backendTree.length; i++){ 
+		morphTree (tree) {
+			if (tree.length === 0) { return; }
+			for (let i = 0; i < tree.length; i++){ 
 				Object.defineProperty(
-					backendTree[i], 'id', {
+					tree[i], 'id', {
 						value: this.ic++,
 						writable: false
 						}
 					); 
-				if (backendTree[i].text) {
+				if (tree[i].text) {
 					Object.defineProperty(
-						backendTree[i], 'name',
-						Object.getOwnPropertyDescriptor(backendTree[i], "text")
+						tree[i], 'name',
+						Object.getOwnPropertyDescriptor(tree[i], "text")
 						);
 				} else {
 					Object.defineProperty(
-						backendTree[i], 'name',
-						Object.getOwnPropertyDescriptor(backendTree[i], "iconCls")
+						tree[i], 'name',
+						Object.getOwnPropertyDescriptor(tree[i], "iconCls")
 						);
 				}
 				
-				delete backendTree[i]["text"];
+				delete tree[i]["text"];
 
-				if (!backendTree[i].leaf) {
-					this.morphTree(backendTree[i].children);
+				if (!tree[i].leaf) {
+					this.morphTree(tree[i].children);
 				}
 			}
 		},
-		extraMorphTree (backendTree) {
-			for (let i = 0; i < backendTree.length; i++) {
-				this.helpExtraMorphTree(backendTree[i]);
+		extraMorphTree (targetTree, tree) {
+			for (let i = 0; i < tree.length; i++) {
+				targetTree[i] = {...tree[i]};
+				this.helpExtraMorphTree(targetTree[i]);
 			}
 		},
 		helpExtraMorphTree (node) {
@@ -145,19 +159,16 @@ export default {
 				}
 			}).then(function (response) {
 				vm.ic = 0;
-				vm.bTree = response.data;
-				vm.morphTree(vm.bTree);
-				vm.extraMorphTree(vm.bTree); // experimental
+				vm.tree = response.data;
+				vm.morphTree(vm.tree);
+				// vm.extraMorphTree(vm.collapsedTree, vm.tree); // experimental
 				vm.loaded = true;
 			}).catch(function (error) {
-				vm.bTree = [];
-				alert('get_networks: ' + error);
+				vm.tree = [];
+				vm.collapsedTree = [];
+				alert('get_diff: ' + error);
 			});
 		}
   }
 }
 </script>
-
-<style>
-
-</style>
