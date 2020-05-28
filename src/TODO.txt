@@ -1,14 +1,20 @@
+important
+
+	admin list necessary => single selection for services
+	(multi selection removes info)
+
+
 global
-
-	global colors primary and secondary
-
-	switch for dark mode
 
 	morph tabs into menu button for small window size
 
 	store search requests in url
 
 	read search request from url
+	
+	global colors primary and secondary
+
+	switch for dark mode
 
 
 components/tables/Tabulator.vue
@@ -34,3 +40,5 @@ components/DiffTree.vue
 views/Services.vue
 
 	handle admin information for multiple selected services
+
+	table size

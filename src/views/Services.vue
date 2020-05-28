@@ -72,13 +72,6 @@
 						/>
 					</v-col>
 					<v-col>
-						<v-checkbox
-						v-model="showDetails"
-						:disabled="tab_details !== 0"
-						label="mehr Details"
-						/>
-					</v-col>
-					<v-col>
 						<v-checkbox 
 						v-model="filterBySearch" 
 						:disabled="tab_services !== 3"
@@ -87,43 +80,18 @@
 					</v-col>
 				</v-row>
 
-				<v-row dense v-if="showDetails && selection">
+				<v-row dense v-if="selection.length == 1">
 					<v-col>
 						<v-row dense>
 							<v-col>
 								<div>Beschreibung:</div>
 							</v-col>
 							<v-col>
-								<div>TODO</div>
-								<!-- <div>{{ selection.description }}</div> -->
+								<div>{{ selection[0].description }}</div>
 							</v-col>
 						</v-row>
 						<v-row dense>
-							<v-col>
-								<div>Verantwortung:</div>
-							</v-col>
-							<v-col>
-								<v-expansion-panels flat tile multiple hover accordion>
-									<v-expansion-panel 
-									v-for="owner in selection.owner"
-									:key="owner.name"
-									align="right"
-									>
-									<v-expansion-panel-header>{{owner.name}}</v-expansion-panel-header>
-									<v-expansion-panel-content>
-										<v-list>
-											<v-list-item
-											v-for="admin in admins[owner.name]"
-											:key="admin"
-											align="right"
-											>
-												<v-list-item-title>{{admin}}</v-list-item-title>
-											</v-list-item>
-										</v-list>
-									</v-expansion-panel-content>
-									</v-expansion-panel>
-								</v-expansion-panels>
-							</v-col>
+							<AdminsTable :selection="selection[0]"/>
 						</v-row>
 					</v-col>
 				</v-row>
@@ -157,6 +125,7 @@ import ServiceTable from '../components/tables/ServiceTable';
 import ServiceSearchPanel from '../components/ServiceSearchPanel';
 import ServiceRulesTable from '../components/tables/ServiceRulesTable';
 import ServiceUsersTable from '../components/tables/ServiceUsersTable';
+import AdminsTable from '../components/tables/AdminsTable';
 
 export default {
 	components: {
@@ -164,6 +133,7 @@ export default {
 		ServiceSearchPanel,
 		ServiceRulesTable,
 		ServiceUsersTable,
+		AdminsTable,
 	},
 	data: () => ({
 		pnl_search: 0,
@@ -173,17 +143,11 @@ export default {
 		expandUser: false,
 		IPAsName: false,
 		filterBySearch: true,
-		showDetails: false,
 		search_input: {},
 		admins: {},
 	}),
 	computed: mapState(['active']),
 	mounted () {
-		// this.$nextTick(function() {
-		// 	window.addEventListener('resize', this.resize);
-		// 	//Init
-		// 	this.resize();
-		// });
 		if (this.$route.params.search.length === 1) {
 			this.tab_services = 0;
 		} else {
@@ -199,21 +163,10 @@ export default {
 				this.selection = [];
 			}
 		},
-		// selection: {
-		// 	handler (newSelection) {
-		// 		this.admins = {};
-		// 		if (newSelection !== null) {
-		// 			for (let i = 0; i < this.selection.owner.length; i++) {
-		// 				this.getAdmins(this.selection.owner[i].name);
-		// 			}
-		// 		}
-		// 	}
-		// },
 		search_input: {
 			deep: true,
 			handler () {
 				this.selection = [];
-				this. admins = null;
 				this.tab_services = 3;
 			}
 		}
@@ -237,29 +190,6 @@ export default {
 		},
 		captureSelectionUpdate(data) {
 			this.selection = data;
-		},
-		getAdmins (owner) {
-			var vm = this;
-			if (!vm.active.owner || !vm.active.policy) {
-				vm.admins = {};
-				return;
-			}
-			vm.axios.get('/get_admins', {
-				params: {
-					chosen_networks: '',
-					active_owner: vm.active.owner,
-					history: vm.active.policy.date,
-					owner: owner
-				}
-			}).then(function (response) {
-				vm.admins[owner] = response.data.records;
-				for (let i = 0; i < vm.admins[owner].length; i++) {
-					vm.admins[owner][i] = vm.admins[owner][i].email;
-				}
-			}).catch(function (error) {
-				vm.admins = {};
-				alert(`get_admins(${owner}): ` + error);
-			});
 		}
 	}
 }

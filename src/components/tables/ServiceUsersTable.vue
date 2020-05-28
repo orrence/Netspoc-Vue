@@ -1,5 +1,6 @@
 <template>
 <Tabulator
+:name="`Dienstbenutzer_${active.owner}_${active.policy ? active.policy.date : ''}`"
 :columns="[
 	{ 
 		title: 'Name',
@@ -17,7 +18,7 @@
 ]"
 :data="data"
 :selectable="false"
-:groupBy="'service'"
+:groupBy="selection.length > 1 ? 'service' : ''"
 />
 </template>
 
@@ -31,21 +32,9 @@ export default {
 	props:['filterBySearch', 'selection'],
 	data: () => ({
 		data: [],
-		unfinishedData: [],
-		requests: 0,
-		pending: false,
 	}),
 	computed: mapState(['active']),
 	watch: {
-		requests: function (value) {
-			if (value === 0) {
-				this.data = this.unfinishedData;
-				this.unfinishedData = [];
-				if (this.pending) {
-					this. getUsers();
-				}
-			}
-		},
 		selection: function () { this.getUsers(); }
 	},
 	mounted () {
@@ -54,44 +43,28 @@ export default {
 	methods: {
 		getUsers () {
 			var vm = this;	// get vue instance
-			if (!vm.active.owner || !vm.active.policy || vm.selection.length === 0) {
-				vm.pending = false;
-				vm.requests = 0;
-				vm.unfinishedData = [];
+			if (!vm.active.owner || !vm.active.policy || vm.selection.length !== 1) {
 				vm.data = [];
-			} else if (vm.requests > 0) {
-				vm.pending = true;
-			} else {
-				vm.pending = false;
-				vm.unfinishedData = [];
-				vm.requests = vm.selection.length;
-				for (let i = 0; i < vm.selection.length; i++) {
-					vm.axios.get('/get_users', {
-						params: {
-							expand_users: vm.expandUser ? 1 : 0,
-							display_property: vm.IPAsName ? 'name' : 'ip',
-							filter_rules: vm.filterBySearch ? 1 : 0,
-							active_owner: vm.active.owner,
-							history: vm.active.policy.date,
-							chosen_networks: '',
-							service: vm.selection[i]
-						}})
-						.then(function (response) {
-							var resdata = response.data.records;
-							for (let j = 0; j < resdata.length; j++) {
-								// for grouping
-								resdata[j].service = vm.selection[i]
-							}
-							vm.unfinishedData = vm.unfinishedData.concat(resdata);
-							vm.requests--;
-						})
-						.catch(function (error) {
-							vm.requests--;
-							alert('get_users: ' + error);
-						}
-					);
-				}
+				return;
 			}
+
+			vm.axios.get('/get_users', {
+				params: {
+					history: vm.active.policy.date,
+					active_owner: vm.active.owner,
+					service: vm.selection.map(row => row.name).join(','),
+					expand_users: vm.expandUser ? 1 : 0,
+					display_property: vm.IPAsName ? 'name' : 'ip',
+					filter_rules: vm.filterBySearch ? 1 : 0,
+				}})
+				.then(function (response) {
+					vm.data = response.data.records;
+				})
+				.catch(function (error) {
+					vm.data = [];
+					alert('get_users: ' + error);
+				}
+			);
 		}
 	}
 }

@@ -1,23 +1,51 @@
 <template>
 <v-container fluid>
-	<v-row v-if="selectable" dense :justify="'space-between'" :align="'center'">
-		<v-col cols="auto">
-			<h5> {{selectedRows}} Netze ausgewählt </h5>
-		</v-col>
+	<v-row dense :justify="'space-between'" :align="'center'">
 		<v-col cols="auto">
 			<v-btn 
-			text
+			icon
+			color="red lighten-2" 
+			@click="downloadAsPDF"
+			>
+				<span class="material-icons">picture_as_pdf</span>
+			</v-btn>
+
+			<v-btn 
+			icon
+			color="green lighten-2" 
+			@click="downloadAsExcel"
+			>
+				<span class="material-icons">border_all</span>
+			</v-btn>
+
+			<!-- <v-btn 
+			icon
+			color="purple lighten-2" 
+			@click="print"
+			>
+				<span class="material-icons">print</span>
+			</v-btn> -->
+		</v-col>
+
+		<v-col v-if="selectable" cols="auto">
+			<div> {{selectedRows}} Netz(e) ausgewählt </div>
+		</v-col>
+		
+		<v-col v-if="selectable" cols="auto">
+			<v-btn 
+			icon
 			color="blue lighten-2" 
 			@click="selectAll"
 			>
-				alle auswählen
+				<span class="material-icons">add_circle_outline</span>
 			</v-btn>
+
 			<v-btn
-			text
+			icon
 			color="orange lighten-2"
 			@click="deselectAll"
 			>
-				alle abwählen
+				<span class="material-icons">remove_circle_outline</span>
 			</v-btn>
 		</v-col>
 	</v-row>
@@ -33,7 +61,7 @@
 import Tabulator from 'tabulator-tables';
 
 export default {
-	props: ['groupBy', 'selectable', 'columns', 'data', 'height'],
+	props: ['groupBy', 'selectable', 'columns', 'data', 'height', 'name'],
 	data: () => ({
 		isVisible: false,
 		newData: false,
@@ -41,10 +69,10 @@ export default {
 		tabulator: null, //variable to hold your table
 		selected: [],
 		selectedRows: 0,
+		lastClick: 0,
 		config: {
 			columns: [],
 			data: [],
-			selectable: false,
 			groupBy: "",
 			layout: "fitColumns",
 			layoutColumnsOnNewData: true,
@@ -56,7 +84,8 @@ export default {
 		"data": {
 			handler: function () {
 				if(this.isVisible) {
-					this.config.data = this.data;
+					// this.config.data = this.data;
+					this.dataTransferxD();
 					this.tabulator.replaceData(this.config.data);
 					this.newData = false;
 				} else {
@@ -75,18 +104,6 @@ export default {
 				}
 			}
 		},
-		"selectable": {
-			handler: function () {
-				if(this.isVisible) {
-					this.config.selectable = this.selectable;
-					this.newTable();
-					this.newConfig = false;
-					this.newData = false;
-				} else {
-					this.newConfig = true;
-				}
-			}
-		}
 	},
 	mounted () {
 		if (this.height) {
@@ -98,15 +115,65 @@ export default {
 			});
 		}
 		this.config.columns = this.columns;
-		this.config.data = this.data;
+		// this.config.data = this.data;
+		this.dataTransferxD();
 		this.config.groupBy = this.groupBy;
-		this.config.selectable = this.selectable;
+		
 		var vm = this; // important
+		
+		this.config.rowClick = function(e, row){
+			if (!vm.selectable) return;
+
+			var ctrl = e.ctrlKey;
+			var shift = e.shiftKey;
+			
+			if (ctrl && shift){
+				let a,b;
+				if (vm.lastClick > row.getIndex()) {
+					a = row.getIndex();
+					b = vm.lastClick;
+				} else {
+					a = vm.lastClick;
+					b = row.getIndex();
+				}
+				for (a; a <= b; a++) { 
+					// vm.tabulator.toggleSelectRow(a); 
+					if (vm.tabulator.getRow(a).isSelected())
+						vm.tabulator.deselectRow(a);
+					else
+						vm.tabulator.selectRow(a);
+				}
+			}
+			else if (ctrl) {
+				row.isSelected() ? row.deselect() : row.select();
+			} 
+			else if (shift) {
+				vm.deselectAll();
+				var a,b;
+				if (vm.lastClick > row.getIndex()) {
+					a = row.getIndex();
+					b = vm.lastClick
+				} else {
+					a = vm.lastClick;
+					b = row.getIndex();
+				}
+				for (a; a <= b; a++){
+					vm.tabulator.selectRow(a);
+				}
+			} 
+			else {
+				vm.deselectAll();
+				row.toggleSelect();
+			}
+			vm.lastClick = row.getIndex();
+		};
+		
 		this.config.rowSelectionChanged = function(data){
 			vm.selectedRows = data.length;
 			vm.selected = data;
 			vm.emitSelectionUpdate();
-		}
+		};
+		
 		this.newTable();
 	},
 	beforeDestroy() {
@@ -115,6 +182,12 @@ export default {
 	methods: {
 		newTable () {
 			this.tabulator = new Tabulator(this.$refs.table, this.config);
+		},
+		dataTransferxD () {
+			this.config.data = this.data;
+			for(var i=0; i<this.config.data.length; i++){
+				this.config.data[i]['id'] = i;
+			}
 		},
 		selectAll () {
 			this.tabulator.selectRow();
@@ -130,22 +203,36 @@ export default {
 			if (!this.height) { this.resize(); }
 			if (isVisible){
 				if (this.newConfig) {
-					this.config.selectable = this.selectable;
 					this.config.groupBy = this.groupBy;
 					this.newTable();
 					this.newConfig = false;
 					this.newData = false;
 				} else if (this.newData) {
-					this.config.data = this.data;
+					// this.config.data = this.data;
+					this.dataTransferxD();
 					this.tabulator.replaceData(this.config.data);
 					this.newData = false;
 				}
 			}
 		},
-		resize() {
+		print () {
+			this.tabulator.print('active');
+		},
+		downloadAsPDF () {
+			// this.tabulator.downloadToTab("pdf");
+			this.tabulator.download("pdf", `${this.name}.pdf`, {
+        orientation:"portrait", //set page orientation to portrait
+        title: this.name, //add title to report
+    });
+		},
+		downloadAsExcel () {
+			this.tabulator.download("xlsx", `${this.name}.xlsx`, {sheetName: this.name});
+		},
+		resize () {
 			this.$refs.table.setAttribute("style", "min-height:200px; height:" + (window.innerHeight - this.$refs.table.getBoundingClientRect().top - 50) + "px;");
 			// this.tabulator.redraw();
 		}
 	}
 }
+
 </script>

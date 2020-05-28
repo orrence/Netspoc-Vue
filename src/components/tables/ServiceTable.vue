@@ -1,5 +1,6 @@
 <template>
 <Tabulator
+:name="`Dienste_${active.owner}_${active.policy ? active.policy.date : ''}_${relation ? relation : 'suche'}`"
 :columns="[
 	{
 		title: 'Name',
@@ -87,7 +88,7 @@ export default {
 			});
 		},
 		passOnSelectionUpdate(data) {
-			this.$emit('selectionUpdate', data.map(row => row.name));
+			this.$emit('selectionUpdate', data);
 		}
 	}
 }
