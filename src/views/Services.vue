@@ -18,7 +18,7 @@
 	</v-row>
 	
 	<v-row dense>
-		<v-col cols="6">
+		<v-col cols="4">
 			<v-card tile>
 				<v-tabs
 				v-model="tab_services"
@@ -46,7 +46,7 @@
 			</v-card>
 		</v-col>
 
-		<v-col cols="6">
+		<v-col cols="8">
 			<v-card tile>
 				<v-tabs
 				v-model="tab_details"
@@ -62,6 +62,7 @@
 						v-model="expandUser"
 						:disabled="tab_details !== 0"
 						label="User expandieren"
+						class="pl-2"
 						/>
 					</v-col>
 					<v-col>
@@ -82,16 +83,29 @@
 
 				<v-row dense v-if="selection.length == 1">
 					<v-col>
-						<v-row dense>
-							<v-col>
-								<div>Beschreibung:</div>
+						<v-row dense :justify="'start'">
+							<v-col cols="auto">
+								<div class="pl-2">Beschreibung:</div>
 							</v-col>
-							<v-col>
+							<v-col cols="auto">
 								<div>{{ selection[0].description }}</div>
 							</v-col>
 						</v-row>
-						<v-row dense>
-							<AdminsTable :selection="selection[0]"/>
+						<v-row v-if="selection[0].disable_at" dense :justify="'start'">
+							<v-col cols="auto">
+								<div class="pl-2">Befristet bis:</div>
+							</v-col>
+							<v-col cols="auto">
+								<div>{{ selection[0].disable_at }}</div>
+							</v-col>
+						</v-row>
+						<v-row v-if="selection[0].description" dense :justify="'start'">
+							<v-col cols="auto">
+								<div class="pl-2">Status:</div>
+							</v-col>
+							<v-col cols="auto">
+								<div>Disabled</div>
+							</v-col>
 						</v-row>
 					</v-col>
 				</v-row>
@@ -113,6 +127,9 @@
 						/>
 					</v-tab-item>
 				</v-tabs-items>
+
+				<AdminsTable v-if="selection.length < 2" :selection="selection[0]"/>
+
 			</v-card>
 		</v-col>
 	</v-row>

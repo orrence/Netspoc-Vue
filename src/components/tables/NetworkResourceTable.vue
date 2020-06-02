@@ -1,6 +1,6 @@
 <template>
 <Tabulator
-:name="`Netzressourcen_${active.owner}_${active.policy ? active.policy.date : ''}`"
+:name="`Netzressourcen`"
 :columns="[
 	{
 		title: 'IP-Addresse',

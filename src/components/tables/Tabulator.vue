@@ -28,7 +28,8 @@
 		</v-col>
 
 		<v-col v-if="selectable" cols="auto">
-			<div> {{selectedRows}} Netz(e) ausgewählt </div>
+			<div v-if="selectedRows > 1">{{ selectedRows }} {{ name }} ausgewählt</div>
+			<div v-else>{{ data.length }} {{ name }} verfügbar</div>
 		</v-col>
 		
 		<v-col v-if="selectable" cols="auto">
@@ -58,6 +59,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Tabulator from 'tabulator-tables';
 
 export default {
@@ -79,6 +81,7 @@ export default {
 			placeholder: "No Data Available",
 		}
 	}),
+	computed: mapState(['active']),
 	watch: {
 		//update table if data changes
 		"data": {
@@ -226,7 +229,7 @@ export default {
     });
 		},
 		downloadAsExcel () {
-			this.tabulator.download("xlsx", `${this.name}.xlsx`, {sheetName: this.name});
+			this.tabulator.download("xlsx", `${this.name}_${this.active.owner}_${this.active.policy.policy}.xlsx`, {sheetName: this.name});
 		},
 		resize () {
 			this.$refs.table.setAttribute("style", "min-height:200px; height:" + (window.innerHeight - this.$refs.table.getBoundingClientRect().top - 50) + "px;");

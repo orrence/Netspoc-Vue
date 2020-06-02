@@ -1,8 +1,10 @@
 important
+	
+	backend request with policy from today => active.policy.policy
+	backend request with policy from any other older day => active.policy.date
 
-	admin list necessary => single selection for services
-	(multi selection removes info)
-
+	change "/login" to "/ldap_login_or_something" if login is not an email
+	
 
 global
 
@@ -19,15 +21,14 @@ global
 
 components/tables/Tabulator.vue
 
-	icons for select all, deselect all
-
-	keybindings for selection (ctrl is pressed => select multiple)
-
-	exel export
-
 	print
 
 	minimal height option
+
+
+components/ServicesSearchPanel.vue
+
+	emmit searchInputUpdate with return-key
 
 
 components/DiffTree.vue
@@ -39,6 +40,9 @@ components/DiffTree.vue
 
 views/Services.vue
 
-	handle admin information for multiple selected services
-
 	table size
+
+
+components/combos/*
+
+	wrong input doesn t change the selected element, but promt an error message

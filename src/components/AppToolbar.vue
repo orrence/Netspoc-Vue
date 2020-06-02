@@ -9,19 +9,19 @@ elevate-on-scroll
 	slider-color="orange"
 	>
 		<v-tab
-		id="rl_services" 
+		id="tab_services" 
 		to="/services/0"
 		> Dienste
 		</v-tab>
 		
 		<v-tab
-		id="rl_networks"
+		id="tab_networks"
 		to="/networks"
 		> Netze
 		</v-tab>
 	
 		<v-tab
-		id="rl_diff"
+		id="tab_diff"
 		to="/diff"
 		> Unterschiede
 		</v-tab>

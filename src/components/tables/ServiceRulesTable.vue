@@ -1,6 +1,6 @@
 <template>
 <Tabulator
-:name="`Dienstdetails_${active.owner}_${active.policy ? active.policy.date : ''}`"
+:name="`Dienstdetails`"
 :columns="[
 	{ 
 		title: 'Aktion',

@@ -86,7 +86,6 @@
 		</v-tab-item>
 
 		<v-tab-item>
-			<v-subheader>Eigene Netze zur Auswahl</v-subheader>
 			<NetworkSelectionTable @selectionUpdate="captureSelectionUpdate"/>
 		</v-tab-item>
 	</v-tabs-items>

@@ -1,6 +1,6 @@
 <template>
 <Tabulator
-:name="`Verantwortliche_${active.owner}_${active.policy ? active.policy.date : ''}`"
+:name="`Verantwortliche`"
 :columns="[
 	{
 		title: 'Verantwortung',
@@ -54,10 +54,12 @@ export default {
 	},
 	methods: {
 		getAdminsForAllOwner() {
-			var owner = this.selection.owner.map(owner => owner.name);
-			this.requests = owner.length;
-			for (let i = 0; i < owner.length; i++) {
-				this.getAdmins(owner[i]);
+			if (this.selection) {
+				var owner = this.selection.owner.map(owner => owner.name);
+				this.requests = owner.length;
+				for (let i = 0; i < owner.length; i++) {
+					this.getAdmins(owner[i]);
+				}
 			}
 		},
 		getAdmins(owner) {

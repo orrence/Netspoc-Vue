@@ -1,6 +1,6 @@
 <template>
 <Tabulator
-:name="`Netze_${active.owner}_${active.policy ? active.policy.date : ''}`"
+:name="`Netze`"
 :columns="[
 	{
 		title: 'IP-Addresse',
@@ -53,6 +53,7 @@ export default {
 				vm.data = [];
 				return;
 			}
+
 			vm.axios.get('/get_networks', {
 				params: {
 					chosen_networks: '',

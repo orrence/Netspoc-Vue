@@ -12,37 +12,37 @@ color="orange"
 
 <script>
 export default {
-  name: 'combo-owner',
-  data: () => ({
-    loadedOwner: false,
-    loadedActiveOwner: false
-  }),
-  computed: {
-    select: {
-      get () { return this.$store.state.active.owner; },
-      set (val) { this.$store.dispatch('setActive', val); }
-    },
-    owners: {
-      get () { return this.$store.state.owners; }
-    }
-  },
-  mounted () {
-    this.$store.dispatch('getOwners')
-      .then(() => {
-        this.loadedOwner = true;
-      });
-    this.$store.dispatch('getActive')
-      .then(() => {
-        this.loadedActiveOwner = true;
-      });
-  }
+	name: 'combo-owner',
+	data: () => ({
+		loadedOwner: false,
+		loadedActiveOwner: false
+	}),
+	computed: {
+		select: {
+			get () { return this.$store.state.active.owner; },
+			set (val) { this.$store.dispatch('setActive', val); }
+		},
+		owners: {
+			get () { return this.$store.state.owners; }
+		}
+	},
+	mounted () {
+		this.$store.dispatch('getOwners')
+			.then(() => {
+				this.loadedOwner = true;
+			});
+		this.$store.dispatch('getActive')
+			.then(() => {
+				this.loadedActiveOwner = true;
+			});
+	}
 }
 </script>
 
 <style>
 /* remove unwanted margins made by vuetify */
 .v-select-list .v-list .v-input__slot { 
-  margin-bottom: 0 !important;
-  margin-top: 20;
+	margin-bottom: 0 !important;
+	margin-top: 20;
 }
 </style>
