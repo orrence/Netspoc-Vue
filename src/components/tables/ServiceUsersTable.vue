@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import Tabulator from './Tabulator';
 export default {
 	components: {
@@ -33,7 +33,7 @@ export default {
 	data: () => ({
 		data: [],
 	}),
-	computed: mapState(['active']),
+	computed: mapGetters(['getActiveOwner', 'getActivePolicy']),
 	watch: {
 		selection: function () { this.getUsers(); }
 	},
@@ -43,15 +43,15 @@ export default {
 	methods: {
 		getUsers () {
 			var vm = this;	// get vue instance
-			if (!vm.active.owner || !vm.active.policy || vm.selection.length !== 1) {
+			if (!vm.getActiveOwner || !vm.getActivePolicy || vm.selection.length !== 1) {
 				vm.data = [];
 				return;
 			}
 
 			vm.axios.get('/get_users', {
 				params: {
-					history: vm.active.policy.date,
-					active_owner: vm.active.owner,
+					active_owner: vm.getActiveOwner,
+					history: vm.getActivePolicy,
 					service: vm.selection.map(row => row.name).join(','),
 					expand_users: vm.expandUser ? 1 : 0,
 					display_property: vm.IPAsName ? 'name' : 'ip',

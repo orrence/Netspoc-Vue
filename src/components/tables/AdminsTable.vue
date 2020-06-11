@@ -16,7 +16,7 @@
 
 <script>
 import Tabulator from './Tabulator';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
 	components: {
@@ -28,7 +28,10 @@ export default {
 		buffer: [],
 		requests: 0,
 	}),
-	computed: mapState(['active']),
+	computed: { 
+		...mapState(['active']), 
+		...mapGetters(['getActiveOwner', 'getActivePolicy']),
+	},
 	watch : {
 		active: {
 			deep: true,
@@ -64,7 +67,7 @@ export default {
 		},
 		getAdmins(owner) {
 			var vm = this;
-			if (!vm.active.owner || !vm.active.policy) {
+			if (!vm.getActiveOwner || !vm.getActivePolicy) {
 				this.requests--;
 				return;
 			}
@@ -72,8 +75,8 @@ export default {
 			vm.axios.get('/get_admins', {
 				params: {
 					chosen_networks: '',
-					active_owner: vm.active.owner,
-					history: vm.active.policy.date,
+					active_owner: vm.getActiveOwner,
+					history: vm.getActivePolicy,
 					owner: owner
 				}
 			}).then(function (response) {

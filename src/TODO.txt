@@ -1,7 +1,4 @@
 important
-	
-	backend request with policy from today => active.policy.policy
-	backend request with policy from any other older day => active.policy.date
 
 	change "/login" to "/ldap_login_or_something" if login is not an email
 	
@@ -19,9 +16,21 @@ global
 	switch for dark mode
 
 
+views/Services.vue
+
+	table size
+	
+
+views/Diff.vue
+	
+	only show policies with changes
+
+
 components/tables/Tabulator.vue
 
-	print
+	sorting case-insensetive
+
+	Networktable sort ip addresses
 
 	minimal height option
 
@@ -33,14 +42,12 @@ components/ServicesSearchPanel.vue
 
 components/DiffTree.vue
 
+	send mail request
+
 	fix collapsedTree
 
 	switch between trees keeps them open
 
-
-views/Services.vue
-
-	table size
 
 
 components/combos/*

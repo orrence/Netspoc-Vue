@@ -27,11 +27,11 @@ export default {
 		}
 	},
 	mounted () {
-		this.$store.dispatch('getOwners')
+		this.$store.dispatch('requestOwners')
 			.then(() => {
 				this.loadedOwner = true;
 			});
-		this.$store.dispatch('getActive')
+		this.$store.dispatch('requestActive')
 			.then(() => {
 				this.loadedActiveOwner = true;
 			});

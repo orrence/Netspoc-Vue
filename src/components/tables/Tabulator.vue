@@ -17,14 +17,6 @@
 			>
 				<span class="material-icons">border_all</span>
 			</v-btn>
-
-			<!-- <v-btn 
-			icon
-			color="purple lighten-2" 
-			@click="print"
-			>
-				<span class="material-icons">print</span>
-			</v-btn> -->
 		</v-col>
 
 		<v-col v-if="selectable" cols="auto">
@@ -59,7 +51,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import Tabulator from 'tabulator-tables';
 
 export default {
@@ -81,14 +73,13 @@ export default {
 			placeholder: "No Data Available",
 		}
 	}),
-	computed: mapState(['active']),
+	computed: mapGetters(['getActiveOwner', 'getActivePolicy']),
 	watch: {
 		//update table if data changes
 		"data": {
 			handler: function () {
 				if(this.isVisible) {
-					// this.config.data = this.data;
-					this.dataTransferxD();
+					this.config.data = this.data;
 					this.tabulator.replaceData(this.config.data);
 					this.newData = false;
 				} else {
@@ -118,8 +109,7 @@ export default {
 			});
 		}
 		this.config.columns = this.columns;
-		// this.config.data = this.data;
-		this.dataTransferxD();
+		this.config.data = this.data;
 		this.config.groupBy = this.groupBy;
 		
 		var vm = this; // important
@@ -140,7 +130,6 @@ export default {
 					b = row.getIndex();
 				}
 				for (a; a <= b; a++) { 
-					// vm.tabulator.toggleSelectRow(a); 
 					if (vm.tabulator.getRow(a).isSelected())
 						vm.tabulator.deselectRow(a);
 					else
@@ -186,12 +175,6 @@ export default {
 		newTable () {
 			this.tabulator = new Tabulator(this.$refs.table, this.config);
 		},
-		dataTransferxD () {
-			this.config.data = this.data;
-			for(var i=0; i<this.config.data.length; i++){
-				this.config.data[i]['id'] = i;
-			}
-		},
 		selectAll () {
 			this.tabulator.selectRow();
 		},
@@ -211,25 +194,20 @@ export default {
 					this.newConfig = false;
 					this.newData = false;
 				} else if (this.newData) {
-					// this.config.data = this.data;
-					this.dataTransferxD();
+					this.config.data = this.data;
 					this.tabulator.replaceData(this.config.data);
 					this.newData = false;
 				}
 			}
 		},
-		print () {
-			this.tabulator.print('active');
-		},
 		downloadAsPDF () {
-			// this.tabulator.downloadToTab("pdf");
 			this.tabulator.download("pdf", `${this.name}.pdf`, {
         orientation:"portrait", //set page orientation to portrait
         title: this.name, //add title to report
     });
 		},
 		downloadAsExcel () {
-			this.tabulator.download("xlsx", `${this.name}_${this.active.owner}_${this.active.policy.policy}.xlsx`, {sheetName: this.name});
+			this.tabulator.download("xlsx", `${this.name}_${this.getActiveOwner}_${this.getActivePolicy}.xlsx`, {sheetName: this.name});
 		},
 		resize () {
 			this.$refs.table.setAttribute("style", "min-height:200px; height:" + (window.innerHeight - this.$refs.table.getBoundingClientRect().top - 50) + "px;");

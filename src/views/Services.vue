@@ -99,7 +99,7 @@
 								<div>{{ selection[0].disable_at }}</div>
 							</v-col>
 						</v-row>
-						<v-row v-if="selection[0].description" dense :justify="'start'">
+						<v-row v-if="selection[0].disabled" dense :justify="'start'">
 							<v-col cols="auto">
 								<div class="pl-2">Status:</div>
 							</v-col>

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters} from 'vuex';
 import Tabulator from './Tabulator';
 export default {
 	components: {
@@ -44,7 +44,7 @@ export default {
 	data: () => ({
 		data: [],
 	}),
-	computed: mapState(['active']),
+	computed: mapGetters(['getActiveOwner', 'getActivePolicy']),
 	watch: {
 		selection: function () { this.getRules(); },
 		expandUser: function () { this.getRules(); },
@@ -59,10 +59,7 @@ export default {
 			var vm = this;	// get vue instance
 			var si = this.search_input;
 
-
-			// TODO process multiple selected services
-
-			if (!vm.active.owner || !vm.active.policy || vm.selection.length !== 1) {
+			if (!vm.getActiveOwner || !vm.getActivePolicy || vm.selection.length !== 1) {
 				vm.data = [];
 				return;
 			}
@@ -71,8 +68,8 @@ export default {
 				params: {
 					expand_users: vm.expandUser ? 1 : 0,
 					display_property: vm.IPAsName ? 'name' : 'ip',
-					active_owner: vm.active.owner,
-					history: vm.active.policy.date,
+					active_owner: vm.getActiveOwner,
+					history: vm.getActivePolicy,
 					service: vm.selection.map(row => row.name).join(','),
 					filter_rules: vm.filterBySearch ? 1 : 0,
 					search_ip1: vm.filterBySearch && si.tab_search === 0 ? si.search_ip1 : '',

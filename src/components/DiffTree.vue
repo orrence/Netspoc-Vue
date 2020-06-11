@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
 	name: 'diff-tree',
@@ -41,6 +41,7 @@ export default {
 	}),
 	computed: {
 		...mapState(['active']),
+		...mapGetters(['getActiveOwner', 'getActivePolicy']),
 	},
 	mounted () {
 		this.getDiff();
@@ -148,13 +149,13 @@ export default {
 		getDiff () {
 			var vm = this;	// get vue instance
 			vm.loaded = false;
-			if (!vm.active.owner) {
+			if (!vm.getActiveOwner) {
 				return;
 			}
 			vm.axios.get('/get_diff', {
 				params: {
-					active_owner: vm.active.owner,
-					history: vm.active.policy.date,
+					active_owner: vm.getActiveOwner,
+					history: vm.getActivePolicy,
 					version: vm.oldPolicy
 				}
 			}).then(function (response) {

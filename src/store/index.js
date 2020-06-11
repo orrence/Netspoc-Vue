@@ -14,8 +14,16 @@ export default new Vuex.Store({
 		}
 	},
 	getters: {
-		loggedIn: (state) => {
+		getLoggedIn: (state) => {
 			return state.loggedIn;
+		},
+		getActiveOwner: (state) => {
+			if(!state.active.owner) return null;
+			return state.active.owner;
+		},
+		getActivePolicy: (state) => {
+			if(!state.active.policy) return "";
+			return state.active.policy.current ? state.active.policy.policy : state.active.policy.date;
 		},
 	},
 	mutations: {
@@ -33,7 +41,7 @@ export default new Vuex.Store({
 		},
 		setActivePolicy (state, activePolicy) {
 			state.active.policy = activePolicy;
-		}
+		},
 	},
 	actions: {
 		setLoggedIn ({ commit }){
@@ -46,7 +54,7 @@ export default new Vuex.Store({
 					commit('setLoggedIn', false);
 				});
 		},
-		getOwners ({ commit }) {
+		requestOwners ({ commit }) {
 			return Vue.axios.get('/get_owners')
 				.then(function (response) {
 					var recurare = response.data.records;
@@ -59,11 +67,11 @@ export default new Vuex.Store({
 					alert('get_owners: ' + error);
 				});
 		},
-		getActive ({ commit, dispatch, state}) {
+		requestActive ({ commit, dispatch, state}) {
 			return Vue.axios.get('/get_owner')
 				.then(function (response) {
 					let newActiveOwner = response.data.records[0].name;
-					dispatch('getHistory', newActiveOwner)
+					dispatch('requestHistory', newActiveOwner)
 					.then( () => {
 						commit('setActive', 
 						{
@@ -87,7 +95,7 @@ export default new Vuex.Store({
 				})
 				.then(function (response) {
 					if(response.data.success){
-						dispatch('getHistory', newActiveOwner)
+						dispatch('requestHistory', newActiveOwner)
 						.then( () => {
 							commit('setActive', 
 							{
@@ -104,7 +112,7 @@ export default new Vuex.Store({
 					alert('setActiveOwner: ' + error);
 				});
 		},
-		getHistory ({ commit }, owner) {
+		requestHistory ({ commit }, owner) {
 			return Vue.axios.get('/get_history', {
 					params: {
 						active_owner: owner || this.state.active.owner,

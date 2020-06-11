@@ -2,7 +2,7 @@
 <v-app-bar
 app
 dense
-v-if="loggedIn"
+v-if="getLoggedIn"
 elevate-on-scroll
 >
 	<v-tabs
@@ -50,9 +50,7 @@ export default {
 		this.$store.dispatch('setLoggedIn');
 	},
 	computed: {
-		...mapGetters ([
-			'loggedIn'
-		])
+		...mapGetters (['getLoggedIn'])
 	},
 	methods: {
 		logout () {

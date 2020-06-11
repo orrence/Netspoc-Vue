@@ -1,9 +1,3 @@
-<!-- 
-Todo: 
-	- only show policies with changes
-	- tree should always open showing the whole tree uncollapsed
--->
-
 <template>
 <v-container fluid>
 	<h3>Vergleiche den ausgewählten Stand mit einem älteren</h3>

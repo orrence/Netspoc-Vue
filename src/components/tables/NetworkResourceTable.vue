@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import Tabulator from './Tabulator';
 export default {
 	components: {
@@ -32,7 +32,7 @@ export default {
 	data: () => ({
 		data: [],
 	}),
-	computed: mapState(['active']),
+	computed: mapGetters(['getActiveOwner', 'getActivePolicy']),
 	watch: {
 		selection: function () {
 			this.data = [];
@@ -46,15 +46,15 @@ export default {
 		getNetworkResources () {
 			var vm = this;	// get vue instance
 
-			if (!vm.active.owner || !vm.active.policy || !vm.selection) {
+			if (!vm.getActiveOwner || !vm.getActivePolicy || !vm.selection) {
 				vm.data = [];
 				return;
 			}
 
 			vm.axios.get('/get_network_resources', {
 				params: {
-					active_owner: vm.active.owner,
-					history: vm.active.policy.date,
+					active_owner: vm.getActiveOwner,
+					history: vm.getActivePolicy,
 					selected_networks: vm.selection.join(',')
 				}
 			}).then(function (response) {

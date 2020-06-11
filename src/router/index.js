@@ -9,42 +9,9 @@ import Entitlements from '@/views/Entitlements'
 import Login from '@/views/Login'
 import PageNotFound from '@/views/PageNotFound'
 
-import TableTest from '@/components/testkram/Tablator'
-import expansion from '@/components/testkram/expansionTest'
-import LayPlay from '@/components/testkram/LayoutPlayground'
-import StoreTest from '@/components/testkram/StoreTest'
-
 Vue.use(VueRouter)
 
 const routes = [
-	{
-		path: '/test',
-		component: expansion,
-		meta: {
-			title: 'expansion'
-		}
-	},
-	{
-		path: '/layplay',
-		component: LayPlay,
-		meta: {
-			title: 'LayPlay'
-		}
-	},
-	{
-		path: '/tabletest',
-		component: TableTest,
-		meta: {
-			title: 'Tablator test'
-		}
-	},
-	{
-		path: '/storetest',
-		component: StoreTest,
-		meta: {
-			title: 'StoreTest'
-		}
-	},
 	{
 		path: '/services/:search',
 		component: Services,
