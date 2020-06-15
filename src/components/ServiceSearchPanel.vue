@@ -86,7 +86,7 @@
 		</v-tab-item>
 
 		<v-tab-item>
-			<NetworkSelectionTable @selectionUpdate="captureSelectionUpdate"/>
+			<NetworkTable :height="'311px'" @selectionUpdate="captureSelectionUpdate"/>
 		</v-tab-item>
 	</v-tabs-items>
 	
@@ -151,11 +151,11 @@
 </template>
 
 <script>
-import NetworkSelectionTable from './tables/NetworkSelectionTable';
+import NetworkTable from './tables/NetworkTable';
 
 export default {
 	components: {
-		NetworkSelectionTable
+		NetworkTable
 	},
 	data: () => ({
 		url: "http://localhost/?#/services/0",

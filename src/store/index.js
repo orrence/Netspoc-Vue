@@ -17,6 +17,12 @@ export default new Vuex.Store({
 		getLoggedIn: (state) => {
 			return state.loggedIn;
 		},
+		getOwners: (state) => {
+			return state.owners;
+		},
+		getHistory: (state) => {
+			return state.history;
+		},
 		getActiveOwner: (state) => {
 			if(!state.active.owner) return null;
 			return state.active.owner;
@@ -44,7 +50,10 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
-		setLoggedIn ({ commit }){
+		setLoggedIn ({ commit }, bool) {
+			commit('setLoggedIn', bool);
+		},
+		requestLoggedIn ({ commit }){
 			return Vue.axios.get('/set')
 				.then(function (response) {
 					let recurare = response.data.success;
@@ -111,6 +120,9 @@ export default new Vuex.Store({
 				.catch(function (error) {
 					alert('setActiveOwner: ' + error);
 				});
+		},
+		setActivePolicy ({ commit }, newActivePolicy) {
+			commit('setActivePolicy', newActivePolicy);
 		},
 		requestHistory ({ commit }, owner) {
 			return Vue.axios.get('/get_history', {

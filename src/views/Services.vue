@@ -137,7 +137,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import ServiceTable from '../components/tables/ServiceTable';
 import ServiceSearchPanel from '../components/ServiceSearchPanel';
 import ServiceRulesTable from '../components/tables/ServiceRulesTable';
@@ -163,7 +162,6 @@ export default {
 		search_input: {},
 		admins: {},
 	}),
-	computed: mapState(['active']),
 	mounted () {
 		if (this.$route.params.search.length === 1) {
 			this.tab_services = 0;

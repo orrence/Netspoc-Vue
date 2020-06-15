@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import diffTree from '../components/DiffTree';
 
 export default {
@@ -50,7 +50,8 @@ export default {
 		this.getOlderPolicies();
 	},
 	computed: {
-		...mapState(['history', 'active']),
+		...mapState(['active']),
+		...mapGetters(['getHistory', 'getActivePolicy']),
 		availablePolicies () {
 			if (this.olderPolicies && this.olderPolicies.length === 0)
 				return "Keine älteren Stände verfügbar.";
@@ -61,7 +62,7 @@ export default {
 		}
 	},
 	watch : {
-		'active.policy' (val, oldVal) {
+		getActivePolicy (val, oldVal) {
 			if (val !== oldVal) {
 				this.getOlderPolicies();
 
@@ -85,14 +86,15 @@ export default {
 			this.oldPolicy = newSelected;
 		},
 		getOlderPolicies () {
-			if (!this.active.policy) {
+			if (!this.getActivePolicy) {
 				return;
 			}
+			var history = this.getHistory;
 			var active = this.active.policy.date;
 			var newOld = [];
-			for (let i = 0; i < this.history.length; i++) {
-				if (active > this.history[i].date) {
-					newOld.push(this.history[i]);
+			for (let i = 0; i < history.length; i++) {
+				if (active > history[i].date) {
+					newOld.push(history[i]);
 				}
 			}
 			this.olderPolicies = newOld;

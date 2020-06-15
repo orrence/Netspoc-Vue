@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
 	name: 'app-login',
 	data: () => ({
@@ -83,6 +85,8 @@ export default {
 		show: false
 	}),
 	methods: {
+		...mapActions (['setLoggedIn']),
+
 		submit () {
 			var vm = this;
 
@@ -99,7 +103,7 @@ export default {
 						vm.loading = false;
 						vm.clear();
 						if (vm.valid) {
-							vm.$store.dispatch('setLoggedIn');
+							vm.setLoggedIn(true);
 							vm.$router.push('networks');
 						}
 					})

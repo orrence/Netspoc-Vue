@@ -5,7 +5,6 @@ import store from '../store'
 import Services from '@/views/Services'
 import Networks from '@/views/Networks'
 import Diff from '@/views/Diff'
-import Entitlements from '@/views/Entitlements'
 import Login from '@/views/Login'
 import PageNotFound from '@/views/PageNotFound'
 
@@ -36,13 +35,6 @@ const routes = [
 		}
 	},
 	{
-		path: '/entitlements',
-		component: Entitlements,
-		meta: {
-			title: 'Berechtigungen'
-		}
-	},
-	{
 		path: '/login',
 		component: Login,
 		meta: {
@@ -65,13 +57,13 @@ const router = new VueRouter ({
 });
 
 router.beforeEach ((to, from, next) => {
-	if (!store.state.loggedIn && to.path != '/login') {
+	if (!store.getters.getLoggedIn && to.path != '/login') {
 		// when reloading in browser without this,
 		// the login component and the apptoolbar get 
 		// rendered at the same time (for unkown reason)
-		store.dispatch('setLoggedIn')
+		store.dispatch('requestLoggedIn')
 			.then(() => {
-				if (!store.state.loggedIn) {
+				if (!store.getters.getLoggedIn) {
 					router.push('/login');
 				} else {
 					next();

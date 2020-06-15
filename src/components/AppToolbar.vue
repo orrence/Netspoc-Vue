@@ -37,33 +37,34 @@ elevate-on-scroll
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import comboPolicy from './combos/Policy'
 import comboOwner from './combos/Owner'
 export default {
+	name: 'app-toolbar',
 	components: {
 		comboPolicy,
 		comboOwner
 	},
-	name: 'app-toolbar',
-	mounted () {
-		this.$store.dispatch('setLoggedIn');
-	},
 	computed: {
 		...mapGetters (['getLoggedIn'])
 	},
+	mounted () {
+		this.requestLoggedIn;
+	},
 	methods: {
+		...mapActions (['requestLoggedIn', 'setLoggedIn']),
+
 		logout () {
 			var vm = this;	// get vue instance
 
 			vm.axios.get('/logout'
-			).then(function (response) {
-				vm.networks = response.data.records;
+			).then(function () {
+				vm.setLoggedIn(false);
+				vm.$router.push('/login');
 			}).catch(function (error) {
 				alert('logout: ' + error);
 			});
-			vm.$store.dispatch('setLoggedIn');
-			vm.$router.push('/login');
 		}
 	}
 }

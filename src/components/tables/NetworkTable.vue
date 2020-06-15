@@ -19,6 +19,7 @@
 :data="data"
 :selectable="true"
 :groupBy="''"
+:height="height"
 @selectionUpdate="passOnSelectionUpdate"
 />
 </template>
@@ -28,6 +29,7 @@ import Tabulator from './Tabulator';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
+	props: ['height'],
 	components: {
 		Tabulator,
 	},
@@ -59,9 +61,9 @@ export default {
 
 			vm.axios.get('/get_networks', {
 				params: {
-					chosen_networks: '',
 					active_owner: vm.getActiveOwner,
-					history: vm.getActivePolicy
+					history: vm.getActivePolicy,
+					chosen_networks: ''
 				}
 			}).then(function (response) {
 				vm.data = response.data.records;

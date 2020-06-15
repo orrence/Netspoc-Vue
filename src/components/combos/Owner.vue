@@ -1,30 +1,29 @@
 <template>
-<v-combobox
-v-if="loadedOwner && loadedActiveOwner"
-label="Owner"
-v-model="select"
-:items="owners"
-outlined
-dense
-color="orange"
+<v-autocomplete
+	label="Owner"
+	v-model="select"
+	:items="getOwners"
+	outlined
+	dense
+	color="orange"
 />
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
 	name: 'combo-owner',
 	data: () => ({
+		lastSelected: "",
 		loadedOwner: false,
 		loadedActiveOwner: false
 	}),
 	computed: {
+		...mapGetters(['getActiveOwner', 'getOwners']),
 		select: {
-			get () { return this.$store.state.active.owner; },
+			get () { return this.getActiveOwner; },
 			set (val) { this.$store.dispatch('setActive', val); }
 		},
-		owners: {
-			get () { return this.$store.state.owners; }
-		}
 	},
 	mounted () {
 		this.$store.dispatch('requestOwners')

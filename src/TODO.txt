@@ -1,8 +1,3 @@
-important
-
-	change "/login" to "/ldap_login_or_something" if login is not an email
-	
-
 global
 
 	morph tabs into menu button for small window size
@@ -16,6 +11,11 @@ global
 	switch for dark mode
 
 
+views/Login/vue
+
+!	change "/login" to "/ldap_login_or_something" if login is not an email
+
+
 views/Services.vue
 
 	table size
@@ -23,14 +23,16 @@ views/Services.vue
 
 views/Diff.vue
 	
+!	stop tree from growing out of window / let the window grow according to the tree
+
 	only show policies with changes
 
 
 components/tables/Tabulator.vue
 
-	sorting case-insensetive
+!	sorting case-insensetive
 
-	Networktable sort ip addresses
+!	Networktable sort ip addresses
 
 	minimal height option
 
@@ -47,9 +49,3 @@ components/DiffTree.vue
 	fix collapsedTree
 
 	switch between trees keeps them open
-
-
-
-components/combos/*
-
-	wrong input doesn t change the selected element, but promt an error message
