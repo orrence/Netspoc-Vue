@@ -1,4 +1,4 @@
-# vuetitest
+# Netspoc-Vue
 
 ## Project setup
 ```
