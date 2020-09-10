@@ -1,11 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import services from './modules/services'
+import auth from './modules/auth'
+import * as getters from './getters'
+import * as mutations from './mutations'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		loggedIn: false,
+
 		owners: [],
 		history: [],
 		active: {
@@ -13,56 +16,11 @@ export default new Vuex.Store({
 			policy: null
 		}
 	},
-	getters: {
-		getLoggedIn: (state) => {
-			return state.loggedIn;
-		},
-		getOwners: (state) => {
-			return state.owners;
-		},
-		getHistory: (state) => {
-			return state.history;
-		},
-		getActiveOwner: (state) => {
-			if(!state.active.owner) return null;
-			return state.active.owner;
-		},
-		getActivePolicy: (state) => {
-			if(!state.active.policy) return "";
-			return state.active.policy.current ? state.active.policy.policy : state.active.policy.date;
-		},
-	},
-	mutations: {
-		setLoggedIn (state, loggedIn) {
-			state.loggedIn = loggedIn;
-		},
-		setOwners (state, owners) {
-			state.owners = owners;
-		},
-		setActive (state, active) {
-			state.active = active;
-		},
-		setHistory (state, history) {
-			state.history = history;
-		},
-		setActivePolicy (state, activePolicy) {
-			state.active.policy = activePolicy;
-		},
-	},
+	
+	getters,
+	mutations,
 	actions: {
-		setLoggedIn ({ commit }, bool) {
-			commit('setLoggedIn', bool);
-		},
-		requestLoggedIn ({ commit }){
-			return Vue.axios.get('/set')
-				.then(function (response) {
-					let recurare = response.data.success;
-					commit('setLoggedIn', recurare);
-				})
-				.catch(function () {
-					commit('setLoggedIn', false);
-				});
-		},
+		
 		requestOwners ({ commit }) {
 			return Vue.axios.get('/get_owners')
 				.then(function (response) {
@@ -139,5 +97,9 @@ export default new Vuex.Store({
 					alert('get_history: ' + error);
 				});
 		},
-	}
+	},
+	modules: {
+		services,
+		auth
+    },
 });
