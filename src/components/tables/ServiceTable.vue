@@ -1,13 +1,14 @@
 <template>
 <Tabulator
 :name="'Dienste'"
+reactiveData=true
 :columns="[
 	{
 		title: 'Name',
 		field: 'name' 
 	},
 ]"
-:data="data"
+:data="servicesData"
 :selectable="true"
 :groupBy="''"
 @selectionUpdate="passOnSelectionUpdate"
@@ -16,7 +17,7 @@
 
 <script>
 import Tabulator from './Tabulator';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
 	components: {
@@ -28,6 +29,7 @@ export default {
 	}),
 	computed: {
 		...mapState(['active']),
+		...mapState('services',['servicesData']),
 		...mapGetters(['getActiveOwner', 'getActivePolicy'])
 	},
 	watch : {
@@ -45,9 +47,13 @@ export default {
 		}
 	},
 	mounted () {
+		console.log('SERVICE DATA');
+		console.log(this.servicesData);
+		console.log(this.active);
 		this.getServices();
 	},
 	methods: {
+		...mapActions('services', ['getServicesList']),
 		getServices () {
 			var vm = this;	// get vue instance
 
@@ -57,8 +63,8 @@ export default {
 				return;
 			}
 
-			vm.axios.get('/service_list', {
-				params: vm.relation ? {	
+			console.log(vm.getActivePolicy);
+			const payload = vm.relation ? {	
 					chosen_networks: '',
 					active_owner: vm.getActiveOwner,
 					history: vm.getActivePolicy,
@@ -83,12 +89,14 @@ export default {
 					search_case_sensitive: vm.search_input.search_case_sensitive ? 'on' : '',
 					search_exact: vm.search_input.search_exact ? 'on' : ''
 				}
-			}).then(function (response) {
-				vm.data = response.data.records;
+			
+			this.getServicesList({data:payload}).then(function () {
+				//vm.data = response.data.records;
 			}).catch(function (error) {
 				vm.data = [];
 				alert('service_list: ' + error);
 			});
+		
 		},
 		passOnSelectionUpdate(data) {
 			this.$emit('selectionUpdate', data);
