@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Tabulator from './Tabulator';
+import Tabulator from '../Tabulator';
 import { mapState, mapGetters } from 'vuex';
 
 export default {

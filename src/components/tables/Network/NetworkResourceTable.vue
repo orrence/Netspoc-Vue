@@ -23,7 +23,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Tabulator from './Tabulator';
+import Tabulator from '../Tabulator';
 export default {
 	components: {
 		Tabulator,
