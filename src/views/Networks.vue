@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import NetworkTable from '../components/tables/NetworkTable';
-import ResourceTable from '../components/tables/NetworkResourceTable';
+import NetworkTable from '../components/tables/Network/NetworkTable';
+import ResourceTable from '../components/tables/Network/NetworkResourceTable';
 
 export default {
 	components: {

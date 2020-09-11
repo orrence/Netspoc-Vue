@@ -97,9 +97,8 @@ export default {
 			formData.append('email', vm.login);
 			formData.append('pass', vm.password);
 			formData.append('app', 'foo');
-		this.loginUser({data:formData});
+			this.loginUser({data:formData});
 			
-		
 		},
 		clear () {
 			this.password = null;

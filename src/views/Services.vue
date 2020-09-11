@@ -137,10 +137,10 @@
 </template>
 
 <script>
-import ServiceTable from '../components/tables/ServiceTable';
+import ServiceTable from '../components/tables/Service/ServiceTable';
 import ServiceSearchPanel from '../components/ServiceSearchPanel';
-import ServiceRulesTable from '../components/tables/ServiceRulesTable';
-import ServiceUsersTable from '../components/tables/ServiceUsersTable';
+import ServiceRulesTable from '../components/tables/Service/ServiceRulesTable';
+import ServiceUsersTable from '../components/tables/Service/ServiceUsersTable';
 import AdminsTable from '../components/tables/AdminsTable';
 
 export default {
