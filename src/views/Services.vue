@@ -212,7 +212,7 @@ export default {
 
 <style>
 .testitest {
-	min-height: 600px;
+	/*min-height: 600px;*/
 	/*height: 100%;*/
 }
 </style>
