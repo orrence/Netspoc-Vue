@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import router from '../../router/index'
 export default {
     namespaced: true,
     state: {
@@ -11,23 +11,36 @@ export default {
         },
     },
     mutations: {
-        setLoggedIn: (state, loggedIn) => {
+        SET_LOGGED_IN: (state, loggedIn) => {
             state.loggedIn = loggedIn;
         },
     },
     actions: {
         setLoggedIn ({ commit }, bool) {
-			commit('setLoggedIn', bool);
+			commit('SET_LOGGED_IN', bool);
 		},
 		requestLoggedIn ({ commit }){
 			return axios.get('/backend/set')
 				.then(function (response) {
 					let recurare = response.data.success;
-					commit('setLoggedIn', recurare);
+                    commit('SET_LOGGED_IN', recurare);
+                   
 				})
 				.catch(function () {
-					commit('setLoggedIn', false);
+					commit('SET_LOGGED_IN', false);
 				});
-		},
+        },
+        loginUser({dispatch}, creds) {
+            console.log(creds);
+          
+                axios.post('/backend/login', creds.data).then(res => {
+                    console.log(res);
+                    dispatch('setLoggedIn', true);
+                    router.push('/networks');
+                }).catch(err => {
+                    console.log(err);
+                })
+            
+        }
     }
 }

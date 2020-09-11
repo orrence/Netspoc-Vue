@@ -1,6 +1,6 @@
 <template>
 <v-container>
-	<h1>Netspoc-Web</h1>
+	<h1>Netspoc-Web 2</h1>
 	
 	<v-card
 	:loading="false"
@@ -29,6 +29,7 @@
 		<v-form 
 		class="mx-2" 
 		@submit="submit"
+		v-model="valid"
 		onSubmit="return false"
 		>
 			<v-text-field
@@ -44,6 +45,7 @@
 				id="txt_password"
 				v-model="password"
 				:append-icon="show ? 'visibility' : 'visibility_off'"
+				:rules="[v => !!v || 'Darf nicht leer sein']"
 				:type="show ? 'text' : 'password'"
 				@click:append="show = !show"
 				required
@@ -56,6 +58,7 @@
 					<v-btn
 					id="btn_login"
 					type="submit"
+					:disabled="!valid"
 					primary large block
 					>Login</v-btn>	
 				</v-flex>
@@ -85,7 +88,7 @@ export default {
 		show: false
 	}),
 	methods: {
-		...mapActions (['setLoggedIn']),
+		...mapActions ('auth',['setLoggedIn','loginUser']),
 
 		submit () {
 			var vm = this;
@@ -94,28 +97,9 @@ export default {
 			formData.append('email', vm.login);
 			formData.append('pass', vm.password);
 			formData.append('app', 'foo');
-	
-			if (vm.login) {
-				vm.loading = true;
-				vm.axios.post('/login', formData)
-					.then(function (response) {
-						vm.valid = /Unknown\spath/.test(response.data);
-						vm.loading = false;
-						vm.clear();
-						if (vm.valid) {
-							vm.setLoggedIn(true);
-							vm.$router.push('networks');
-						}
-					})
-					.catch(function (error) {
-						alert('login: ' + error);
-						vm.valid = false;
-						vm.loading = false;
-					});
-			}
-			else {
-				vm.valid = false;
-			}
+		this.loginUser({data:formData});
+			
+		
 		},
 		clear () {
 			this.password = null;

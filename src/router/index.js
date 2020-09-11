@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
-
 import Services from '@/views/Services'
 import Networks from '@/views/Networks'
 import Diff from '@/views/Diff'
@@ -12,27 +11,8 @@ Vue.use(VueRouter)
 
 const routes = [
 	{
-		path: '/services/:search',
-		component: Services,
-		props: true,
-		name: 'services',
-		meta: {
-			title: 'Dienste'
-		}
-	},
-	{
-		path: '/networks',
-		component: Networks,
-		meta: {
-			title: 'Netze'
-		}		
-	},
-	{
-		path: '/diff',
-		component: Diff,
-		meta: {
-			title: 'Unterschiede'
-		}
+		path: '/',
+		redirect: '/services/0',
 	},
 	{
 		path: '/login',
@@ -47,7 +27,38 @@ const routes = [
 		meta: {
 			title: 'Page Not Found'
 		}
-	}
+	},
+			{
+				path: '/services/:search',
+				component: Services,
+				props: true,
+				name: 'services',
+				meta: {
+					title: 'Dienste',
+					requiresAuth: true,
+				}
+			},
+			{
+				path: '/networks',
+				component: Networks,
+				meta: {
+					title: 'Netze',
+					requiresAuth: true,
+				}		
+			},
+			{
+				path: '/diff',
+				component: Diff,
+				meta: {
+					title: 'Unterschiede',
+					requiresAuth: true,
+				}
+			},
+		
+	
+	
+	
+	
 ];
 
 const router = new VueRouter ({
@@ -57,21 +68,32 @@ const router = new VueRouter ({
 });
 
 router.beforeEach ((to, from, next) => {
-	if (!store.getters.getLoggedIn && to.path != '/login') {
-		// when reloading in browser without this,
-		// the login component and the apptoolbar get 
-		// rendered at the same time (for unkown reason)
-		store.dispatch('requestLoggedIn')
+	if(to.matched.some(record => record.meta.requiresAuth)) {
+		// todo check if is already loggedin
+		if (!store.getters['auth/getLoggedIn']) {
+			store.dispatch('auth/requestLoggedIn')
 			.then(() => {
-				if (!store.getters.getLoggedIn) {
-					router.push('/login');
-				} else {
-					next();
+				if(store.getters['auth/getLoggedIn']) {
+					return next();
 				}
+				router.push('/login');
 			});
-	} else {
+			
+		} 
+			return next();
+		
+		/*store.dispatch('auth/requestLoggedIn')
+		.then(() => {
+			if (!store.getters['auth/getLoggedIn']) {
+				router.push('/login');
+			} else {
+				next();
+			}
+		});*/
+	} else  {
 		next();
 	}
+	
 });
 
 router.afterEach ((to) => {
