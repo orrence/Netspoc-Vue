@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import NetworkTable from './tables/NetworkTable';
+import NetworkTable from './tables/Network/NetworkTable';
 
 export default {
 	components: {
