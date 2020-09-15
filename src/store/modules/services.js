@@ -1,4 +1,4 @@
-import axios from "axios";
+import Vue from 'vue'
 
 export default {
     namespaced: true,
@@ -6,6 +6,7 @@ export default {
         servicesData: [],
         rulesData: [],
         adminsData: [],
+        searchInput: [],
     },
     mutations: {
         RECEIVED_SERVICESDATA(state, payload) {
@@ -16,19 +17,24 @@ export default {
         },
         RECEIVED_ADMINSDATA(state,payload) {
             state.adminsData = payload.records;
+        },
+        SEARCH_UPDATE(state,payload) {
+            console.log(payload);
+            state.searchInput = payload;
+        
         }
     },
 
     actions: {
         getServicesList({ commit }, payload) {
-            axios.get('/backend/service_list', {
+            return Vue.axios.get('/service_list', {
                 params: payload.data
             }).then(res => {
                 commit('RECEIVED_SERVICESDATA', res.data);
             })
         },
         getServiceRules({ commit }, payload) {
-            axios.get('/backend/get_rules', {
+            return Vue.axios.get('/get_rules', {
                 params: payload
             }).then(res => {
                 let resdata = res.data.records;
@@ -50,7 +56,7 @@ export default {
             })
         },
         getAdmins({commit}, payload) {
-            axios.get('/get_admins', {
+            return Vue.axios.get('/get_admins', {
                 params: payload
             }).then(function (response) {
                 commit('RECEIVED_ADMINSDATA', response);

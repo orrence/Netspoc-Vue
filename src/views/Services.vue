@@ -1,22 +1,7 @@
 <template>
 <v-container fluid>
-	<v-row dense>
-		<v-col>
-			<v-expansion-panels tile hover>
-				<v-expansion-panel>
-					<v-expansion-panel-header>
-						Suchoptionen
-					</v-expansion-panel-header>
-					<v-expansion-panel-content>
-						<ServiceSearchPanel
-						@searchInputUpdate="recieveSearchInput"
-						/>
-					</v-expansion-panel-content>
-				</v-expansion-panel>
-			</v-expansion-panels>
-		</v-col>
-	</v-row>
 	
+	<search-bar/>
 	<v-row dense>
 		<v-col cols="4">
 			<v-card tile>
@@ -40,7 +25,7 @@
 						<ServiceTable :relation="'visible'" @selectionUpdate="captureSelectionUpdate"/>
 					</v-tab-item>
 					<v-tab-item :key="3">
-						<ServiceTable :search_input="search_input" @selectionUpdate="captureSelectionUpdate"/>
+						<ServiceTable :search_input="searchInput" @selectionUpdate="captureSelectionUpdate"/>
 					</v-tab-item>
 				</v-tabs-items>
 			</v-card>
@@ -117,7 +102,7 @@
 						:expandUser="expandUser"
 						:IPAsName="IPAsName"
 						:filterBySearch="filterBySearch && tab_services===3"
-						:search_input="search_input"
+						:search_input="searchInput"
 						/>
 					</v-tab-item>
 					<v-tab-item :key="1">
@@ -138,18 +123,19 @@
 
 <script>
 import ServiceTable from '../components/tables/Service/ServiceTable';
-import ServiceSearchPanel from '../components/ServiceSearchPanel';
 import ServiceRulesTable from '../components/tables/Service/ServiceRulesTable';
 import ServiceUsersTable from '../components/tables/Service/ServiceUsersTable';
 import AdminsTable from '../components/tables/AdminsTable';
+import SearchBar from '../components/SearchBar';
+import { mapState } from 'vuex';
 
 export default {
 	components: {
 		ServiceTable,
-		ServiceSearchPanel,
 		ServiceRulesTable,
 		ServiceUsersTable,
 		AdminsTable,
+		SearchBar
 	},
 	data: () => ({
 		pnl_search: 0,
@@ -162,6 +148,9 @@ export default {
 		search_input: {},
 		admins: {},
 	}),
+	computed: {
+		...mapState('services',['searchInput'])
+	},
 	mounted () {
 		if (this.$route.params.search.length === 1) {
 			this.tab_services = 0;
@@ -178,7 +167,7 @@ export default {
 				this.selection = [];
 			}
 		},
-		search_input: {
+		searchInput: {
 			deep: true,
 			handler () {
 				this.selection = [];

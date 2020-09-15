@@ -1,26 +1,34 @@
-import axios from "axios";
 import router from '../../router/index'
+import Vue from 'vue'
+
 export default {
     namespaced: true,
     state: {
         loggedIn: false,
+        loginError: false,
     },
     getters: {
         getLoggedIn: state => {
             return state.loggedIn;
         },
+        getLoginError: state => {
+            return state.loginError;
+        }
     },
     mutations: {
         SET_LOGGED_IN: (state, loggedIn) => {
             state.loggedIn = loggedIn;
         },
+        SET_LOGIN_ERROR: (state, loginError) => {
+            state.loginError = loginError;
+        }
     },
     actions: {
         setLoggedIn({ commit }, bool) {
             commit('SET_LOGGED_IN', bool);
         },
         requestLoggedIn({ commit }) {
-            return axios.get('/backend/set')
+            return Vue.axios.get('/set')
                 .then(function (response) {
                     let recurare = response.data.success;
                     commit('SET_LOGGED_IN', recurare);
@@ -30,18 +38,23 @@ export default {
                     commit('SET_LOGGED_IN', false);
                 });
         },
-        loginUser({ dispatch }, creds) {
-            axios.post('/backend/login', creds.data).then(res => {
-                console.log(res);
-                dispatch('setLoggedIn', true);
-                router.push('/networks');
+        loginUser({ dispatch, commit }, creds) {
+            return Vue.axios.post('/login', creds.data).then(res => {               
+                if(res.request.responseURL == 'http://localhost/backend/foo') {
+                    dispatch('setLoggedIn', true);
+                    commit('SET_LOGIN_ERROR',false);
+                    router.push('/services/0');
+                } else {
+                    commit('SET_LOGIN_ERROR',true);
+                }
+                
             }).catch(err => {
                 console.log(err);
             })
 
         },
         logoutUser({ dispatch }) {
-            axios.get('/backend/logout'
+            return Vue.axios.get('/logout'
             ).then(function () {
                 dispatch('setLoggedIn', false);
                 router.push('/login');

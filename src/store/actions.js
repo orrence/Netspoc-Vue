@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
 export const requestOwners = ({ commit }) => {
     return Vue.axios.get('/get_owners')
@@ -66,7 +66,7 @@ export const setActivePolicy = ({ commit }, newActivePolicy) => {
 };
 
 export const requestHistory = ({ commit }, owner) => {
-    return Vue.axios.get('/get_history', {
+    return Vue.axiosTTP.get('/get_history', {
         params: {
             active_owner: owner || this.state.active.owner,
             history: 'none'
