@@ -1,7 +1,8 @@
 <template>
-<Tabulator
-:name="`Netzressourcen`"
-:columns="[
+  <Tabulator
+    :name="`Netzressourcen`"
+    reactiveData="true"
+    :columns="[
 	{
 		title: 'IP-Addresse',
 		field: 'child_ip', sorter:'ip'
@@ -15,65 +16,57 @@
 		field: 'child_owner'
 	}
 ]"
-:data="data"
-:selectable="false"
-:groupBy="'name'"
-/>
+    :data="networkResourcesData"
+    :selectable="false"
+    :groupBy="'name'"
+  />
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Tabulator from '../Tabulator';
+import { mapGetters, mapState, mapActions } from "vuex";
+import Tabulator from "../Tabulator";
 export default {
-	components: {
-		Tabulator,
-	},
-	props:['selection'],
-	data: () => ({
-		data: [],
-	}),
-	computed: mapGetters(['getActiveOwner', 'getActivePolicy']),
-	watch: {
-		selection: function () {
-			this.data = [];
-			this.getNetworkResources();
-		}
-	},
-	mounted () {
-		this.getNetworkResources();
-	},
-	methods: {
-		getNetworkResources () {
-			var vm = this;	// get vue instance
+  components: {
+    Tabulator,
+  },
+  props: ["selection"],
+  data: () => ({
+    data: [],
+  }),
+  computed: {
+    ...mapState("networks", ["networkResourcesData"]),
+    ...mapGetters(["getActiveOwner", "getActivePolicy"]),
+  },
+  watch: {
+    selection: function () {
+      this.data = [];
+      this.loadNetworkResources();
+    },
+  },
+  mounted() {
+    this.loadNetworkResources();
+  },
+  methods: {
+    ...mapActions("networks", ["getNetworkResources"]),
+    loadNetworkResources() {
+      var vm = this; // get vue instance
 
-			if (!vm.getActiveOwner || !vm.getActivePolicy || !vm.selection) {
-				vm.data = [];
-				return;
-			}
+      if (!vm.getActiveOwner || !vm.getActivePolicy || !vm.selection) {
+        vm.data = [];
+        return;
+      }
 
-			vm.axios.get('/get_network_resources', {
-				params: {
-					active_owner: vm.getActiveOwner,
-					history: vm.getActivePolicy,
-					selected_networks: vm.selection.join(',')
-				}
-			}).then(function (response) {
-				var resdata = response.data.records;
-				for (let i = 0; i < resdata.length; i++) {
-					if (resdata[i].child_owner) {
-						resdata[i].child_owner = resdata[i].child_owner.owner;
-					}
-				}
-				vm.data = resdata;
-			}).catch(function (error) {
-				vm.data = [];
-				alert('get_network_resources: ' + error);
-			});
-		}
-	}
-}
+      const params = {
+        active_owner: vm.getActiveOwner,
+        history: vm.getActivePolicy,
+        selected_networks: vm.selection.join(","),
+      };
+      this.getNetworkResources(params);
+      
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

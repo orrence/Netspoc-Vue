@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import services from './modules/services'
 import auth from './modules/auth'
+import networks from './modules/networks'
 import * as getters from './getters'
 import * as mutations from './mutations'
 import * as actions from './actions'
@@ -22,6 +23,7 @@ export default new Vuex.Store({
 	actions,
 	modules: {
 		services,
-		auth
+		auth,
+		networks
     },
 });

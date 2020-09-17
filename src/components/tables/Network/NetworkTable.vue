@@ -1,7 +1,8 @@
 <template>
-<Tabulator
-:name="`Netze`"
-:columns="[
+  <Tabulator
+    :name="`Netze`"
+    reactiveData="true"
+    :columns="[
 	{
 		title: 'IP-Addresse',
 		field: 'ip',
@@ -16,17 +17,17 @@
 		field:'owner',
 	},
 ]"
-:data="data"
-:selectable="true"
-:groupBy="''"
-:height="height"
-@selectionUpdate="passOnSelectionUpdate"
-/>
+    :data="networksData"
+    :selectable="true"
+    :groupBy="''"
+    :height="height"
+    @selectionUpdate="passOnSelectionUpdate"
+  />
 </template>
 
 <script>
 import Tabulator from '../Tabulator';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
 	props: ['height'],
@@ -38,39 +39,35 @@ export default {
 	}),
 	computed: {
 		...mapState(['active']),
+		...mapState("networks", ["networksData"]),
 		...mapGetters(['getActiveOwner', 'getActivePolicy']),
 	},
 	watch : {
 		active: {
 			deep: true,
 			handler () {
-				this.getNetworks();
+				this.loadNetworks();
 			}
 		}
 	},
 	mounted () {
-		this.getNetworks()
+		this.loadNetworks()
 	},
 	methods: {
-		getNetworks () {
+		...mapActions('networks',['getNetworks']),
+		loadNetworks () {
 			var vm = this;   // get vue instance
 			if (!vm.getActiveOwner) {
 				vm.data = [];
 				return;
 			}
-
-			vm.axios.get('/get_networks', {
-				params: {
-					active_owner: vm.getActiveOwner,
+			const params = {
+				active_owner: vm.getActiveOwner,
 					history: vm.getActivePolicy,
 					chosen_networks: ''
-				}
-			}).then(function (response) {
-				vm.data = response.data.records;
-			}).catch(function (error) {
-				vm.data = [];
-				alert('get_networks: ' + error);
-			});
+			};
+
+			this.getNetworks(params);
 		},
 		passOnSelectionUpdate(data) {
 			this.$emit('selectionUpdate', data.map(row => row.name));
