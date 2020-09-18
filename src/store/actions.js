@@ -17,9 +17,12 @@ export const requestOwners = ({ commit }) => {
 export const requestActive = ({ commit, dispatch, state }) => {
     return Vue.axios.get('/get_owner')
         .then(function (response) {
+            console.log('HALALAL');
+            console.log(response.data.records[0].name);
             let newActiveOwner = response.data.records[0].name;
             dispatch('requestHistory', newActiveOwner)
                 .then(() => {
+                    console.log('TESTTTT');
                     commit('setActive',
                         {
                             owner: newActiveOwner,
@@ -66,7 +69,7 @@ export const setActivePolicy = ({ commit }, newActivePolicy) => {
 };
 
 export const requestHistory = ({ commit }, owner) => {
-    return Vue.axiosTTP.get('/get_history', {
+    return Vue.axios.get('/get_history', {
         params: {
             active_owner: owner || this.state.active.owner,
             history: 'none'

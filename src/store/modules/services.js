@@ -7,6 +7,8 @@ export default {
         rulesData: [],
         adminsData: [],
         searchInput: [],
+        usersData: [],
+        serviceSelection: [],
     },
     mutations: {
         RECEIVED_SERVICESDATA(state, payload) {
@@ -19,9 +21,15 @@ export default {
             state.adminsData = payload.records;
         },
         SEARCH_UPDATE(state,payload) {
+            console.log('SEARCH NOW');
             console.log(payload);
             state.searchInput = payload;
-        
+        },
+        RECEIVED_USERSDATA(state,payload) {
+            state.usersData = payload.records;
+        },
+        UPDATE_SERVICE_SELECTION(state,payload) {
+            state.serviceSelection = payload;
         }
     },
 
@@ -69,6 +77,17 @@ export default {
                 }
                 vm.requests--; */
               })
+        },
+        getServiceUsers({commit}, payload) {
+            return Vue.axios.get('/get_users', {
+                params: payload
+            }).then(function (response) {
+                commit('RECEIVED_USERSDATA', response);
+            
+              })
+        },
+        updateServiceSelection({commit},payload) {
+            commit('UPDATE_SERVICE_SELECTION', payload);
         }
     }
 }
