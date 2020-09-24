@@ -63,6 +63,7 @@
 						:disabled="tab_details !== 0"
 						label="User expandieren"
 						class="pl-2"
+						id="cb_expand_user"
 						/>
 					</v-col>
 					<v-col>
@@ -70,6 +71,7 @@
 						v-model="IPAsName"
 						:disabled="tab_details !== 0"
 						label="Namen statt IPs"
+						id="cb_show_names"
 						/>
 					</v-col>
 					<v-col>
@@ -77,6 +79,7 @@
 						v-model="filterBySearch" 
 						:disabled="tab_services !== 3"
 						label="Filtern nach Suche"
+						id="cb_filter_search"
 						/>
 					</v-col>
 				</v-row>

@@ -93,22 +93,19 @@ export default {
 			const formData = new FormData();
 			formData.append('email', vm.login);
 			formData.append('pass', vm.password);
-			formData.append('app', 'foo');
+			formData.append('app', '../index.html');
 	
 			if (vm.login) {
 				vm.loading = true;
 				vm.axios.post('/login', formData)
 					.then(function (response) {
-						vm.valid = /Unknown\spath/.test(response.data);
 						vm.loading = false;
+						vm.valid = true;
 						vm.clear();
-						if (vm.valid) {
-							vm.setLoggedIn(true);
-							vm.$router.push('networks');
-						}
+						vm.setLoggedIn(true);
+						vm.$router.push('networks');
 					})
 					.catch(function (error) {
-						alert('login: ' + error);
 						vm.valid = false;
 						vm.loading = false;
 					});
