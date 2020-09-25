@@ -74,7 +74,7 @@ sub test_service_details {
     ok(1 == scalar @{$browser->find_elements('//label[contains(text(), "Filtern nach Suche")]')}, 'Found checkbox: Filter search');
     ok(1 == scalar @{$browser->find_elements('//div[contains(text(), "Beschreibung:")]/../..//div[contains(text(), "Your foo")]')}, 'Description: Your foo');
     # Check service table header
-    @titles = $browser->find_child_elements($details, './/div[contains(@class, "tabulator-col-title")]');
+    @titles = $browser->find_child_elements($details, './/div[@class="tabulator-col-title"]');
     @regex = ('Aktion', 'Quelle', 'Ziel', 'Protokoll');
     ok($browser->check_grid_syntax(\@titles, \@regex), 'Details grid header are correct');
     # Check service table syntax

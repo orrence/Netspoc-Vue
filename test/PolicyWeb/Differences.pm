@@ -26,7 +26,7 @@ sub test_services {
     ok(1 == scalar @{$browser->find_child_elements($services, '//div[@class="tabulator-cell" and text()="Test12"]')}, 'Found service test 12');
     # Find changed protocoll
     $browser->find_child_element($services, '//div[@class="tabulator-cell" and text()="Test11"]')->click();
-    ok(1 == scalar @{$browser->find_elements('//div[@class="tabulator-col-title" and text()="Protokoll"]/../../../../..//div[4][text()="tcp 83"]')}, 'Changed protocoll of test 11');
+    ok(1 == scalar @{$browser->find_elements('//div[@class="tabulator-cell" and @tabulator-field="prt" and text()="tcp 83"]')}, 'Changed protocoll of test 11');
 }
 
 # This function runs the tests for the differences tab
