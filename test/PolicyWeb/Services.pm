@@ -53,8 +53,7 @@ sub test_own_services {
     my $head_text = $browser->find_child_element($container, './/div[contains(text(), "' .(scalar @rows) . ' Dienste verf")]');
     ok($head_text, 'Found head and it contains number of elements');
     my @contains = ('Test1', 'Test10', 'Test11', 'Test2', 'Test3', 'Test3a', 'Test4', 'Test5', 'Test6', 'Test7', 'Test8', 'Test9');
-    my $name_row = 1;
-    ok($browser->grid_contains($table, $name_row, \@contains), 'Grid contains all test services');
+    ok($browser->grid_contains($table, 'name', \@contains), 'Grid contains all test services');
     ok($browser->check_grid_order($table), 'Grid changes correctly');
     ok($browser->download($browser->find_child_element($container, './/span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]'), /\.pdf$/), 'Download Services PDF');
     ok($browser->download($browser->find_child_element($container, './/span[contains(@class, "material-icons") and contains(text(), "border_all")]'), /\.xlsx$/), 'Download Services XLSX');

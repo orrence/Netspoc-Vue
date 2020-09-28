@@ -85,8 +85,7 @@ sub grid_contains {
     my($browser, $table, $row, $searchA) = @_;
     my @search = @{$searchA};
     foreach $text (@search) {
-        @elements = $browser->find_child_elements($table, ".//div[$row][contains(\@class, 'tabulator-cell') and contains(text(), '$text')]");
-        if (0 == scalar @elements) {
+        if (0 == scalar @{$browser->find_child_elements($table, ".//div[\@class='tabulator-cell' and \@tabulator-field='$row' and text()='$text']")}) {
             return 0;
         }
     }

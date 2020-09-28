@@ -50,9 +50,8 @@ sub test_ressources_grid {
     $browser->find_child_element($network_table, './/div[@class="tabulator-cell" and text()="network:Big"]')->click();
     sleep 1;
     ok(1 == scalar @{$browser->find_child_elements($table, './/div[contains(@class, "tabulator-group") and contains(text(), "network:Big")]')}, 'Found group: network:Big');
-    my $name_row = 2;
     my @names = ('host:B10', 'host:Range', 'interface:asa.Big', 'interface:u.Big');
-    ok($browser->grid_contains($table, $name_row, \@names), 'network ressources for network:Big');
+    ok($browser->grid_contains($table, 'child_name', \@names), 'network ressources for network:Big');
     ok($browser->check_grid_order($table), 'Ressources grid order changes');
     # Select network 'Kunde'
     $browser->find_child_element($network_table, './/div[@class="tabulator-cell" and text()="network:Kunde"]')->click();
