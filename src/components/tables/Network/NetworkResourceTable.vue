@@ -1,8 +1,9 @@
 <template>
-  <Tabulator
-    :name="`Netzressourcen`"
-    reactiveData="true"
-    :columns="[
+  <div id="table_networks_resource">
+    <Tabulator
+      :name="`Netzressourcen`"
+      reactiveData="true"
+      :columns="[
 	{
 		title: 'IP-Addresse',
 		field: 'child_ip', sorter:'ip'
@@ -16,10 +17,11 @@
 		field: 'child_owner'
 	}
 ]"
-    :data="networkResourcesData"
-    :selectable="false"
-    :groupBy="'name'"
-  />
+      :data="networkResourcesData"
+      :selectable="false"
+      :groupBy="'name'"
+    />
+  </div>
 </template>
 
 <script>
@@ -62,7 +64,6 @@ export default {
         selected_networks: vm.selection.join(","),
       };
       this.getNetworkResources(params);
-      
     },
   },
 };

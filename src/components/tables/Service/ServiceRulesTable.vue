@@ -1,7 +1,8 @@
 <template>
-  <Tabulator
-    :name="`Dienstdetails`"
-    :columns="[
+  <div id="table_services_rules">
+    <Tabulator
+      :name="`Dienstdetails`"
+      :columns="[
 	{ 
 		title: 'Aktion',
 		field: 'action',
@@ -27,11 +28,12 @@
 		width: 92
 	},
 ]"
-    reactiveData="true"
-    :data="rulesData"
-    :selectable="false"
-    :groupBy="selection.length > 1 ? 'service' : ''"
-  />
+      reactiveData="true"
+      :data="rulesData"
+      :selectable="false"
+      :groupBy="selection.length > 1 ? 'service' : ''"
+    />
+  </div>
 </template>
 
 <script>

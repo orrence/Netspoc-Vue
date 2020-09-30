@@ -1,18 +1,20 @@
 <template>
-  <Tabulator
-    :name="`Verantwortliche`"
-    :columns="[
+  <div id="table_admins">
+    <Tabulator
+      :name="`Verantwortliche`"
+      :columns="[
 	{
 		title: 'Verantwortung',
 		field: 'email',
 	}
 ]"
-    reactiveData="true"
-    :data="adminsData"
-    :selectable="false"
-    :groupBy="'owner'"
-    :height="'140px'"
-  />
+      reactiveData="true"
+      :data="adminsData"
+      :selectable="false"
+      :groupBy="'owner'"
+      :height="'140px'"
+    />
+  </div>
 </template>
 
 <script>

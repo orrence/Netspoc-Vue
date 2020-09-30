@@ -1,17 +1,19 @@
 <template>
-  <Tabulator
-    :name="'Dienste'"
-    :columns="[
+  <div id="table_services">
+    <Tabulator
+      :name="'Dienste'"
+      :columns="[
 	{
 		title: 'Name',
 		field: 'name' 
 	},
 ]"
-    :data="servicedata"
-    :selectable="true"
-    :groupBy="''"
-    @selectionUpdate="passOnSelectionUpdate"
-  />
+      :data="servicedata"
+      :selectable="true"
+      :groupBy="''"
+      @selectionUpdate="passOnSelectionUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -28,8 +30,8 @@ export default {
   }),
 
   methods: {
-    ...mapActions("services", ["getServicesList","updateServiceSelection"]),
-    
+    ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
+
     passOnSelectionUpdate(data) {
       this.updateServiceSelection(data);
       //this.$emit("selectionUpdate", data);

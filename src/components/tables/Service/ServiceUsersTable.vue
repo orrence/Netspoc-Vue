@@ -1,7 +1,8 @@
 <template>
-  <Tabulator
-    :name="`Dienstbenutzer`"
-    :columns="[
+  <div id="table_services_user">
+    <Tabulator
+      :name="`Dienstbenutzer`"
+      :columns="[
 	{ 
 		title: 'Name',
 		field: 'name'
@@ -16,14 +17,16 @@
 		field: 'owner'
 	},
 ]"
-    :data="data"
-    :selectable="false"
-    :groupBy="selection.length > 1 ? 'service' : ''"
-  />
+      reactiveData="true"
+      :data="usersData"
+      :selectable="false"
+      :groupBy="selection.length > 1 ? 'service' : ''"
+    />
+  </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Tabulator from "../Tabulator";
 export default {
   components: {
@@ -33,7 +36,10 @@ export default {
   data: () => ({
     data: [],
   }),
-  computed: mapGetters(["getActiveOwner", "getActivePolicy"]),
+  computed: {
+    ...mapState("services", ["usersData"]),
+    ...mapGetters(["getActiveOwner", "getActivePolicy"]),
+  },
   watch: {
     selection: function () {
       this.getUsers();
@@ -43,6 +49,7 @@ export default {
     this.getUsers();
   },
   methods: {
+    ...mapActions("services", ["getServiceUsers"]),
     getUsers() {
       var vm = this; // get vue instance
       if (
@@ -54,24 +61,15 @@ export default {
         return;
       }
 
-      vm.axios
-        .get("/get_users", {
-          params: {
-            active_owner: vm.getActiveOwner,
-            history: vm.getActivePolicy,
-            service: vm.selection.map((row) => row.name).join(","),
-            expand_users: vm.expandUser ? 1 : 0,
-            display_property: vm.IPAsName ? "name" : "ip",
-            filter_rules: vm.filterBySearch ? 1 : 0,
-          },
-        })
-        .then(function (response) {
-          vm.data = response.data.records;
-        })
-        .catch(function (error) {
-          vm.data = [];
-          alert("get_users: " + error);
-        });
+      const params = {
+        active_owner: vm.getActiveOwner,
+        history: vm.getActivePolicy,
+        service: vm.selection.map((row) => row.name).join(","),
+        expand_users: vm.expandUser ? 1 : 0,
+        display_property: vm.IPAsName ? "name" : "ip",
+        filter_rules: vm.filterBySearch ? 1 : 0,
+      };
+      this.getServiceUsers(params);
     },
   },
 };
