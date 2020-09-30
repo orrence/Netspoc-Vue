@@ -39,8 +39,9 @@ export default {
                 });
         },
         loginUser({ dispatch, commit }, creds) {
-            return Vue.axios.post('/login_vue', creds.data).then(res => {               
-                if(res.request.responseURL == 'http://localhost/backend/foo') {
+            return Vue.axios.post('/login_vue', creds.data).then(res => {  
+                console.log(res);             
+                if(res.data.success) {
                     dispatch('setLoggedIn', true);
                     commit('SET_LOGIN_ERROR',false);
                     router.push('/services/0');
