@@ -47,24 +47,16 @@ export default {
 		comboOwner
 	},
 	computed: {
-		...mapGetters (['getLoggedIn'])
+		...mapGetters ('auth',['getLoggedIn'])
 	},
 	mounted () {
 		this.requestLoggedIn;
 	},
 	methods: {
-		...mapActions (['requestLoggedIn', 'setLoggedIn']),
+		...mapActions ('auth',['requestLoggedIn', 'setLoggedIn','logoutUser']),
 
 		logout () {
-			var vm = this;	// get vue instance
-
-			vm.axios.get('/logout'
-			).then(function () {
-				vm.setLoggedIn(false);
-				vm.$router.push('/login');
-			}).catch(function (error) {
-				alert('logout: ' + error);
-			});
+			this.logoutUser();
 		}
 	}
 }

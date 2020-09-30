@@ -100,14 +100,14 @@ export default {
 		},
 	},
 	mounted () {
-		if (this.height) {
+		/* if (this.height) {
 			this.$refs.table.setAttribute("style", "height:" + this.height + ";");
 		} else {
 			this.$nextTick(function() {
 				window.addEventListener('resize', this.resize);
 				this.resize();
 			});
-		}
+		} */
 		this.config.columns = this.columns;
 		this.config.data = this.data;
 		this.config.groupBy = this.groupBy;

@@ -19,7 +19,7 @@ export default {
 	}
 }
 </script>
-
+ 
 <style>
 /*invisible element below input fields causes misalignment*/
 .v-text-field__details{

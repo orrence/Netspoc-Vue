@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import NetworkTable from './tables/NetworkTable';
+import NetworkTable from './tables/Network/NetworkTable';
 
 export default {
 	components: {
@@ -276,7 +276,9 @@ export default {
 			this.cluster.search_networks = data;
 		},
 		emitSearchInputToParent () {
-			this.$emit('searchInputUpdate', {...this.cluster});
+			console.log({...this.cluster}); 
+			this.$store.commit('services/SEARCH_UPDATE',{...this.cluster});
+			//this.$emit('searchInputUpdate', {...this.cluster});
 		},
 	}
 }
