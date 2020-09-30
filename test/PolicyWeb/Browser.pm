@@ -60,17 +60,18 @@ sub is_grid_ordered {
 sub check_grid_order {
     my ($browser, $table) = @_;
     my @heads = $browser->find_child_elements($table, './div[contains(@class, "tabulator-header")]//div[@tabulator-field]');
-    for (my $column = 0; $column < scalar @heads; $column++) {
+    my $head_size = scalar @heads;
+    for (my $column = 0; $column < $head_size; $column++) {
         # Test ascending order
         $heads[$column]->click();
         @cells = $browser->find_child_elements($table, 'tabulator-cell', 'class');
-        if($browser->is_grid_ordered(\@cells, 1, scalar @heads, $column)) {
+        if($browser->is_grid_ordered(\@cells, 1, $head_size, $column)) {
             return 0;
         }
         # Test descending order
         $heads[$column]->click();
         @cells = $browser->find_child_elements($table, 'tabulator-cell', 'class');
-        if($browser->is_grid_ordered(\@cells,  -1, scalar @heads, $column)) {
+        if($browser->is_grid_ordered(\@cells,  -1, $head_size, $column)) {
             return 0;
         }
     }
@@ -115,17 +116,10 @@ sub array_remove {
     my ($browser, $arrayA, $removeA) = @_;
     my @array = @{$arrayA};
     my @remove = @{$removeA};
-    for (my $index = 0; $index < scalar @array; $index++) {
-        foreach my $remove_element (@remove) {
-            if ($array[$index] eq $remove_element) {
-                for ($remove_index = $index; $remove_index < scalar @array - 1; $remove_index++) {
-                    $array[$remove_index] = $array[$remove_index + 1];
-                }
-                pop(@array);
-            }
-        }
-    }
-    return @array;
+    my %filtered;
+    @filtered{@array} = ();
+    delete @filtered{@remove};
+    return keys %filtered;
 }
 
 # This method checks file downloads
