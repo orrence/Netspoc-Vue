@@ -36,7 +36,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import diffTree from '../components/DiffTree';
+import diffTree from '../components/difftree/DiffTree';
 
 export default {
 	components: {

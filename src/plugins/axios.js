@@ -2,6 +2,7 @@
 
 import Vue from 'vue';
 import axios from "axios";
+import router from '../router';
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -32,10 +33,20 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   function(response) {
     // Do something with response data
+    console.log('RESPONSE SUCCESS');
     return response;
   },
   function(error) {
     // Do something with response error
+    console.log('FEHLER RESPORNSE');
+    const response = error.response;
+
+    if(response.data.msg == 'Login required') {
+      router.replace({
+        path: '/login',
+        query: { redirect: router.currentRoute.fullPath}
+      })
+    }
     return Promise.reject(error);
   }
 );
