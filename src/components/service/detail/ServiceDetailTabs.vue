@@ -1,6 +1,6 @@
 <template>
   <v-card tile>
-    <v-tabs v-model="tab_details" slider-color="orange">
+    <v-tabs background-color="lightgray" v-model="tab_details" slider-color="orange">
       <v-tab>Details zum Dienst</v-tab>
       <v-tab>Benutzer (User) des Dienstes</v-tab>
     </v-tabs>

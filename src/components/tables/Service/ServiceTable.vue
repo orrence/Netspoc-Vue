@@ -1,5 +1,5 @@
 <template>
-  <div id="table_services">
+  <div :id="compID">
     <Tabulator
       :name="'Dienste'"
       :columns="[
@@ -24,7 +24,7 @@ export default {
   components: {
     Tabulator,
   },
-  props: ["servicedata"],
+  props: ["servicedata","compID"],
   data: () => ({
     data: [],
   }),

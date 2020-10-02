@@ -1,13 +1,22 @@
 <template>
   <v-container fluid>
-    <search-bar />
+    <v-btn tile elevation="2" class="ma-4 ml-0" raised color="primary" @click.stop="drawer = !drawer">
+      <v-icon left>
+        mdi-search-web
+      </v-icon>
+      Suchen
+      </v-btn>
+    <v-navigation-drawer v-model="drawer" absolute temporary width="500">
+      <search-bar @closeSearch="drawer = !drawer"/>
+    </v-navigation-drawer>
+    
     <v-row dense>
       <v-col cols="4">
-        <service-tabs :serviceTab="tab_services" @selectionUpdate="captureSelectionUpdate" />
+        <service-tabs class="mr-2" :serviceTab="tab_services" @selectionUpdate="captureSelectionUpdate" />
       </v-col>
 
       <v-col cols="8">
-        <service-detail-tabs :search_input="searchInput" :tab_services="tab_services" />
+        <service-detail-tabs class="ml-2" :search_input="searchInput" :tab_services="tab_services" />
       </v-col>
     </v-row>
   </v-container>
@@ -16,7 +25,7 @@
 <script>
 import ServiceTabs from "../components/service/ServiceTabs";
 import ServiceDetailTabs from "../components/service/detail/ServiceDetailTabs";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/service/search/SearchBar";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -28,7 +37,7 @@ export default {
   data: () => ({
     pnl_search: 0,
     tab_services: -1,
-
+    drawer: false,
     admins: {},
   }),
   computed: {
@@ -81,6 +90,7 @@ export default {
     recieveSearchInput(newInput) {
       this.search_input = newInput;
     },
+  
     captureSelectionUpdate(data) {
 		console.log('UPDATE SELCTION DATA '+data);
       this.tab_services = data;

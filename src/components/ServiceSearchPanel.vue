@@ -120,10 +120,7 @@
 					label="Nur befristete Dienste suchen" 
 					/>
 				</v-col>
-			</v-row>		
-		</v-col>
-		<v-divider vertical/>
-		<v-col>
+			</v-row>
 			<v-subheader>Allgemeine Optionen</v-subheader>
 			<v-row dense :align="'center'">				
 				<v-col>
@@ -138,13 +135,14 @@
 					label="Suchergebnisse nur mit exakter Übereinstimmung" 
 					/>
 				</v-col>
-			</v-row>
+			</v-row>		
 		</v-col>
+
 	</v-row>
 
 	<v-row dense :justify="'end'">
 		<v-col>
-			<v-btn text color="success" @click="searchUpdate">suchen</v-btn>
+			<v-btn block color="success" @click="searchUpdate">suchen</v-btn>
 		</v-col>
 	</v-row>
 </v-container>

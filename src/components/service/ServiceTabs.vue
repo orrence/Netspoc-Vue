@@ -1,6 +1,6 @@
 <template>
   <v-card tile>
-    <v-tabs @change="onChangeTab" v-model="tabservices" slider-color="orange">
+    <v-tabs @change="onChangeTab" v-model="tabservices" background-color="lightgray"  slider-color="orange">
       <v-tab>Eigene</v-tab>
       <v-tab>Genutzte</v-tab>
       <v-tab>Nutzbare</v-tab>
@@ -10,16 +10,16 @@
     </v-tabs>
     <v-tabs-items v-model="tabservices">
       <v-tab-item :key="0">
-        <ServiceTable :servicedata="servicesData" />
+        <ServiceTable :servicedata="servicesData" compID="table_services_own" />
       </v-tab-item>
       <v-tab-item :key="1">
-        <ServiceTable :servicedata="servicesData" />
+        <ServiceTable :servicedata="servicesData" compID="table_services_used"/>
       </v-tab-item>
       <v-tab-item :key="2">
-        <ServiceTable :servicedata="servicesData" />
+        <ServiceTable :servicedata="servicesData" compID="table_services_usable"/>
       </v-tab-item>
       <v-tab-item :key="3">
-        <ServiceTable :servicedata="servicesData" />
+        <ServiceTable :servicedata="servicesData" compID="table_services_searchresult"/>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
