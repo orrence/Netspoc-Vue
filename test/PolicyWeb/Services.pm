@@ -29,15 +29,15 @@ sub test_service_buttons {
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab") and contains(text(), "Genutzte")]')}, 'Button: Genutzte');
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab") and contains(text(), "Nutzbare")]')}, 'Button: Nutzbare');
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab")]/i[contains(@class, "v-icon") and contains(text(), "search")]')}, 'Button: Suche');
-    ok(1 == scalar @{$browser->find_elements('//div[contains(text(), "Dienste verf")]/../..//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Services PDF');
-    ok(1 == scalar @{$browser->find_elements('//div[contains(text(), "Dienste verf")]/../..//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Services XLSX');
+    ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Services PDF');
+    ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Services XLSX');
     my $details = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Details zum Dienst")]');
     ok($details, 'Button: Details zum Dienst');
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab") and contains(text(), "Benutzer (User) des Dienstes")]')}, 'Button: Benutzer (User) des Dienstes');
-    ok(1 == scalar @{$browser->find_child_elements($details, '../../../../../div[3]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Details PDF');
-    ok(1 == scalar @{$browser->find_child_elements($details, '../../../../../div[3]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Details XLSX');
-    ok(1 == scalar @{$browser->find_child_elements($details, '../../../../../div[4]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Owner PDF');
-    ok(1 == scalar @{$browser->find_child_elements($details, '../../../../../div[4]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Owner XLSX');
+    ok(1 == scalar @{$browser->find_child_elements($details, '//div[@id="table_services_rules"]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Details PDF');
+    ok(1 == scalar @{$browser->find_child_elements($details, '//div[@id="table_services_rules"]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Details XLSX');
+    ok(1 == scalar @{$browser->find_child_elements($details, '//div[@id="table_admins"]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Owner PDF');
+    ok(1 == scalar @{$browser->find_child_elements($details, '//div[@id="table_admins"]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Owner XLSX');
 }
 
 # This function tests the table for the own services
@@ -46,7 +46,7 @@ sub test_own_services {
     my ($browser) = @_;
     my $own = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Eigene")]');
     $own->click();
-    my $container = $browser->find_child_element($own, '../../../../..//div[contains(@class, "container") and contains(@class, "container--fluid")]');
+    my $container = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]');
     my $table = $browser->find_child_element($container, './/div[contains(@class, "tabulator")]');
     ok($table, 'Table: Own services');
     my @rows = $browser->find_child_elements($table, './/div[contains(@class, "tabulator-row")]');
@@ -63,31 +63,33 @@ sub test_own_services {
 # Argument 0 => The browser for the tests
 sub test_service_details {
     my ($browser) = @_;
-    my $services = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Eigene")]/../../../../..//div[contains(@class, "container") and contains(@class, "container--fluid")]');
-    my $details = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Details zum Dienst")]/../../../../../div[3]');
-    my $owner = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Details zum Dienst")]/../../../../../div[4]');
+    my $services = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]');
+    my $details = $browser->find_element('//div[@id="table_services_rules"]');
+    my $owner = $browser->find_element('//div[@id="table_admins"]');
     $browser->find_child_element($services, './/div[contains(@class, "tabulator-cell") and contains(text(), "Test4")]')->click();
     # Check checkboxes and description
-    ok(1 == scalar @{$browser->find_elements('//label[contains(text(), "User expandieren")]')}, 'Found checkbox: Expand users');
-    ok(1 == scalar @{$browser->find_elements('//label[contains(text(), "Namen statt IPs")]')}, 'Found checkbox: Show names');
-    ok(1 == scalar @{$browser->find_elements('//label[contains(text(), "Filtern nach Suche")]')}, 'Found checkbox: Filter search');
+    my $input_expand_users = $browser->find_element('//input[@id="cb_expand_user"]/../../../..');
+    ok($input_expand_users, 'Found checkbox: Expand users');
+    my $input_show_names = $browser->find_element('//input[@id="cb_show_names"]/../../../..');
+    ok($input_show_names, 'Found checkbox: Show names');
+    ok(1 == scalar @{$browser->find_elements('//input[@id="cb_filter_search"]')}, 'Found checkbox: Filter search');
     ok(1 == scalar @{$browser->find_elements('//div[contains(text(), "Beschreibung:")]/../..//div[contains(text(), "Your foo")]')}, 'Description: Your foo');
     # Check service table header
     @titles = $browser->find_child_elements($details, './/div[@class="tabulator-col-title"]');
     @regex = ('Aktion', 'Quelle', 'Ziel', 'Protokoll');
     ok($browser->check_grid_syntax(\@titles, \@regex), 'Details grid header are correct');
     # Check service table syntax
-    @rules = $browser->find_child_elements($details, 'tabulator-cell', 'class');
+    @rules = $browser->find_child_elements($details, './/div[@class="tabulator-cell"]');
     @regex = ('permit', 'User', '\d\d?\d?\.\d\d?\d?\.\d\d?\d?\.\d\d?\d?', '(udp|tcp) \d+');
     ok($browser->check_grid_syntax(\@rules, \@regex), 'Grid syntax is correct');
     # Check expanded users
-    $browser->find_element('//label[contains(text(), "User expandieren")]')->click();
-    @rules = $browser->find_child_elements($details, 'tabulator-cell', 'class');
+    $input_expand_users->click();
+    @rules = $browser->find_child_elements($details, './/div[@class="tabulator-cell"]');
     $regex[1] = '\d\d?\d?\.\d\d?\d?\.\d\d?\d?\.\d\d?\d?';
     ok($browser->check_grid_syntax(\@rules, \@regex), 'Users expand correctly');
     # Check names instead of IPs
-    $browser->find_element('//label[contains(text(), "Namen statt IPs")]')->click();
-    @rules = $browser->find_child_elements($details, 'tabulator-cell', 'class');
+    $input_show_names->click();
+    @rules = $browser->find_child_elements($details, './/div[@class="tabulator-cell"]');
     $regex[1] = '(any|network|interface|host):.+';
     $regex[2] = '(any|network|interface|host):.+';
     ok($browser->check_grid_syntax(\@rules, \@regex), 'Names instead of IPs');
@@ -98,18 +100,18 @@ sub test_service_details {
         ok($browser->check_grid_order($table), 'Details grid changes correctly');
     }
     # Check details download
-    ok($browser->download($browser->find_child_element($details, './/span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]'), /\.pdf$/), 'Download Services PDF');
-    ok($browser->download($browser->find_child_element($details, './/span[contains(@class, "material-icons") and contains(text(), "border_all")]'), /\.xlsx$/), 'Download Services XLSX');
+    ok($browser->download($browser->find_child_element($details, './/span[@class="material-icons" and text()="picture_as_pdf"]'), /\.pdf$/), 'Download Services PDF');
+    ok($browser->download($browser->find_child_element($details, './/span[@class="material-icons" and text()="border_all"]'), /\.xlsx$/), 'Download Services XLSX');
     # Check owner
     $browser->move_to(element => $owner);
-    @rules = $browser->find_child_elements($owner, 'tabulator-cell', 'class');
+    @rules = $browser->find_child_elements($owner, './/div[@class="tabulator-cell"]');
     @regex = ('guest');
-    $table = $browser->find_child_element($owner, 'tabulator', 'class');
+    $table = $browser->find_child_element($owner, './/div[@class="tabulator"]');
     ok($browser->check_grid_syntax(\@rules, \@regex), 'guest is Owner');
     ok($browser->check_grid_order($table), 'Owner grid changes correctly');
     # Check owner download
-    ok($browser->download($browser->find_child_element($owner, './/span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]'), /\.pdf$/), 'Download Owner PDF');
-    ok($browser->download($browser->find_child_element($owner, './/span[contains(@class, "material-icons") and contains(text(), "border_all")]'), /\.xlsx$/), 'Download Owner XLSX');
+    ok($browser->download($browser->find_child_element($owner, './/span[@class="material-icons" and text()="picture_as_pdf"]'), /\.pdf$/), 'Download Owner PDF');
+    ok($browser->download($browser->find_child_element($owner, './/span[@class="material-icons" and text()="border_all"]'), /\.xlsx$/), 'Download Owner XLSX');
     # Scroll back to top
     $browser->execute_script('window.scrollTo(0,0)');
 }
@@ -215,12 +217,11 @@ sub test_search {
     $browser->execute_script('window.scrollTo(0,0)');
     $search_options->click();
     sleep 1;
-    $browser->find_element('//i[contains(@class, "material-icons") and contains(text(), "search")]/../../../../../..//div[contains(@class, "v-window-item--active")]'
-        . '//div[contains(@class, "tabulator-cell") and contains(text(), "Test9")]')->click();
+    $browser->find_element('//div[contains(@class, "v-window-item--active")]//div[@id="table_services"]//div[contains(@class, "tabulator-cell") and contains(text(), "Test9")]')->click();
     $browser->find_element('//input[@id="cb_show_names"]/../../../..')->click();
-    my $details = $browser->find_element('//div[contains(@class, "tabulator-col-title") and contains(text(), "Aktion")]/../../../../..');
+    my $details = $browser->find_element('//div[@id="table_services_rules"]');
     sleep 1;
-    my @rules = $browser->find_child_elements($details, 'tabulator-cell', 'class');
+    my @rules = $browser->find_child_elements($details, './/div[@class="tabulator-cell"]');
     my @rules = @rules[0..3];
     my @regex = ('permit', '10.2.2.2', '10.2.2.2', 'udp 83');
     TODO: {
@@ -231,7 +232,7 @@ sub test_search {
     # Filter checkbox
     $browser->find_element('//input[@id="cb_filter_search"]/../../../..')->click();
     sleep 1;
-    my @rules = $browser->find_child_elements($details, 'tabulator-cell', 'class');
+    my @rules = $browser->find_child_elements($details, './/div[@class="tabulator-cell"]');
     my @rules = @rules[0..3];
     my @regex = ('permit', "10.1.0.10\n10.2.2.2", "10.1.0.10,10.2.2.2", 'udp 83');
     TODO: {
@@ -252,8 +253,7 @@ sub check_search_result() {
     my $search_options = $browser->find_element('//button[contains(text(), "Suchoptionen")]');
     $search_options->click();
     sleep 1;
-    my @services = $browser->find_elements('//i[contains(@class, "material-icons") and contains(text(), "search")]/../../../../../..//div[contains(@class, "v-window-item--active")]'
-        . '//div[contains(@class, "tabulator-cell")]');
+    my @services = $browser->find_elements('//div[contains(@class, "v-window-item--active")]//div[@id="table_services"]//div[contains(@class, "tabulator-cell")]');
     ok(scalar @services == $expected, $message);
     $search_options->click();
     sleep 1;

@@ -14,14 +14,14 @@ sub test {
 # Argument 0 => The t´browser for the tests
 sub test_find_elements {
     my ($browser) = @_;
-    ok($browser->find_element_by_id('btn_logout'), 'Found button logout');
+    ok($browser->find_element('//button[@id="btn_logout"]'), 'Found button logout');
 }
 
 # This function test the logout button
 # Argument 0 => The t´browser for the tests
 sub test_logout {
    my ($browser) = @_;
-   $browser->find_element_by_id('btn_logout')->click();
+   $browser->find_element('//button[@id="btn_logout"]')->click();
    sleep 1;
    ok($browser->get_current_url() =~ '/login', 'Logout successfull');
 }

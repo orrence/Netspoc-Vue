@@ -2,6 +2,7 @@
     <v-row dense :align="'center'">
       <v-col>
         <v-checkbox
+          id="cb_expand_user"
           :value="expandUser"
           @change="expandUserChange"
           :disabled="tab_details !== 0"
@@ -10,10 +11,11 @@
         />
       </v-col>
       <v-col>
-        <v-checkbox  :value="IPAsName" @change="IPAsNameChange" :disabled="tab_details !== 0" label="Namen statt IPs" />
+        <v-checkbox id="cb_show_names" :value="IPAsName" @change="IPAsNameChange" :disabled="tab_details !== 0" label="Namen statt IPs" />
       </v-col>
       <v-col>
         <v-checkbox
+          id="cb_filter_search"
           :value="filterBySearch"
           @change="filterBySearchChange"
           :disabled="tab_services !== 3"

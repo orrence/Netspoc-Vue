@@ -20,12 +20,12 @@ sub test_services {
     $browser->find_element('//div[contains(@class, "v-tab") and text()="Eigene"]')->click();
     sleep 1;
     # Find changed services
-    my $services = $browser->find_element('//div[@class="tabulator-col-title" and text()="Name"]/../../../../..');
-    ok(0 == scalar @{$browser->find_child_elements($services, '//div[@class="tabulator-cell" and text()="Test10"]')}, 'Test 10 removed');
-    ok(1 == scalar @{$browser->find_child_elements($services, '//div[@class="tabulator-cell" and text()="Test11"]')}, 'Found service test 11');
-    ok(1 == scalar @{$browser->find_child_elements($services, '//div[@class="tabulator-cell" and text()="Test12"]')}, 'Found service test 12');
+    my $services = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]');
+    ok(0 == scalar @{$browser->find_child_elements($services, './/div[@class="tabulator-cell" and text()="Test10"]')}, 'Test 10 removed');
+    ok(1 == scalar @{$browser->find_child_elements($services, './/div[@class="tabulator-cell" and text()="Test11"]')}, 'Found service test 11');
+    ok(1 == scalar @{$browser->find_child_elements($services, './/div[@class="tabulator-cell" and text()="Test12"]')}, 'Found service test 12');
     # Find changed protocoll
-    $browser->find_child_element($services, '//div[@class="tabulator-cell" and text()="Test11"]')->click();
+    $browser->find_child_element($services, './/div[@class="tabulator-cell" and text()="Test11"]')->click();
     ok(1 == scalar @{$browser->find_elements('//div[@class="tabulator-cell" and @tabulator-field="prt" and text()="tcp 83"]')}, 'Changed protocoll of test 11');
 }
 

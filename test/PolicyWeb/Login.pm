@@ -36,6 +36,7 @@ sub test_find_login {
 sub test_fail_login {
     my ($browser) = @_;
     $browser->find_element('//input[@id="txt_login"]')->send_keys('not-guest');
+    $browser->find_element('//input[@id="txt_password"]')->send_keys('qwertz');
     $browser->find_element('//button[@id="btn_login"]')->click();
     sleep 1;
     ok($browser->get_current_url() =~ '/login', 'Login as not-guest failed');
@@ -49,7 +50,7 @@ sub test_login {
     $browser->find_element('//input[@id="txt_login"]')->send_keys('guest');
     $browser->find_element('//button[@id="btn_login"]')->click();
     sleep 1;
-    ok($browser->get_current_url() =~ '/networks', 'Login as guest');
+    ok($browser->get_current_url() =~ '/services/0', 'Login as guest');
     $browser->select_policy('p1');
 }
 

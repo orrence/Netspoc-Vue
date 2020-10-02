@@ -1,4 +1,5 @@
 #!perl
+# Note: Execute 'npm run build' before executing this script
 # Argument 0 => (Optional) Selenium server port (Default => 4444)
 
 use Test::More;
