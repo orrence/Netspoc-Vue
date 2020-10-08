@@ -2,10 +2,15 @@
   <v-row dense>
     <v-col>
       <v-container fluid>
-        <v-tabs background-color="lightgray" v-model="cluster.tab_search" slider-color="orange" grow>
+        <v-tabs
+          background-color="lightgray"
+          v-model="cluster.tab_search"
+          @change="changeTab"
+          slider-color="orange"
+          grow
+        >
           <v-tab>Regeln</v-tab>
           <v-tab>Beschreibung</v-tab>
-          <v-tab>Netzauswahl</v-tab>
         </v-tabs>
         <v-tabs-items v-model="cluster.tab_search">
           <v-tab-item>
@@ -54,7 +59,11 @@
                 <v-checkbox v-model="cluster.search_subnet" label="Enthaltene Netze einbeziehen"></v-checkbox>
               </v-col>
               <v-col>
-                <v-checkbox v-model="cluster.search_range" label="Port-Ranges einbeziehen"></v-checkbox>
+                <v-checkbox
+                  :value="cluster.search_range"
+                  v-model="cluster.search_range"
+                  label="Port-Ranges einbeziehen"
+                ></v-checkbox>
               </v-col>
             </v-row>
           </v-tab-item>
@@ -135,13 +144,16 @@
 </template>
 <script>
 import NetworkTable from "../../tables/Network/NetworkTable";
+import urlSearchParams from "../../mixins/urlSearchParams";
 
 export default {
+  mixins: [urlSearchParams],
   components: {
     NetworkTable,
   },
   data: () => ({
     url: "http://localhost/?#/services/0",
+    tabnames: ['regeln','beschreibung'],
     cluster: {
       tab_search: 0,
       search_ip1: "",
@@ -159,142 +171,53 @@ export default {
       search_limited: false,
       search_case_sensitive: false,
       search_exact: false,
+      tabname: '',
     },
   }),
   mounted() {
-    if (this.$route.params.search.length > 1) {
-      this.setSearchParams(this.$route);
+    console.log(this.cluster);
+
+    if (this.$route.hash != "") {
+      this.setSearchParams();
       if (this.cluster.search_string) {
-        this.tab_search = 1;
+        this.tab_search = 0;
       } else {
-        this.cluster.tab_search = 0;
+        this.cluster.tab_search = 1;
       }
       this.emitSearchInputToParent();
     }
   },
-  beforeRouteUpdate(to) {
-    if (this.$route.params.search.length > 1) {
-      this.setSearchParams(to);
+  beforeRouteUpdate() {
+    console.log("ROUTE CHANGE");
+    if (this.$route.hash != "") {
+      this.setSearchParams();
       if (this.cluster.search_string) {
-        this.tab_search = 1;
-      } else {
         this.tab_search = 0;
+      } else {
+        this.tab_search = 1;
       }
     }
   },
   methods: {
-    setSearchParams(route) {
-      var cluster = this.cluster;
-      var params = route.params.search.split(";");
-      cluster.search_ip1 = "";
-      cluster.search_ip2 = "";
-      cluster.search_proto = "";
-      cluster.search_string = "";
-      cluster.search_networks = [];
-      cluster.search_description = false;
-      cluster.search_subnet = false;
-      cluster.search_own = false;
-      cluster.search_used = false;
-      params.forEach(function (str) {
-        if (str.includes("ip1")) {
-          cluster.search_ip1 = str.match(/:(.*)/)[1].replace(/\\\\/g, "/");
-        } else if (str.includes("ip2")) {
-          cluster.search_ip2 = str.match(/:(.*)/)[1].replace(/\\\\/g, "/");
-        } else if (str.includes("prt")) {
-          cluster.search_proto = str.match(/:(.*)/)[1];
-        } else if (str.includes("sea")) {
-          cluster.search_string = str.match(/:(.*)/)[1];
-        }
-        // else if (str.includes("net")) { cluster.search_string = str.match(/:(.*)/)[1].replace(/\\\\/g, ':'); }
-        else if (str === "des") {
-          cluster.search_description = true;
-        } else if (str === "sup") {
-          cluster.search_supernet = true;
-        } else if (str === "sub") {
-          cluster.search_subnet = true;
-        } else if (str === "ran") {
-          cluster.search_range = true;
-        } else if (str === "own") {
-          cluster.search_own = true;
-        } else if (str === "use") {
-          cluster.search_used = true;
-        } else if (str === "usa") {
-          cluster.search_visible = true;
-        } else if (str === "lim") {
-          cluster.search_limited = true;
-        } else if (str === "sen") {
-          cluster.search_case_sensitive = true;
-        } else if (str === "exa") {
-          cluster.search_exact = true;
-        }
-      });
+    setSearchParams() {
+      this.cluster = this.getFiltersFromUrl(this.cluster, true);
     },
+    changeTab(num) {
+      this.cluster.tabname = this.tabnames[num];
+    },
+
     searchUpdate() {
-      var search = "";
-      var cluster = this.cluster;
-
-      this.$emit('closeSearch');
-      if (cluster.search_ip1) {
-        let str = "ip1:" + cluster.search_ip1 + ";";
-        search += str.replace(/\//g, "\\");
-      }
-      if (cluster.search_ip2) {
-        let str = "ip2:" + cluster.search_ip2 + ";";
-        search += str.replace(/\//g, "\\");
-      }
-      if (cluster.search_proto) {
-        let str = "ptr:" + cluster.search_proto + ";";
-        search += str;
-      }
-      if (cluster.search_string) {
-        let str = "sea:" + cluster.search_string + ";";
-        search += str;
-      }
-      // if (cluster.search_networks) {
-      // 	let str = cluster.search_networks + ";";
-      // 	search +=	"net:" + str.replace(/:/g, '\\');
-      // }
-      if (cluster.search_description) {
-        search += "des;";
-      }
-      if (cluster.search_supernet) {
-        search += "sup;";
-      }
-      if (cluster.search_subnet) {
-        search += "sub;";
-      }
-      if (cluster.search_range) {
-        search += "ran;";
-      }
-      if (cluster.search_own) {
-        search += "own;";
-      }
-      if (cluster.search_used) {
-        search += "use;";
-      }
-      if (cluster.search_visible) {
-        search += "usa;";
-      }
-      if (cluster.search_limited) {
-        search += "lim;";
-      }
-      if (cluster.search_case_sensitive) {
-        search += "sen;";
-      }
-      if (cluster.search_exact) {
-        search += "exa;";
-      }
-
-      window.history.pushState("services", "Suche", `/services/${search}`);
+      console.log('CLUSTER');
+      console.log(this.cluster.tab_search);
+      this.$emit("closeSearch");
+      this.updateUrlHash(this.cluster);
       this.emitSearchInputToParent();
     },
     captureSelectionUpdate(data) {
       this.cluster.search_networks = data;
     },
     emitSearchInputToParent() {
-      console.log({ ...this.cluster });
       this.$store.commit("services/SEARCH_UPDATE", { ...this.cluster });
-      //this.$emit('searchInputUpdate', {...this.cluster});
     },
   },
 };

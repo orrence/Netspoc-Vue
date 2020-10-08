@@ -1,6 +1,6 @@
 <template>
   <v-card tile>
-    <v-tabs @change="onChangeTab" v-model="tabservices" background-color="lightgray"  slider-color="orange">
+    <v-tabs @change="onChangeTab" v-model="serviceTabModel" background-color="lightgray"  slider-color="orange">
       <v-tab>Eigene</v-tab>
       <v-tab>Genutzte</v-tab>
       <v-tab>Nutzbare</v-tab>
@@ -8,7 +8,7 @@
         <v-icon>search</v-icon>
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tabservices">
+    <v-tabs-items v-model="serviceTabModel">
       <v-tab-item :key="0">
         <ServiceTable :servicedata="servicesData" compID="table_services_own" />
       </v-tab-item>
@@ -35,7 +35,6 @@ export default {
   },
   props: ["serviceTab"],
   data: () => ({
-    tabservices: -1,
     relations: ["owner", "user", "visible"],
   }),
   computed: {
@@ -43,13 +42,15 @@ export default {
     ...mapState(["active"]),
     ...mapState("services", ["servicesData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
+    serviceTabModel: {
+			get () { return this.serviceTab},
+			set (val) {
+         this.$emit("selectionUpdate", val);
+			}
+		}
   },
   watch: {
-    tabservices: {
-      handler() {
-        this.$emit("selectionUpdate", this.tabservices);
-      },
-    },
+    
     searchInput: {
         deep:true,
         handler() {
@@ -60,7 +61,7 @@ export default {
     active: {
         deep: true,
         handler() {
-            this.getServices(this.tabservices);
+            this.getServices(this.serviceTabModel);
         }
     }
   },

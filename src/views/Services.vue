@@ -1,10 +1,16 @@
 <template>
   <v-container fluid>
-    <v-btn tile elevation="2" class="ma-4 ml-0" raised color="primary" @click.stop="drawer = !drawer">
+    <v-btn tile elevation="2" class="ma-4 ml-0" raised color="secondary" @click.stop="drawer = !drawer">
       <v-icon left>
         mdi-search-web
       </v-icon>
       Suchen
+      </v-btn>
+      <v-btn tile elevation="2" class="ma-4 ml-0" raised color="secondary" @click.stop="drawer = !drawer">
+      <v-icon left>
+        mdi-search-web
+      </v-icon>
+      Netzauswahl
       </v-btn>
     <v-navigation-drawer v-model="drawer" absolute temporary width="500">
       <search-bar @closeSearch="drawer = !drawer"/>
@@ -44,11 +50,11 @@ export default {
     ...mapState("services", ["searchInput", "serviceSelection"]),
   },
   mounted() {
-    if (this.$route.params.search.length === 1) {
+    if (this.$route.hash == "") {
       this.tab_services = 0;
     } else {
       this.tab_services = 3;
-    }
+    } 
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.resize);
@@ -62,6 +68,7 @@ export default {
     searchInput: {
       deep: true,
       handler() {
+        console.log('searhc input');
         this.updateServiceSelection([]);
         this.tab_services = 3;
       },
