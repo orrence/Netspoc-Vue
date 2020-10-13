@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<app-toolbar/>
+		<app-toolbar color="primary" />
 		<v-content>
 			<keep-alive>
 				<router-view/>

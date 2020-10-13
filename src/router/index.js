@@ -16,7 +16,7 @@ const routes = [
 	},
 	{
 		path: '/',
-		redirect: '/services/0',
+		redirect: '/services',
 	},
 	{
 		path: '/login',
@@ -33,7 +33,7 @@ const routes = [
 		}
 	},
 			{
-				path: '/services/:search',
+				path: '/services',
 				component: Services,
 				props: true,
 				name: 'services',

@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar app color="accent" v-if="getLoggedIn" elevate-on-scroll>
+  <v-app-bar app color="primary" dark v-if="getLoggedIn" elevate-on-scroll>
     <v-tabs  slider-color="orange">
-      <v-tab id="tab_services" to="/services/0">Dienste</v-tab>
+      <v-tab id="tab_services" to="/services">Dienste</v-tab>
 
       <v-tab id="tab_networks" to="/networks">Netze</v-tab>
 
@@ -13,7 +13,7 @@
     <combo-policy id="comb_policy" class="mx-1 pt-1" />
     <combo-owner id="comb_owner" class="mr-1 pt-1" />
 
-    <v-btn id="btn_logout" @click="logout">logout</v-btn>
+    <v-btn id="btn_logout" class="secondary" @click="logout">logout</v-btn>
   </v-app-bar>
 </template>
 

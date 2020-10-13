@@ -44,7 +44,7 @@ export default {
                 if(res.data.success) {
                     dispatch('setLoggedIn', true);
                     commit('SET_LOGIN_ERROR',false);
-                    router.push('/services/0');
+                    router.push('/services');
                 } else {
                     commit('SET_LOGIN_ERROR',true);
                 }

@@ -14,7 +14,7 @@
         </v-tabs>
         <v-tabs-items v-model="cluster.tab_search">
           <v-tab-item>
-            <v-subheader>Wonach soll gesucht werden?</v-subheader>
+            <v-subheader class="body-1 pl-0">Wonach soll gesucht werden?</v-subheader>
             <v-row dense>
               <v-col>
                 <v-text-field
@@ -60,7 +60,7 @@
               </v-col>
               <v-col>
                 <v-checkbox
-                  :value="cluster.search_range"
+              
                   v-model="cluster.search_range"
                   label="Port-Ranges einbeziehen"
                 ></v-checkbox>
@@ -91,42 +91,46 @@
             </v-row>
           </v-tab-item>
 
-          <v-tab-item>
-            <NetworkTable :height="'311px'" @selectionUpdate="captureSelectionUpdate" />
-          </v-tab-item>
         </v-tabs-items>
 
         <v-divider />
 
         <v-row dense :align="'center'">
           <v-col>
-            <v-subheader>In welchen Diensten suchen?</v-subheader>
+            <v-subheader class="body-1 pl-0">In welchen Diensten suchen?</v-subheader>
             <v-row dense :align="'center'">
               <v-col>
-                <v-checkbox v-model="cluster.search_own" label="Eigene" />
+                <v-checkbox class="mt-0" v-model="cluster.search_own" label="Eigene" />
               </v-col>
               <v-col>
-                <v-checkbox v-model="cluster.search_used" label="Genutzte" />
-              </v-col>
-              <v-col>
-                <v-checkbox v-model="cluster.search_visible" label="Nutzbare" />
-              </v-col>
-              <v-col>
-                <v-checkbox v-model="cluster.search_limited" label="Nur befristete Dienste suchen" />
+                <v-checkbox class="mt-0" v-model="cluster.search_used" label="Genutzte" />
               </v-col>
             </v-row>
-            <v-subheader>Allgemeine Optionen</v-subheader>
+
+           
+            <v-row dense :align="'center'">
+              <v-col>
+                <v-checkbox class="mt-0" v-model="cluster.search_visible" label="Nutzbare" />
+              </v-col>
+              <v-col>
+                <v-checkbox class="mt-0" v-model="cluster.search_limited" label="Nur befristete Dienste suchen" />
+              </v-col>
+            </v-row>
+             <v-divider />
+            <v-subheader class="body-1 pl-0">Allgemeine Optionen</v-subheader>
             <v-row dense :align="'center'">
               <v-col>
                 <v-checkbox
                   v-model="cluster.search_case_sensitive"
                   label="Groß-/Kleinschreibung beachten"
+                  class="mt-0"
                 />
               </v-col>
               <v-col>
                 <v-checkbox
                   v-model="cluster.search_exact"
                   label="Suchergebnisse nur mit exakter Übereinstimmung"
+                  class="mt-0"
                 />
               </v-col>
             </v-row>
@@ -143,44 +147,29 @@
   </v-row>
 </template>
 <script>
-import NetworkTable from "../../tables/Network/NetworkTable";
 import urlSearchParams from "../../mixins/urlSearchParams";
+import EventBus from '../../../plugins/event-bus';
+import { mapState } from "vuex";
 
 export default {
   mixins: [urlSearchParams],
-  components: {
-    NetworkTable,
-  },
+
   data: () => ({
     url: "http://localhost/?#/services/0",
-    tabnames: ['regeln','beschreibung'],
-    cluster: {
-      tab_search: 0,
-      search_ip1: "",
-      search_ip2: "",
-      search_proto: "",
-      search_string: "",
-      search_networks: [],
-      search_description: true,
-      search_supernet: false,
-      search_subnet: true,
-      search_range: false,
-      search_own: true,
-      search_used: true,
-      search_visible: false,
-      search_limited: false,
-      search_case_sensitive: false,
-      search_exact: false,
-      tabname: '',
-    },
+    tabnames: ["regeln", "beschreibung"],
+    cluster: {}
   }),
+  computed: {
+      ...mapState("services", ["searchInput"]),
+  },
   mounted() {
+    this.cluster = this.searchInput;
+    console.log('CLUSTER LOAD');
     console.log(this.cluster);
-
     if (this.$route.hash != "") {
       this.setSearchParams();
       if (this.cluster.search_string) {
-        this.tab_search = 0;
+        this.cluster.tab_search = 0;
       } else {
         this.cluster.tab_search = 1;
       }
@@ -192,32 +181,32 @@ export default {
     if (this.$route.hash != "") {
       this.setSearchParams();
       if (this.cluster.search_string) {
-        this.tab_search = 0;
+        this.cluster.tab_search = 0;
       } else {
-        this.tab_search = 1;
+        this.cluster.tab_search = 1;
       }
     }
   },
   methods: {
     setSearchParams() {
-      this.cluster = this.getFiltersFromUrl(this.cluster, true);
+      this.cluster = this.getFiltersFromUrl(this.searchInput, true);
     },
     changeTab(num) {
       this.cluster.tabname = this.tabnames[num];
     },
 
     searchUpdate() {
-      console.log('CLUSTER');
-      console.log(this.cluster.tab_search);
+  
       this.$emit("closeSearch");
-      this.updateUrlHash(this.cluster);
+      this.updateUrlHash(this.searchInput);
       this.emitSearchInputToParent();
+      EventBus.$emit('showsearchresults');
     },
     captureSelectionUpdate(data) {
       this.cluster.search_networks = data;
     },
     emitSearchInputToParent() {
-      this.$store.commit("services/SEARCH_UPDATE", { ...this.cluster });
+      this.$store.commit("services/SEARCH_UPDATE", this.cluster);
     },
   },
 };

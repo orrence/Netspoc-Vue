@@ -1,9 +1,18 @@
 <template>
   <div id="table_networks">
+    
     <Tabulator
       :name="`Netze`"
       reactiveData="true"
       :columns="[
+      {
+        formatter:'rowSelection', 
+        titleFormatter:'rowSelection',
+        hozAlign:'center',
+        width: 10,
+         headerSort:false,
+       
+      },
 	{
 		title: 'IP-Addresse',
 		field: 'ip',
@@ -38,6 +47,7 @@ export default {
   },
   data: () => ({
     data: [],
+    selectionModel: '',
   }),
   computed: {
     ...mapState(["active"]),
@@ -71,7 +81,12 @@ export default {
 
       this.getNetworks(params);
     },
+    cellclicked() {
+      console.log('TEST');
+    },
     passOnSelectionUpdate(data) {
+      console.log('SELECTION UPDATE');
+      console.log(data);
       this.$emit(
         "selectionUpdate",
         data.map((row) => row.name)

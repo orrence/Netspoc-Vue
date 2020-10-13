@@ -1,19 +1,23 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
+import { colors } from 'vuetify/lib';
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  theme: {
+    primary: colors.indigo.base,
+    secondary: colors.indigo.base
+  }
+});
 
 export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#2196f3',
-        secondary: '#009688',
-        accent: '#673ab7',
-        error: '#f44336',
-        warning: '#ff9800',
-        info: '#607d8b',
-        success: '#4caf50'
+        primary: '#344955',
+        secondary: '#F9AA33',
+        accent: '#bec5c9',
+        error: '#b71c1c',
+        lightgray: '#f6f6f6'
       }
     }
   },

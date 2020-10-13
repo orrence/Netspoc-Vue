@@ -47,7 +47,7 @@ import AdditionalServiceInfo from "./AdditionalServiceInfo";
 import { mapState } from "vuex";
 
 export default {
-  props: ["search_input", "tab_services"],
+  props: ["tab_services"],
   components: {
     ServiceUsersTable,
     AdminsTable,

@@ -28,6 +28,7 @@
 <script>
 import ServiceTable from "../tables/Service/ServiceTable";
 import { mapState, mapGetters, mapActions } from "vuex";
+import EventBus from '../../plugins/event-bus';
 
 export default {
   components: {
@@ -54,8 +55,8 @@ export default {
     searchInput: {
         deep:true,
         handler() {
-             this.tabservices = 3;
-            this.getServices(3);
+            // this.tabservices = 3;
+           // this.getServices(3);
         }
     },
     active: {
@@ -64,6 +65,15 @@ export default {
             this.getServices(this.serviceTabModel);
         }
     }
+  },
+  created() {
+    var vm = this;
+       EventBus.$on('showsearchresults', function() {
+         console.log('SEARCH IS CLICKED');
+         vm.tabservices = 3;
+      
+         vm.getServices(3);
+       });
   },
   methods: {
     ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
@@ -80,11 +90,12 @@ export default {
         // vm.$emit("selectionUpdate", vm.data);
         return;
       }
-
+      console.log('LOAD SERVICES');
+      console.log(vm.searchInput);
       const payload =
         typeof this.relations[tabitem] !== "undefined"
           ? {
-              chosen_networks: "",
+              chosen_networks: vm.searchInput.search_networks.join(","),
               active_owner: vm.getActiveOwner,
               history: vm.getActivePolicy,
               relation: this.relations[tabitem],
@@ -127,10 +138,7 @@ export default {
                 vm.searchInput.search_description
                   ? "on"
                   : "",
-              chosen_networks:
-                vm.searchInput.tab_search === 2
-                  ? vm.searchInput.search_networks.join(",")
-                  : "",
+              chosen_networks: vm.searchInput.search_networks.join(","),
               search_own: vm.searchInput.search_own ? "on" : "",
               search_used: vm.searchInput.search_used ? "on" : "",
               search_visible: vm.searchInput.search_visible ? "on" : "",
