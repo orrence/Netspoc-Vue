@@ -19,3 +19,4 @@ subtest 'Services' => sub {PolicyWeb::Services::test($browser)};
 subtest 'Differences' => sub {PolicyWeb::Differences::test($browser)};
 subtest 'Logout' => sub {PolicyWeb::Logout::test($browser)};
 $browser->close();
+done_testing();

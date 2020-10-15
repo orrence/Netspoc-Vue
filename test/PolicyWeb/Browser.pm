@@ -36,7 +36,7 @@ sub check_grid_syntax {
             }
         }
     }
-    return 1;
+    return scalar @cells >= scalar @regex;
 }
 
 # This method checks if the grid is ordered
