@@ -55,7 +55,7 @@ import { mapGetters } from 'vuex';
 import Tabulator from 'tabulator-tables';
 
 export default {
-	props: ['groupBy', 'selectable', 'columns', 'data', 'height', 'name'],
+	props: ['tableconfig','groupBy', 'selectable', 'columns', 'data', 'height', 'name', 'maxSelections'],
 	data: () => ({
 		isVisible: false,
 		newData: false,
@@ -111,7 +111,8 @@ export default {
 		this.config.columns = this.columns;
 		this.config.data = this.data;
 		this.config.groupBy = this.groupBy;
-		
+
+		this.config = Object.assign({},this.config, this.tableconfig);
 		var vm = this; // important
 		
 		this.config.rowClick = function(e, row){

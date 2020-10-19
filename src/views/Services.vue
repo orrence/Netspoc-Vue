@@ -26,8 +26,11 @@
     </div>
 
     <v-navigation-drawer v-model="drawer" absolute temporary width="500">
-      <search-bar v-if="showsearchbar" @closeSearch="drawer = !drawer" />
-      <netselection-bar v-else @closeSearch="drawer = !drawer"  @changeBadgeVal="toggleBatchValue" />
+      <search-bar @closeSearch="drawer = !drawer" />
+    </v-navigation-drawer>
+
+    <v-navigation-drawer v-model="netselectiondrawer" absolute temporary width="500">
+       <netselection-bar  @closeSearch="netselectiondrawer = !netselectiondrawer"  @changeBadgeVal="toggleBatchValue" />
     </v-navigation-drawer>
 
     <v-row dense>
@@ -38,7 +41,6 @@
           @selectionUpdate="captureSelectionUpdate"
         />
       </v-col>
-
       <v-col cols="8">
         <service-detail-tabs class="ml-2" :search_input="searchInput" :tab_services="tab_services" />
       </v-col>
@@ -64,6 +66,7 @@ export default {
     pnl_search: 0,
     tab_services: -1,
     drawer: false,
+    netselectiondrawer: false,
     admins: {},
     showsearchbar: true,
     message: 0,
@@ -116,11 +119,11 @@ export default {
     },
     openNavDrawer(type) {
       if (type == "search") {
-        this.showsearchbar = true;
+         this.drawer = !this.drawer;
       } else {
-        this.showsearchbar = false;
+        this.netselectiondrawer = !this.netselectiondrawer;
       }
-      this.drawer = !this.drawer;
+     
     },
 
     getElementsByClassName(className) {

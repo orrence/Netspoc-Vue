@@ -1,37 +1,45 @@
 <template>
   <div id="table_networks">
-    
     <Tabulator
       :name="`Netze`"
-      reactiveData="true"
-      :columns="[
-      {
-        formatter:'rowSelection', 
-        titleFormatter:'rowSelection',
-        hozAlign:'center',
-        width: 10,
-         headerSort:false,
+     
+      :tableconfig="{
+        reactiveData:true,
+        selectable:2,
        
-      },
-	{
-		title: 'IP-Addresse',
-		field: 'ip',
-		sorter: 'ip',
-	},
-	{
-		title:'Name',
-		field:'name',
-	},
-	{
-		title:'Verantwortungsbereich',
-		field:'owner',
-	},
-]"
+      }"
+      :columns="[
+        {
+          formatter: 'rowSelection',
+          titleFormatter: 'rowSelection',
+          hozAlign: 'center',
+          width: 10,
+          headerSort: false,
+          cellClick: function(e,cell) {
+           
+          }
+        },
+        {
+          title: 'IP-Addresse',
+          field: 'ip',
+          sorter: 'ip',
+        },
+        {
+          title: 'Name',
+          field: 'name',
+        },
+        {
+          title: 'Verantwortungsbereich',
+          field: 'owner',
+        },
+      ]"
       :data="networksData"
-      :selectable="true"
+      
       :groupBy="''"
+     
       :height="height"
       @selectionUpdate="passOnSelectionUpdate"
+       @cellClick='cellclicked'
     />
   </div>
 </template>
@@ -47,7 +55,7 @@ export default {
   },
   data: () => ({
     data: [],
-    selectionModel: '',
+    selectionModel: "",
   }),
   computed: {
     ...mapState(["active"]),
@@ -82,15 +90,16 @@ export default {
       this.getNetworks(params);
     },
     cellclicked() {
-      console.log('TEST');
+      console.log("TEST");
     },
     passOnSelectionUpdate(data) {
-      console.log('SELECTION UPDATE');
+      console.log("SELECTION UPDATE");
       console.log(data);
-      this.$emit(
+      return false;
+     /* this.$emit(
         "selectionUpdate",
         data.map((row) => row.name)
-      );
+      ); */
     },
   },
 };
