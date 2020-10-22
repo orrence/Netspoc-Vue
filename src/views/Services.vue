@@ -30,7 +30,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer v-model="netselectiondrawer" absolute temporary width="500">
-       <netselection-bar  @closeSearch="netselectiondrawer = !netselectiondrawer"  @changeBadgeVal="toggleBatchValue" />
+       <netselection-bar  @closeSearch="netselectiondrawer = !netselectiondrawer"   @changeBadgeVal="toggleBatchValue" />
     </v-navigation-drawer>
 
     <v-row dense>
@@ -93,9 +93,9 @@ export default {
     searchInput: {
       deep: true,
       handler() {
-        console.log("searhc input");
+       /* console.log("searhc input");
         this.updateServiceSelection([]);
-        this.tab_services = 3;
+        this.tab_services = 3; */
       },
     },
   },

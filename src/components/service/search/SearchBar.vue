@@ -1,10 +1,10 @@
 <template>
   <v-row dense>
     <v-col>
-      <v-container fluid>
+      <v-container fluid v-if="Object.keys(cluster).length > 0">
         <v-tabs
           background-color="lightgray"
-          v-model="cluster.tab_search"
+          v-model="tabsearchArea"
           @change="changeTab"
           slider-color="orange"
           grow
@@ -12,8 +12,8 @@
           <v-tab>Regeln</v-tab>
           <v-tab>Beschreibung</v-tab>
         </v-tabs>
-        <v-tabs-items v-model="cluster.tab_search">
-          <v-tab-item>
+        <v-tabs-items v-model="tabsearchArea">
+          <v-tab-item :key="0">
             <v-subheader class="body-1 pl-0">Wonach soll gesucht werden?</v-subheader>
             <v-row dense>
               <v-col>
@@ -21,7 +21,7 @@
                   outlined
                   dense
                   label="IP 1"
-                  v-model="cluster.search_ip1"
+                  v-model="cluster.rules.search_ip1"
                   id="txtf_search_ip1"
                   color="orange"
                 />
@@ -31,7 +31,7 @@
                   outlined
                   dense
                   label="IP 2"
-                  v-model="cluster.search_ip2"
+                  v-model="cluster.rules.search_ip2"
                   id="txtf_search_ip2"
                   color="orange"
                 />
@@ -41,7 +41,7 @@
                   outlined
                   dense
                   label="Protokoll"
-                  v-model="cluster.search_proto"
+                  v-model="cluster.rules.search_proto"
                   id="txtf_search_proto"
                   color="orange"
                 />
@@ -51,7 +51,7 @@
             <v-row dense :align="'center'">
               <v-col>
                 <v-checkbox
-                  v-model="cluster.search_supernet"
+                  v-model="cluster.rules.search_supernet"
                   label="Übergeordnete Netze einbeziehen"
                 ></v-checkbox>
               </v-col>
@@ -61,14 +61,14 @@
               <v-col>
                 <v-checkbox
               
-                  v-model="cluster.search_range"
+                  v-model="cluster.rules.search_range"
                   label="Port-Ranges einbeziehen"
                 ></v-checkbox>
               </v-col>
             </v-row>
           </v-tab-item>
 
-          <v-tab-item>
+          <v-tab-item :key="1">
             <v-subheader>Suchbegriff</v-subheader>
             <v-row dense>
               <v-col>
@@ -76,7 +76,7 @@
                   outlined
                   dense
                   label="Suchbegriff"
-                  v-model="cluster.search_string"
+                  v-model="cluster.textsearch.search_string"
                   id="search_string"
                 />
               </v-col>
@@ -84,7 +84,7 @@
             <v-row dense>
               <v-col>
                 <v-checkbox
-                  v-model="cluster.search_description"
+                  v-model="cluster.textsearch.search_description"
                   label="Suche auch in Dienstbeschreibungen"
                 />
               </v-col>
@@ -100,20 +100,20 @@
             <v-subheader class="body-1 pl-0">In welchen Diensten suchen?</v-subheader>
             <v-row dense :align="'center'">
               <v-col>
-                <v-checkbox class="mt-0" v-model="cluster.search_own" label="Eigene" />
+                <v-checkbox class="mt-0" v-model="cluster.general.search_own" label="Eigene" />
               </v-col>
               <v-col>
-                <v-checkbox class="mt-0" v-model="cluster.search_used" label="Genutzte" />
+                <v-checkbox class="mt-0" v-model="cluster.general.search_used" label="Genutzte" />
               </v-col>
             </v-row>
 
            
             <v-row dense :align="'center'">
               <v-col>
-                <v-checkbox class="mt-0" v-model="cluster.search_visible" label="Nutzbare" />
+                <v-checkbox class="mt-0" v-model="cluster.general.search_visible" label="Nutzbare" />
               </v-col>
               <v-col>
-                <v-checkbox class="mt-0" v-model="cluster.search_limited" label="Nur befristete Dienste suchen" />
+                <v-checkbox class="mt-0" v-model="cluster.general.search_limited" label="Nur befristete Dienste suchen" />
               </v-col>
             </v-row>
              <v-divider />
@@ -121,14 +121,14 @@
             <v-row dense :align="'center'">
               <v-col>
                 <v-checkbox
-                  v-model="cluster.search_case_sensitive"
+                  v-model="cluster.general.search_case_sensitive"
                   label="Groß-/Kleinschreibung beachten"
                   class="mt-0"
                 />
               </v-col>
               <v-col>
                 <v-checkbox
-                  v-model="cluster.search_exact"
+                  v-model="cluster.general.search_exact"
                   label="Suchergebnisse nur mit exakter Übereinstimmung"
                   class="mt-0"
                 />
@@ -155,23 +155,24 @@ export default {
   mixins: [urlSearchParams],
 
   data: () => ({
-    url: "http://localhost/?#/services/0",
     tabnames: ["regeln", "beschreibung"],
-    cluster: {}
+    cluster: {},
+    tabsearchArea: 0,
   }),
   computed: {
-      ...mapState("services", ["searchInput"]),
+      ...mapState("services", ["searchInput","searchArea"]),
+    
   },
   mounted() {
-    this.cluster = this.searchInput;
+   this.cluster = this.searchInput;
     console.log('CLUSTER LOAD');
     console.log(this.cluster);
     if (this.$route.hash != "") {
       this.setSearchParams();
       if (this.cluster.search_string) {
-        this.cluster.tab_search = 0;
+        this.tabsearchArea= 0;
       } else {
-        this.cluster.tab_search = 1;
+        this.tabsearchArea = 1;
       }
       this.emitSearchInputToParent();
     }
@@ -181,9 +182,9 @@ export default {
     if (this.$route.hash != "") {
       this.setSearchParams();
       if (this.cluster.search_string) {
-        this.cluster.tab_search = 0;
+        this.tabsearchArea = 0;
       } else {
-        this.cluster.tab_search = 1;
+        this.tabsearchArea = 1;
       }
     }
   },
@@ -192,20 +193,23 @@ export default {
       this.cluster = this.getFiltersFromUrl(this.searchInput, true);
     },
     changeTab(num) {
-      this.cluster.tabname = this.tabnames[num];
+    
+      this.$store.commit('services/UPDATE_SEARCH_AREA',this.tabnames[num]);
     },
 
     searchUpdate() {
   
       this.$emit("closeSearch");
-      this.updateUrlHash(this.searchInput);
+      this.updateUrlHash(...this.searchInput);
       this.emitSearchInputToParent();
-      EventBus.$emit('showsearchresults');
+      EventBus.$emit('selectionUpdated','search');
     },
     captureSelectionUpdate(data) {
       this.cluster.search_networks = data;
     },
     emitSearchInputToParent() {
+    
+    
       this.$store.commit("services/SEARCH_UPDATE", this.cluster);
     },
   },

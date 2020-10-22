@@ -5,7 +5,8 @@
      
       :tableconfig="{
         reactiveData:true,
-        selectable:2,
+        selectable:20,
+        index: 'ip'
        
       }"
       :columns="[
@@ -15,9 +16,7 @@
           hozAlign: 'center',
           width: 10,
           headerSort: false,
-          cellClick: function(e,cell) {
-           
-          }
+          field: 'selected'
         },
         {
           title: 'IP-Addresse',
@@ -66,12 +65,14 @@ export default {
     active: {
       deep: true,
       handler() {
+        console.log('BECOEMS ACTIVE');
+        console.log(this.active);
         this.loadNetworks();
       },
     },
   },
-  mounted() {
-    this.loadNetworks();
+  updated() {
+    console.log('UPDATE DATA');
   },
   methods: {
     ...mapActions("networks", ["getNetworks"]),
@@ -95,11 +96,11 @@ export default {
     passOnSelectionUpdate(data) {
       console.log("SELECTION UPDATE");
       console.log(data);
-      return false;
-     /* this.$emit(
+     
+      this.$emit(
         "selectionUpdate",
         data.map((row) => row.name)
-      ); */
+      ); 
     },
   },
 };

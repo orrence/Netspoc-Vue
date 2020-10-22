@@ -81,6 +81,9 @@ export default {
 				if(this.isVisible) {
 					this.config.data = this.data;
 					this.tabulator.replaceData(this.config.data);
+					console.log('SELECT ORW');
+					console.log(this.config.data);
+					this.tabulator.selectRow("10.61.191.11");
 					this.newData = false;
 				} else {
 					this.newData = true;
@@ -175,6 +178,7 @@ export default {
 	methods: {
 		newTable () {
 			this.tabulator = new Tabulator(this.$refs.table, this.config);
+
 		},
 		selectAll () {
 			this.tabulator.selectRow();

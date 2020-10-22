@@ -1,6 +1,11 @@
 <template>
   <v-card tile>
-    <v-tabs @change="onChangeTab" v-model="serviceTabModel" background-color="lightgray"  slider-color="orange">
+    <v-tabs
+      @change="onChangeTab"
+      v-model="serviceTabModel"
+      background-color="lightgray"
+      slider-color="orange"
+    >
       <v-tab>Eigene</v-tab>
       <v-tab>Genutzte</v-tab>
       <v-tab>Nutzbare</v-tab>
@@ -13,13 +18,22 @@
         <ServiceTable :servicedata="servicesData" compID="table_services_own" />
       </v-tab-item>
       <v-tab-item :key="1">
-        <ServiceTable :servicedata="servicesData" compID="table_services_used"/>
+        <ServiceTable
+          :servicedata="servicesData"
+          compID="table_services_used"
+        />
       </v-tab-item>
       <v-tab-item :key="2">
-        <ServiceTable :servicedata="servicesData" compID="table_services_usable"/>
+        <ServiceTable
+          :servicedata="servicesData"
+          compID="table_services_usable"
+        />
       </v-tab-item>
       <v-tab-item :key="3">
-        <ServiceTable :servicedata="servicesData" compID="table_services_searchresult"/>
+        <ServiceTable
+          :servicedata="servicesData"
+          compID="table_services_searchresult"
+        />
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -28,8 +42,8 @@
 <script>
 import ServiceTable from "../tables/Service/ServiceTable";
 import { mapState, mapGetters, mapActions } from "vuex";
-import EventBus from '../../plugins/event-bus';
-
+import EventBus from "../../plugins/event-bus";
+import Vue from "vue";
 export default {
   components: {
     ServiceTable,
@@ -39,117 +53,115 @@ export default {
     relations: ["owner", "user", "visible"],
   }),
   computed: {
-    ...mapState("services", ["searchInput"]),
+    ...mapState("services", ["searchInput", "searchArea"]),
     ...mapState(["active"]),
     ...mapState("services", ["servicesData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
     serviceTabModel: {
-			get () { return this.serviceTab},
-			set (val) {
-         this.$emit("selectionUpdate", val);
-			}
-		}
+      get() {
+        return this.serviceTab;
+      },
+      set(val) {
+        this.$emit("selectionUpdate", val);
+      },
+    },
   },
   watch: {
-    
     searchInput: {
-        deep:true,
-        handler() {
-            // this.tabservices = 3;
-           // this.getServices(3);
-        }
+      deep: true,
+      handler() {
+        // this.tabservices = 3;
+        // this.getServices(3);
+      },
     },
     active: {
-        deep: true,
-        handler() {
-            this.getServices(this.serviceTabModel);
-        }
-    }
+      deep: true,
+      handler() {
+        this.getServices(this.serviceTabModel);
+      },
+    },
   },
   created() {
     var vm = this;
-       EventBus.$on('showsearchresults', function() {
-         console.log('SEARCH IS CLICKED');
-         vm.tabservices = 3;
-      
-         vm.getServices(3);
-       });
+    EventBus.$on("selectionUpdated", function (selection) {
+      console.log("SEARCH IS CLICKED");
+      console.log(selection);
+      if (selection == "search") {
+        vm.serviceTabModel = 3;
+        vm.getServices(3);
+      } else {
+        vm.getServices(this.serviceTabModel);
+      }
+    });
   },
   methods: {
     ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
     onChangeTab(data) {
-
       this.getServices(data);
       // this.$store.dispatch('requestActive');
+    },
+    createPayloadElement(payloadObj) {
+      let payload = {};
+
+      for (const [key, value] of Object.entries(payloadObj)) {
+        console.log(key, value);
+        if (typeof value == "boolean") {
+          let boolval = "";
+          if (value == true) {
+            boolval = "on";
+          }
+          Vue.set(payload, key, boolval);
+        } else {
+          Vue.set(payload, key, value);
+        }
+      }
+      return payload;
     },
     getServices(tabitem) {
       var vm = this; // get vue instance
 
-      if (!vm.getActiveOwner || (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)) {
+      if (
+        !vm.getActiveOwner ||
+        (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)
+      ) {
         this.updateServiceSelection([]);
         // vm.$emit("selectionUpdate", vm.data);
         return;
       }
-      console.log('LOAD SERVICES');
-      console.log(vm.searchInput);
-      const payload =
-        typeof this.relations[tabitem] !== "undefined"
-          ? {
-              chosen_networks: vm.searchInput.search_networks.join(","),
-              active_owner: vm.getActiveOwner,
-              history: vm.getActivePolicy,
-              relation: this.relations[tabitem],
-            }
-          : {
-              active_owner: vm.getActiveOwner,
-              history: vm.getActivePolicy,
-              relation: "",
-              search_ip1:
-                vm.searchInput.tab_search === 0
-                  ? vm.searchInput.search_ip1
-                  : "",
-              search_ip2:
-                vm.searchInput.tab_search === 0
-                  ? vm.searchInput.search_ip2
-                  : "",
-              search_proto:
-                vm.searchInput.tab_search === 0
-                  ? vm.searchInput.search_proto
-                  : "",
-              search_supernet:
-                vm.searchInput.tab_search === 0 &&
-                vm.searchInput.search_supernet
-                  ? "on"
-                  : "",
-              search_subnet:
-                vm.searchInput.tab_search === 0 && vm.searchInput.search_subnet
-                  ? "on"
-                  : "",
-              search_range:
-                vm.searchInput.tab_search === 0 && vm.searchInput.search_range
-                  ? "on"
-                  : "",
-              search_string:
-                vm.searchInput.tab_search === 1
-                  ? vm.searchInput.search_string
-                  : "",
-              search_in_desc:
-                vm.searchInput.tab_search === 1 &&
-                vm.searchInput.search_description
-                  ? "on"
-                  : "",
-              chosen_networks: vm.searchInput.search_networks.join(","),
-              search_own: vm.searchInput.search_own ? "on" : "",
-              search_used: vm.searchInput.search_used ? "on" : "",
-              search_visible: vm.searchInput.search_visible ? "on" : "",
-              search_disable_at: vm.searchInput.search_disable_at ? "on" : "",
-              search_case_sensitive: vm.searchInput.search_case_sensitive
-                ? "on"
-                : "",
-              search_exact: vm.searchInput.search_exact ? "on" : "",
-            };
 
-      this.getServicesList({ data: payload });
+      let rulepayload = {};
+      let textsearch_payload = {};
+      let generalpayload = {};
+
+      rulepayload = this.createPayloadElement(vm.searchInput.rules);
+      textsearch_payload = this.createPayloadElement(vm.searchInput.textsearch);
+      generalpayload = this.createPayloadElement(vm.searchInput.general);
+
+      let basepayload;
+      console.log( rulepayload);
+      if (typeof this.relations[tabitem] !== "undefined") {
+        basepayload = {
+          chosen_networks: vm.searchInput.search_networks.join(","),
+          active_owner: vm.getActiveOwner,
+          history: vm.getActivePolicy,
+          relation: this.relations[tabitem],
+        };
+      } else {
+        basepayload = {
+          chosen_networks: vm.searchInput.search_networks.join(","),
+          active_owner: vm.getActiveOwner,
+          history: vm.getActivePolicy,
+          relation: "",
+          ...rulepayload,
+          ...textsearch_payload,
+          ...generalpayload
+        };
+        console.log('SEARCH MORE');
+        console.log(basepayload);
+       
+      }
+
+      this.getServicesList({ data: basepayload });
     },
   },
 };

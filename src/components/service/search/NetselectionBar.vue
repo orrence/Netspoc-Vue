@@ -13,7 +13,8 @@
         </v-tabs>
         <v-tabs-items v-model="networkselection">
           <v-tab-item>
-            <NetworkTable :height="'500px'" @selectionUpdate="captureSelectionUpdate" />
+            
+            <NetworkTable  @selectionUpdate="captureSelectionUpdate" />
           </v-tab-item>
         </v-tabs-items>  
 
@@ -48,9 +49,9 @@ export default {
       ...mapState("services", ["searchInput"]),
   },
   mounted() {
-  
+    console.log('BAR MOUNTED');
   },
-  beforeRouteUpdate() {
+  /*beforeRouteUpdate() {
     console.log("ROUTE CHANGE");
     if (this.$route.hash != "") {
       this.setSearchParams();
@@ -60,7 +61,7 @@ export default {
         this.tab_search = 1;
       }
     }
-  },
+  },*/
   methods: {
     setSearchParams() {
       this.cluster = this.getFiltersFromUrl(this.cluster, true);
@@ -72,15 +73,16 @@ export default {
     searchUpdate() {
 
       this.$emit("closeSearch");
-       this.emitSearchInputToParent();
+      this.emitSearchInputToParent();
       this.updateUrlHash(this.searchInput);
       console.log('NETWORKDS');
      console.log(this.search_networks);
-      EventBus.$emit('showsearchresults');
+  
+         EventBus.$emit('selectionUpdated','network');
       this.$emit('changeBadgeVal',this.search_networks);
     },
     captureSelectionUpdate(data) {
-      
+      console.log('WAS UPDATED!!!!!!!!');
       this.search_networks = data;
 
      // this.$store.commit("services/SET_NETWORK_SELECTION", { ...this.cluster.search_networks });

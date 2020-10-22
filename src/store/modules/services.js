@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { getField, updateField} from 'vuex-map-fields'
+import { getField, updateField } from 'vuex-map-fields'
 
 export default {
     namespaced: true,
@@ -7,24 +7,31 @@ export default {
         servicesData: [],
         rulesData: [],
         adminsData: [],
+        searchArea: "regeln",
         searchInput: {
-            tab_search: 0,
-            search_ip1: "",
-            search_ip2: "",
-            search_proto: "",
-            search_string: "",
+            rules: {
+                search_ip1: "",
+                search_ip2: "",
+                search_proto: "",
+                search_supernet: false,
+                search_subnet: true,
+                search_range: false,
+            },
+            textsearch: {
+                search_string: "",
+                search_description: true,
+            },
+            general: {
+                search_own: true,
+                search_used: true,
+                search_visible: false,
+                search_limited: false,
+                search_case_sensitive: false,
+                search_exact: false,
+            },
             search_networks: [],
-            search_description: true,
-            search_supernet: false,
-            search_subnet: true,
-            search_range: false,
-            search_own: true,
-            search_used: true,
-            search_visible: false,
-            search_limited: false,
-            search_case_sensitive: false,
-            search_exact: false,
-            tabname: "",
+
+
         },
         usersData: [],
         serviceSelection: [],
@@ -44,12 +51,17 @@ export default {
             state.adminsData = payload.records;
         },
         SEARCH_UPDATE(state, payload) {
-            console.log('SEARCH NOW');
+
+            payload.search_networks = state.searchInput.search_networks
+            state.searchInput = Object.assign({}, state.searchInput, payload);
+
+        },
+        UPDATE_SEARCH_AREA(state, payload) {
             console.log(payload);
-            state.searchInput = payload;
+            state.searchArea = payload;
         },
         SET_NETWORK_SELECTION(state, payload) {
-            state.searchInput = Object.assign({},state.searchInput, payload);
+            state.searchInput = Object.assign({}, state.searchInput, payload);
         },
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload.records;
