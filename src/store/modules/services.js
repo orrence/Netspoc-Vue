@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { getField, updateField } from 'vuex-map-fields'
+import { updateField } from 'vuex-map-fields'
 
 export default {
     namespaced: true,
@@ -30,14 +30,20 @@ export default {
                 search_exact: false,
             },
             search_networks: [],
-
-
         },
         usersData: [],
         serviceSelection: [],
     },
     getters: {
-        getField,
+        getsearchInputPlain: state => {
+            let retpayload = {
+                ...state.searchInput.rules,
+                ...state.searchInput.textsearch,
+                ...state.searchInput.general,
+                search_networks: state.searchInput.search_networks
+            }
+            return retpayload;
+        },
     },
     mutations: {
         updateField,
@@ -51,10 +57,8 @@ export default {
             state.adminsData = payload.records;
         },
         SEARCH_UPDATE(state, payload) {
-
             payload.search_networks = state.searchInput.search_networks
             state.searchInput = Object.assign({}, state.searchInput, payload);
-
         },
         UPDATE_SEARCH_AREA(state, payload) {
             console.log(payload);
@@ -68,6 +72,20 @@ export default {
         },
         UPDATE_SERVICE_SELECTION(state, payload) {
             state.serviceSelection = payload;
+        },
+        UPDATE_SEARCH_FROM_URLHASH(state,payload) {
+            let temp = state.searchInput;
+            for (const [key] of Object.entries(state.searchInput.rules)) {
+                temp.rules[key] = payload[key];
+            }
+            for (const [key] of Object.entries(state.searchInput.textsearch)) {
+                temp.rules[key] = payload[key];
+            }
+            for (const [key] of Object.entries(state.searchInput.general)) {
+                temp.rules[key] = payload[key];
+            }
+            temp.search_networks = payload.search_networks;
+            state.searchInput = temp;
         }
     },
 

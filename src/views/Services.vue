@@ -11,7 +11,7 @@
       <v-icon left>mdi-search-web</v-icon>Suchen
     </v-btn>
     <div style="display: inline-flex">
-      <v-badge color="green" overlap offset-x="26" offset-y="24" :value="message" :content="message">
+      <v-badge color="green" overlap offset-x="26" offset-y="24" :value="networkCount" :content="networkCount">
         <v-btn
           tile
           elevation="2"
@@ -30,7 +30,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer v-model="netselectiondrawer" absolute temporary width="500">
-       <netselection-bar  @closeSearch="netselectiondrawer = !netselectiondrawer"   @changeBadgeVal="toggleBatchValue" />
+       <netselection-bar  @closeSearch="netselectiondrawer = !netselectiondrawer" @changeBadgeVal="toggleBatchValue" />
     </v-navigation-drawer>
 
     <v-row dense>
@@ -54,8 +54,10 @@ import ServiceDetailTabs from "../components/service/detail/ServiceDetailTabs";
 import SearchBar from "../components/service/search/SearchBar";
 import NetselectionBar from "../components/service/search/NetselectionBar";
 import { mapState, mapActions } from "vuex";
+import urlSearchParams from "../components/mixins/urlSearchParams";
 
 export default {
+   mixins: [urlSearchParams],
   components: {
     SearchBar,
     ServiceTabs,
@@ -69,15 +71,20 @@ export default {
     netselectiondrawer: false,
     admins: {},
     showsearchbar: true,
-    message: 0,
+    networkCount: 0,
   }),
   computed: {
     ...mapState("services", ["searchInput", "serviceSelection"]),
   },
   mounted() {
+    
     if (this.$route.hash == "") {
       this.tab_services = 0;
     } else {
+       let filters = this.getFiltersFromUrl(this.$store.getters['services/getsearchInputPlain'], true);
+    
+     this.networkCount = filters.search_networks.length;
+    
       this.tab_services = 3;
     }
   },
@@ -113,9 +120,8 @@ export default {
       }
     },
     toggleBatchValue(val) {
-      console.log('SEACA');
-      console.log(this.searchInput);
-      this.message = val.length;
+    
+      this.networkCount = val.length;
     },
     openNavDrawer(type) {
       if (type == "search") {
@@ -138,7 +144,6 @@ export default {
     },
 
     captureSelectionUpdate(data) {
-      console.log("UPDATE SELCTION DATA " + data);
       this.tab_services = data;
     },
   },

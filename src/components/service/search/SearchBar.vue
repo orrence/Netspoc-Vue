@@ -161,36 +161,39 @@ export default {
   }),
   computed: {
       ...mapState("services", ["searchInput","searchArea"]),
-    
   },
   mounted() {
-   this.cluster = this.searchInput;
-    console.log('CLUSTER LOAD');
-    console.log(this.cluster);
     if (this.$route.hash != "") {
       this.setSearchParams();
-      if (this.cluster.search_string) {
-        this.tabsearchArea= 0;
+    
+      if (this.cluster.rules.search_string != '') {
+        this.tabsearchArea= 1;
       } else {
-        this.tabsearchArea = 1;
+        this.tabsearchArea = 0;
       }
-      this.emitSearchInputToParent();
+     
+    } else {
+      this.cluster = this.searchInput;
     }
   },
   beforeRouteUpdate() {
-    console.log("ROUTE CHANGE");
+   
     if (this.$route.hash != "") {
       this.setSearchParams();
-      if (this.cluster.search_string) {
-        this.tabsearchArea = 0;
-      } else {
+      if (this.cluster.rules.search_string != '') {
         this.tabsearchArea = 1;
+      } else {
+        this.tabsearchArea = 0;
       }
     }
   },
   methods: {
     setSearchParams() {
-      this.cluster = this.getFiltersFromUrl(this.searchInput, true);
+      let filters = this.getFiltersFromUrl(this.$store.getters['services/getsearchInputPlain'], true);
+  
+      this.$store.commit('services/UPDATE_SEARCH_FROM_URLHASH',filters);
+      this.cluster = this.searchInput;
+    
     },
     changeTab(num) {
     
@@ -200,7 +203,7 @@ export default {
     searchUpdate() {
   
       this.$emit("closeSearch");
-      this.updateUrlHash(...this.searchInput);
+      this.updateUrlHash(this.$store.getters['services/getsearchInputPlain']);
       this.emitSearchInputToParent();
       EventBus.$emit('selectionUpdated','search');
     },
@@ -208,8 +211,6 @@ export default {
       this.cluster.search_networks = data;
     },
     emitSearchInputToParent() {
-    
-    
       this.$store.commit("services/SEARCH_UPDATE", this.cluster);
     },
   },

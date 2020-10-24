@@ -40,7 +40,6 @@ export default {
     active: {
       deep: true,
       handler() {
-        console.log("ACTIVE LOAD");
         this.getAdminsForAllOwner();
       },
     },

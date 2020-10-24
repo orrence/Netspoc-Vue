@@ -17,12 +17,10 @@ export const requestOwners = ({ commit }) => {
 export const requestActive = ({ commit, dispatch, state }) => {
     return Vue.axios.get('/get_owner')
         .then(function (response) {
-            console.log('HALALAL');
-            console.log(response.data.records[0].name);
+            
             let newActiveOwner = response.data.records[0].name;
             dispatch('requestHistory', newActiveOwner)
                 .then(() => {
-                    console.log('TESTTTT');
                     commit('setActive',
                         {
                             owner: newActiveOwner,

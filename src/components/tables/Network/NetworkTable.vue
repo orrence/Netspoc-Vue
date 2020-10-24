@@ -2,12 +2,10 @@
   <div id="table_networks">
     <Tabulator
       :name="`Netze`"
-     
       :tableconfig="{
-        reactiveData:true,
-        selectable:20,
-        index: 'ip'
-       
+        reactiveData: true,
+        selectable: 20,
+        index: 'ip',
       }"
       :columns="[
         {
@@ -16,7 +14,7 @@
           hozAlign: 'center',
           width: 10,
           headerSort: false,
-          field: 'selected'
+          field: 'selected',
         },
         {
           title: 'IP-Addresse',
@@ -33,12 +31,11 @@
         },
       ]"
       :data="networksData"
-      
+      :selectedNetworks="networks"
       :groupBy="''"
-     
       :height="height"
       @selectionUpdate="passOnSelectionUpdate"
-       @cellClick='cellclicked'
+      @cellClick="cellclicked"
     />
   </div>
 </template>
@@ -46,8 +43,10 @@
 <script>
 import Tabulator from "../Tabulator";
 import { mapState, mapGetters, mapActions } from "vuex";
+import urlSearchParams from "../c../../../mixins/urlSearchParams";
 
 export default {
+  mixins: [urlSearchParams],
   props: ["height"],
   components: {
     Tabulator,
@@ -55,6 +54,7 @@ export default {
   data: () => ({
     data: [],
     selectionModel: "",
+    networks: "",
   }),
   computed: {
     ...mapState(["active"]),
@@ -65,15 +65,11 @@ export default {
     active: {
       deep: true,
       handler() {
-        console.log('BECOEMS ACTIVE');
-        console.log(this.active);
         this.loadNetworks();
       },
     },
   },
-  updated() {
-    console.log('UPDATE DATA');
-  },
+  created() {},
   methods: {
     ...mapActions("networks", ["getNetworks"]),
     loadNetworks() {
@@ -88,19 +84,24 @@ export default {
         chosen_networks: "",
       };
 
-      this.getNetworks(params);
+      this.getNetworks(params).then(function (response) {
+        console.log("AXIOS RESPOSNE");
+        /* let filters = this.getFiltersFromUrl(
+          this.$store.getters["services/getsearchInputPlain"],
+          true
+        );
+        console.log(filters.search_networks);
+        console.log(this.data);
+        this.networks = filters.search_networks; */
+        console.log(response);
+      });
     },
-    cellclicked() {
-      console.log("TEST");
-    },
+    cellclicked() {},
     passOnSelectionUpdate(data) {
-      console.log("SELECTION UPDATE");
-      console.log(data);
-     
       this.$emit(
         "selectionUpdate",
         data.map((row) => row.name)
-      ); 
+      );
     },
   },
 };

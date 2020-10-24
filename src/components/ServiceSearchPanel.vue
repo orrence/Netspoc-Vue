@@ -264,7 +264,6 @@ export default {
 			this.cluster.search_networks = data;
 		},
 		emitSearchInputToParent () {
-			console.log({...this.cluster}); 
 			this.$store.commit('services/SEARCH_UPDATE',{...this.cluster});
 			//this.$emit('searchInputUpdate', {...this.cluster});
 		},

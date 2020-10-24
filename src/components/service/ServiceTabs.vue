@@ -84,8 +84,6 @@ export default {
   created() {
     var vm = this;
     EventBus.$on("selectionUpdated", function (selection) {
-      console.log("SEARCH IS CLICKED");
-      console.log(selection);
       if (selection == "search") {
         vm.serviceTabModel = 3;
         vm.getServices(3);
@@ -104,7 +102,6 @@ export default {
       let payload = {};
 
       for (const [key, value] of Object.entries(payloadObj)) {
-        console.log(key, value);
         if (typeof value == "boolean") {
           let boolval = "";
           if (value == true) {
@@ -138,7 +135,6 @@ export default {
       generalpayload = this.createPayloadElement(vm.searchInput.general);
 
       let basepayload;
-      console.log( rulepayload);
       if (typeof this.relations[tabitem] !== "undefined") {
         basepayload = {
           chosen_networks: vm.searchInput.search_networks.join(","),
@@ -156,9 +152,7 @@ export default {
           ...textsearch_payload,
           ...generalpayload
         };
-        console.log('SEARCH MORE');
-        console.log(basepayload);
-       
+    
       }
 
       this.getServicesList({ data: basepayload });

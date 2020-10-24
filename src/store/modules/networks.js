@@ -23,7 +23,6 @@ export default {
             })
         },
         getNetworkResources({ commit }, payload) {
-            console.log(payload);
             return Vue.axios.get('/get_network_resources', {
                 params: payload
             }).then(res => {

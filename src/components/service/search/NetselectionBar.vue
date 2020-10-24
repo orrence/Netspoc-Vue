@@ -49,7 +49,8 @@ export default {
       ...mapState("services", ["searchInput"]),
   },
   mounted() {
-    console.log('BAR MOUNTED');
+    console.log('NETWORK PROPS');
+    console.log(this.selectedNetworks);
   },
   /*beforeRouteUpdate() {
     console.log("ROUTE CHANGE");
@@ -74,15 +75,13 @@ export default {
 
       this.$emit("closeSearch");
       this.emitSearchInputToParent();
-      this.updateUrlHash(this.searchInput);
-      console.log('NETWORKDS');
-     console.log(this.search_networks);
-  
+      this.updateUrlHash(this.$store.getters['services/getsearchInputPlain']);
+
+   
          EventBus.$emit('selectionUpdated','network');
       this.$emit('changeBadgeVal',this.search_networks);
     },
     captureSelectionUpdate(data) {
-      console.log('WAS UPDATED!!!!!!!!');
       this.search_networks = data;
 
      // this.$store.commit("services/SET_NETWORK_SELECTION", { ...this.cluster.search_networks });
