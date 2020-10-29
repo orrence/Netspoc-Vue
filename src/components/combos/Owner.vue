@@ -1,5 +1,6 @@
 <template>
 <v-autocomplete
+	id="combo_owner"
 	label="Owner"
 	v-model="select"
 	:items="getOwners"

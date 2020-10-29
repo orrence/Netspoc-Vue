@@ -50,18 +50,21 @@
 				<v-checkbox 
 					v-model="cluster.search_supernet"
 					label="Übergeordnete Netze einbeziehen" 
+					id="cb_search_supernet"
 					></v-checkbox>
 				</v-col>
 				<v-col>
 					<v-checkbox 
 					v-model="cluster.search_subnet"
 					label="Enthaltene Netze einbeziehen" 
+					id="cb_search_subnet"
 					></v-checkbox>
 				</v-col>
 				<v-col>
 					<v-checkbox 
 					v-model="cluster.search_range"
 					label="Port-Ranges einbeziehen" 
+                                        id="cb_search_range"
 					></v-checkbox>
 				</v-col>
 			</v-row>
@@ -79,6 +82,7 @@
 					<v-checkbox 
 					v-model="cluster.search_description"
 					label="Suche auch in Dienstbeschreibungen" 
+					id="cb_search_description"
 					/>
 				</v-col>
 			</v-row>
@@ -100,24 +104,28 @@
 					<v-checkbox 
 					v-model="cluster.search_own"
 					label="Eigene" 
+					id="cb_search_own"
 					/>
 				</v-col>
 				<v-col>
 					<v-checkbox 
 					v-model="cluster.search_used"
 					label="Genutzte" 
+					id="cb_search_used"
 					/>
 				</v-col>
 				<v-col>
 					<v-checkbox 
 					v-model="cluster.search_visible"
 					label="Nutzbare" 
+					id="cb_search_usable"
 					/>
 				</v-col>
 				<v-col>
 					<v-checkbox 
 					v-model="cluster.search_limited"
 					label="Nur befristete Dienste suchen" 
+					id="cb_search_limited"
 					/>
 				</v-col>
 			</v-row>
@@ -127,12 +135,14 @@
 					<v-checkbox 
 					v-model="cluster.search_case_sensitive"
 					label="Groß-/Kleinschreibung beachten" 
+					id="cb_search_case_sensitive"
 					/>
 				</v-col>
 				<v-col>
 					<v-checkbox 
 					v-model="cluster.search_exact"
 					label="Suchergebnisse nur mit exakter Übereinstimmung" 
+					id="cb_search_exact"
 					/>
 				</v-col>
 			</v-row>		
@@ -142,7 +152,7 @@
 
 	<v-row dense :justify="'end'">
 		<v-col>
-			<v-btn block color="success" @click="searchUpdate">suchen</v-btn>
+			<v-btn text color="success" @click="searchUpdate" id="btn_search_start">suchen</v-btn>
 		</v-col>
 	</v-row>
 </v-container>

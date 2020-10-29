@@ -49,8 +49,8 @@ export default {
     "data",
     "height",
     "name",
-	"maxSelections",
-	"selectedNetworks"
+    "maxSelections",
+    "selectedNetworks",
   ],
   data: () => ({
     isVisible: false,
@@ -80,7 +80,7 @@ export default {
           console.log("TABULATOPR CHANGE");
           console.log(this.tabulator);
           console.log(this.config);
-          this.tabulator.selectRow("10.61.191.11");
+          //this.tabulator.selectRow("10.61.191.11");
           console.log(this.tabulator);
           this.newData = false;
         } else {
@@ -97,6 +97,16 @@ export default {
         } else {
           this.newConfig = true;
         }
+      },
+    },
+    selectedNetworks: {
+      handler: function () {
+        console.log(this.selectedNetworks);
+        this.selectedNetworks.forEach((param) => {
+          console.log("PARAM");
+          console.log(param);
+          this.tabulator.selectRow("10.61.191.11");
+        });
       },
     },
   },
@@ -199,7 +209,15 @@ export default {
           this.config.data = this.data;
           this.tabulator.replaceData(this.config.data);
           this.newData = false;
-          this.tabulator.selectRow("10.61.191.11");
+          console.log("SELECTED");
+          console.log(this.selectedNetworks);
+          if (typeof this.selectedNetworks != "undefined") {
+            this.selectedNetworks.forEach((param) => {
+              console.log("PARAM");
+              console.log(param);
+              this.tabulator.selectRow(param);
+            });
+          }
         }
       }
     },

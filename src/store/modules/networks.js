@@ -20,6 +20,7 @@ export default {
                 params: payload
             }).then(res => {
                 commit('RECEIVED_NETWORKSDATA', res.data);
+                return res.data;
             })
         },
         getNetworkResources({ commit }, payload) {

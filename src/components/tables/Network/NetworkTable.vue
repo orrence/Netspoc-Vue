@@ -5,7 +5,7 @@
       :tableconfig="{
         reactiveData: true,
         selectable: 20,
-        index: 'ip',
+        index: 'name',
       }"
       :columns="[
         {
@@ -86,13 +86,12 @@ export default {
 
       this.getNetworks(params).then(function (response) {
         console.log("AXIOS RESPOSNE");
-        /* let filters = this.getFiltersFromUrl(
-          this.$store.getters["services/getsearchInputPlain"],
+         let filters = vm.getFiltersFromUrl(
+          vm.$store.getters["services/getsearchInputPlain"],
           true
         );
-        console.log(filters.search_networks);
-        console.log(this.data);
-        this.networks = filters.search_networks; */
+       
+        vm.networks = filters.search_networks; 
         console.log(response);
       });
     },

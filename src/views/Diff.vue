@@ -12,6 +12,7 @@
 		<v-col cols="6">
 			<v-combobox 
 			v-if="olderPolicies.length > 0"
+			id="combo_compare_policies"
 			label="Vergleichsstand"
 			:items="olderPolicies"
 			v-model="oldPolicy"
