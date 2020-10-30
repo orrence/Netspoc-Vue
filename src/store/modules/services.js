@@ -54,7 +54,9 @@ export default {
             state.rulesData = payload;
         },
         RECEIVED_ADMINSDATA(state, payload) {
-            state.adminsData = payload.records;
+            console.log('AJAX ADMINS DATA');
+            console.log(payload);
+            state.adminsData = payload.data.records;
         },
         SEARCH_UPDATE(state, payload) {
             payload.search_networks = state.searchInput.search_networks
@@ -119,7 +121,7 @@ export default {
                 commit('RECEIVED_RULESDATA', resdata);
             })
         },
-        getAdmins({ commit }, payload) {
+        getAdminsData({ commit }, payload) {
             return Vue.axios.get('/get_admins', {
                 params: payload
             }).then(function (response) {
@@ -134,6 +136,7 @@ export default {
                  vm.requests--; */
             })
         },
+
         getServiceUsers({ commit }, payload) {
             return Vue.axios.get('/get_users', {
                 params: payload

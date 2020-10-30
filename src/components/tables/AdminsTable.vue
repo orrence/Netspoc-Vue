@@ -12,7 +12,7 @@
       :data="adminsData"
       :selectable="false"
       :groupBy="'owner'"
-      :height="'140px'"
+
     />
   </div>
 </template>
@@ -43,13 +43,14 @@ export default {
         this.getAdminsForAllOwner();
       },
     },
-    /*selection: {
+    selection: {
       handler() {
+        console.log('LOAD ADMINS DATA NOW');
         this.admins = {};
         this.getAdminsForAllOwner();
       },
     },
-    requests(amount) {
+    /*requests(amount) {
       if (amount === 0) {
         this.data = this.buffer;
         this.buffer = [];
@@ -60,10 +61,12 @@ export default {
     this.getAdminsForAllOwner();
   },
   methods: {
-    ...mapActions("services", ["getAdmins"]),
+    ...mapActions("services", ["getAdminsData"]),
     getAdminsForAllOwner() {
-      if (this.selection) {
-        var owner = this.selection.owner.map((owner) => owner.name);
+      console.log('LOAD ADMINS');
+      console.log(this.selection);
+      if (this.selection.length > 0) {
+        var owner = this.selection[0].owner.map((owner) => owner.name);
         this.requests = owner.length;
         for (let i = 0; i < owner.length; i++) {
           this.getAdmins(owner[i]);
@@ -77,13 +80,15 @@ export default {
         return;
       }
 
+    console.log('LADAAAAD ADMINS');
       const payload = {
         chosen_networks: "",
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
         owner: owner,
       };
-      this.getAdmins(payload);
+      this.$store.dispatch('services/getAdminsData',payload);
+      //this.getAdminsData(payload);
 
       /*.then(function (response) {
           var admins = response.data.records;

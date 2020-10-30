@@ -33,7 +33,7 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <AdminsTable v-if="serviceSelection.length < 2" :selection="serviceSelection[0]" />
+    <AdminsTable v-if="serviceSelection.length < 2" :selection="serviceSelection" />
   </v-card>
 </template>
 
@@ -54,6 +54,14 @@ export default {
     ServiceRulesTable,
     AdditionalFilterOptions,
     AdditionalServiceInfo
+  },
+  watch: {
+    serviceSelection: {
+      handler() {
+        console.log('DETAIL SERVICE UPDATED');
+        console.log(this.serviceSelection);
+      }
+    }
   },
   data: () => ({
     pnl_search: 0,

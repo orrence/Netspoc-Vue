@@ -33,12 +33,10 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   function(response) {
     // Do something with response data
-    console.log('RESPONSE SUCCESS');
     return response;
   },
   function(error) {
     // Do something with response error
-    console.log('FEHLER RESPORNSE');
     const response = error.response;
 
     if(response.data.msg == 'Login required') {

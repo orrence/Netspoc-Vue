@@ -49,7 +49,6 @@ export default {
       ...mapState("services", ["searchInput"]),
   },
   mounted() {
-    console.log('NETWORK PROPS');
     console.log(this.selectedNetworks);
   },
   /*beforeRouteUpdate() {

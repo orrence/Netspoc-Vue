@@ -94,7 +94,7 @@ export default {
   watch: {
     tab_services: {
       handler() {
-        this.updateServiceSelection([]);
+       // this.updateServiceSelection([]);
       },
     },
     searchInput: {
@@ -144,6 +144,8 @@ export default {
     },
 
     captureSelectionUpdate(data) {
+      console.log('TAB SERVICES');
+      console.log(data);
       this.tab_services = data;
     },
   },

@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+
     <v-row dense :justify="'space-between'" :align="'center'">
       <v-col cols="auto">
         <v-btn icon color="red lighten-2" @click="downloadAsPDF">
@@ -28,9 +29,9 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row >
       <v-col>
-        <div v-observe-visibility="visibilityChanged" ref="table" />
+        <div ref="table" />
       </v-col>
     </v-row>
   </v-container>
@@ -51,10 +52,12 @@ export default {
     "name",
     "maxSelections",
     "selectedNetworks",
+    "selectFirstRow",
   ],
   data: () => ({
     isVisible: false,
     newData: false,
+    isLoaded: false,
     newConfig: false,
     tabulator: null, //variable to hold your table
     selected: [],
@@ -74,18 +77,14 @@ export default {
     //update table if data changes
     data: {
       handler: function () {
-        if (this.isVisible) {
-          this.config.data = this.data;
-          this.tabulator.replaceData(this.config.data);
-          console.log("TABULATOPR CHANGE");
-          console.log(this.tabulator);
-          console.log(this.config);
-          //this.tabulator.selectRow("10.61.191.11");
-          console.log(this.tabulator);
-          this.newData = false;
-        } else {
-          this.newData = true;
+        this.config.data = this.data;
+        this.tabulator.setData(this.config.data);
+
+        if (typeof this.selectFirstRow != "undefined") {
+          this.tabulator.selectRow(this.config.data[0].name);
         }
+        this.isLoaded = true;
+        this.newData = false;
       },
     },
     groupBy: {
@@ -101,11 +100,8 @@ export default {
     },
     selectedNetworks: {
       handler: function () {
-        console.log(this.selectedNetworks);
         this.selectedNetworks.forEach((param) => {
-          console.log("PARAM");
-          console.log(param);
-          this.tabulator.selectRow("10.61.191.11");
+          this.tabulator.selectRow(param);
         });
       },
     },
@@ -122,11 +118,12 @@ export default {
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
-
+    //this.config.minHeight = "200px";
+    this.config.maxHeight = "500px";
     this.config = Object.assign({}, this.config, this.tableconfig);
-    var vm = this; // important
+    //  var vm = this; // important
 
-    this.config.rowClick = function (e, row) {
+    /*this.config.rowClick = function (e, row) {
       if (!vm.selectable) return;
 
       var ctrl = e.ctrlKey;
@@ -165,13 +162,13 @@ export default {
         row.toggleSelect();
       }
       vm.lastClick = row.getIndex();
-    };
+    }; */
 
-    this.config.rowSelectionChanged = function (data) {
+    /*this.config.rowSelectionChanged = function (data) {
       vm.selectedRows = data.length;
       vm.selected = data;
       vm.emitSelectionUpdate();
-    };
+    }; */
 
     this.newTable();
   },
@@ -181,16 +178,15 @@ export default {
   methods: {
     newTable() {
       this.tabulator = new Tabulator(this.$refs.table, this.config);
-      console.log("TABULATOR CREATED");
-      console.log(this.config);
     },
     selectAll() {
-      this.tabulator.selectRow();
+      // this.tabulator.selectRow();
     },
     deselectAll() {
       this.tabulator.deselectRow();
     },
     emitSelectionUpdate() {
+      console.log("TABULATOR SELECTION UDPATE");
       this.$emit("selectionUpdate", this.selected);
     },
     visibilityChanged(isVisible) {
@@ -209,15 +205,12 @@ export default {
           this.config.data = this.data;
           this.tabulator.replaceData(this.config.data);
           this.newData = false;
-          console.log("SELECTED");
-          console.log(this.selectedNetworks);
           if (typeof this.selectedNetworks != "undefined") {
             this.selectedNetworks.forEach((param) => {
-              console.log("PARAM");
-              console.log(param);
               this.tabulator.selectRow(param);
             });
           }
+          this.isLoaded = true;
         }
       }
     },
@@ -248,3 +241,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.hidden {
+  display: none;
+}
+</style>

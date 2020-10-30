@@ -59,20 +59,24 @@ export default {
   },
   watch: {
     selection: function () {
+      console.log('SELECTION RANGE');
       this.getRules();
     },
     expandUser: function () {
+      console.log('EXPAND USER RANGE');
       this.getRules();
     },
     IPAsName: function () {
+      console.log('IPASNAME RANGE');
       this.getRules();
     },
     filterBySearch: function () {
+      console.log('FILTER SEARCH RANGE');
       this.getRules();
     },
   },
   mounted() {
-    this.getRules();
+    //this.getRules();
   },
   methods: {
     ...mapActions("services", ["getServiceRules"]),
@@ -80,6 +84,7 @@ export default {
       var vm = this; // get vue instance
       var si = this.search_input;
 
+      console.log('GET SETRVICE RULES DATA');
       if (
         !vm.getActiveOwner ||
         !vm.getActivePolicy ||

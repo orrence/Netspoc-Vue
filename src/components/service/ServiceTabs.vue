@@ -13,25 +13,40 @@
         <v-icon>search</v-icon>
       </v-tab>
     </v-tabs>
+    <div :class="!showLoadingCircle ? 'hidden' : ''" class="loadingoverlay">
+      <div class="loadingcircle">
+        <v-progress-circular
+          color="deep-orange"
+          indeterminate
+          size="94"
+        ></v-progress-circular>
+      </div>
+    </div>
     <v-tabs-items v-model="serviceTabModel">
-      <v-tab-item :key="0">
-        <ServiceTable :servicedata="servicesData" compID="table_services_own" />
-      </v-tab-item>
-      <v-tab-item :key="1">
+      <v-tab-item :key="0" transition="false">
         <ServiceTable
-          :servicedata="servicesData"
+
+          :activetab="serviceTabModel == 0 ? true : false"
+          compID="table_services_own"
+        />
+      </v-tab-item>
+      <v-tab-item :key="1" transition="false">
+        <ServiceTable
+      
+          :activetab="serviceTabModel == 1 ? true : false"
           compID="table_services_used"
         />
       </v-tab-item>
-      <v-tab-item :key="2">
+      <v-tab-item :key="2" transition="false">
         <ServiceTable
-          :servicedata="servicesData"
+       
+          :activetab="serviceTabModel == 2 ? true : false"
           compID="table_services_usable"
         />
       </v-tab-item>
       <v-tab-item :key="3">
         <ServiceTable
-          :servicedata="servicesData"
+          :activetab="serviceTabModel == 3 ? true : false"
           compID="table_services_searchresult"
         />
       </v-tab-item>
@@ -51,6 +66,7 @@ export default {
   props: ["serviceTab"],
   data: () => ({
     relations: ["owner", "user", "visible"],
+    showLoadingCircle: true,
   }),
   computed: {
     ...mapState("services", ["searchInput", "searchArea"]),
@@ -62,6 +78,7 @@ export default {
         return this.serviceTab;
       },
       set(val) {
+        console.log("EMIT TAB UPDATE " + val);
         this.$emit("selectionUpdate", val);
       },
     },
@@ -80,6 +97,11 @@ export default {
         this.getServices(this.serviceTabModel);
       },
     },
+    servicesData: {
+      handler() {
+        this.showLoadingCircle = false;
+      }
+    }
   },
   created() {
     var vm = this;
@@ -95,9 +117,12 @@ export default {
   methods: {
     ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
     onChangeTab(data) {
+      console.log(data);
+      this.showLoadingCircle = true;
       this.getServices(data);
       // this.$store.dispatch('requestActive');
     },
+   
     createPayloadElement(payloadObj) {
       let payload = {};
 
@@ -117,15 +142,16 @@ export default {
     getServices(tabitem) {
       var vm = this; // get vue instance
 
+      console.log("SERVIEC S");
       if (
         !vm.getActiveOwner ||
         (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)
       ) {
-        this.updateServiceSelection([]);
+        //this.updateServiceSelection([]);
         // vm.$emit("selectionUpdate", vm.data);
         return;
       }
-
+      console.log("PATRICK");
       let rulepayload = {};
       let textsearch_payload = {};
       let generalpayload = {};
@@ -150,9 +176,8 @@ export default {
           relation: "",
           ...rulepayload,
           ...textsearch_payload,
-          ...generalpayload
+          ...generalpayload,
         };
-    
       }
 
       this.getServicesList({ data: basepayload });
@@ -160,3 +185,23 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.loadingoverlay {
+  position: absolute;
+  height: 100%;
+  z-index: 999;
+  width: 100%;
+  background: #fff;
+  opacity: 0.9;
+}
+.loadingcircle {
+  position:absolute;
+  left: 34%;
+  top: 40%;
+  margin: 0 auto;
+}
+.hidden {
+  display: none;
+}
+</style>
