@@ -1,25 +1,30 @@
 <template>
   <div id="table_services_user">
     <Tabulator
+      :tableconfig="{
+        reactiveData: true,
+        selectable: 1,
+
+        rowSelected: passOnSelectionUpdate,
+        //rowSelectionChanged: passOnSelectionUpdate
+      }"
       :name="`Dienstbenutzer`"
       :columns="[
-	{ 
-		title: 'Name',
-		field: 'name'
-	},
-	{ 
-		title: 'IP-Adressen',
-		field: 'ip',
-		sorter: 'ip'
-	},
-	{ 
-		title: 'Verantwortungsbereich',
-		field: 'owner'
-	},
-]"
-      reactiveData="true"
+        {
+          title: 'Name',
+          field: 'name',
+        },
+        {
+          title: 'IP-Adressen',
+          field: 'ip',
+          sorter: 'ip',
+        },
+        {
+          title: 'Verantwortungsbereich',
+          field: 'owner',
+        },
+      ]"
       :data="usersData"
-      :selectable="false"
       :groupBy="selection.length > 1 ? 'service' : ''"
     />
   </div>
@@ -37,7 +42,7 @@ export default {
     data: [],
   }),
   computed: {
-    ...mapState("services", ["usersData"]),
+    ...mapState("services", ["usersData","searchInput"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
@@ -50,6 +55,16 @@ export default {
   },
   methods: {
     ...mapActions("services", ["getServiceUsers"]),
+    passOnSelectionUpdate(data) {
+  
+      const payload = {
+        chosen_networks: this.searchInput.search_networks.join(","),
+        active_owner: this.getActiveOwner,
+        history: this.getActivePolicy,
+        owner: data.getData().owner,
+      };
+      this.$store.dispatch('services/getAdminsData',payload);
+    },
     getUsers() {
       var vm = this; // get vue instance
       if (
@@ -60,7 +75,6 @@ export default {
         vm.data = [];
         return;
       }
-
       const params = {
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,

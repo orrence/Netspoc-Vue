@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { updateField } from 'vuex-map-fields'
 
 export default {
     namespaced: true,
@@ -8,6 +7,7 @@ export default {
         rulesData: [],
         adminsData: [],
         searchArea: "regeln",
+        serviceTabNumber: 0,
         searchInput: {
             rules: {
                 search_ip1: "",
@@ -19,7 +19,7 @@ export default {
             },
             textsearch: {
                 search_string: "",
-                search_description: true,
+                search_in_desc: true,
             },
             general: {
                 search_own: true,
@@ -46,7 +46,6 @@ export default {
         },
     },
     mutations: {
-        updateField,
         RECEIVED_SERVICESDATA(state, payload) {
             state.servicesData = payload.records;
         },
@@ -70,10 +69,14 @@ export default {
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
         RECEIVED_USERSDATA(state, payload) {
-            state.usersData = payload.records;
+        
+            state.usersData = payload.data.records;
         },
         UPDATE_SERVICE_SELECTION(state, payload) {
             state.serviceSelection = payload;
+        },
+        UPDATE_SERVICE_TAB_NUMBER(state,payload) {
+            state.serviceTabNumber = payload;
         },
         UPDATE_SEARCH_FROM_URLHASH(state,payload) {
             let temp = state.searchInput;
@@ -147,6 +150,9 @@ export default {
         },
         updateServiceSelection({ commit }, payload) {
             commit('UPDATE_SERVICE_SELECTION', payload);
-        }
+        },
+         
+  
+       
     }
 }

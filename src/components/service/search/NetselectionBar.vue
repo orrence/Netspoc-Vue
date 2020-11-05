@@ -77,6 +77,8 @@ export default {
       this.updateUrlHash(this.$store.getters['services/getsearchInputPlain']);
 
    
+      console.log('SEARH NETWORD');
+      console.log(this.search_networks);
          EventBus.$emit('selectionUpdated','network');
       this.$emit('changeBadgeVal',this.search_networks);
     },

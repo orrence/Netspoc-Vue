@@ -84,7 +84,7 @@
             <v-row dense>
               <v-col>
                 <v-checkbox
-                  v-model="cluster.textsearch.search_description"
+                  v-model="cluster.textsearch.search_in_desc"
                   label="Suche auch in Dienstbeschreibungen"
                 />
               </v-col>

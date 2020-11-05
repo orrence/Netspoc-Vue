@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-btn
-      tile
+    
       elevation="2"
       class="ma-4 ml-0"
       raised
@@ -13,7 +13,7 @@
     <div style="display: inline-flex">
       <v-badge color="green" overlap offset-x="26" offset-y="24" :value="networkCount" :content="networkCount">
         <v-btn
-          tile
+        
           elevation="2"
           class="ma-4 ml-0"
           raised
@@ -120,7 +120,8 @@ export default {
       }
     },
     toggleBatchValue(val) {
-    
+      console.log('NETWORK ALUE ------------------------');
+      console.log(val);
       this.networkCount = val.length;
     },
     openNavDrawer(type) {
@@ -144,8 +145,7 @@ export default {
     },
 
     captureSelectionUpdate(data) {
-      console.log('TAB SERVICES');
-      console.log(data);
+  
       this.tab_services = data;
     },
   },

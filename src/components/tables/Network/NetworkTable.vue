@@ -6,6 +6,8 @@
         reactiveData: true,
         selectable: 20,
         index: 'name',
+        rowSelectionChanged: passOnSelectionUpdate,
+
       }"
       :columns="[
         {
@@ -34,8 +36,7 @@
       :selectedNetworks="networks"
       :groupBy="''"
       :height="height"
-      @selectionUpdate="passOnSelectionUpdate"
-      @cellClick="cellclicked"
+  
     />
   </div>
 </template>
@@ -99,7 +100,7 @@ export default {
     passOnSelectionUpdate(data) {
       this.$emit(
         "selectionUpdate",
-        data.map((row) => row.name)
+       data.map((row) => row.name)
       );
     },
   },

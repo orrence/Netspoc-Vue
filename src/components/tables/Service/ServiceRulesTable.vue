@@ -3,31 +3,31 @@
     <Tabulator
       :name="`Dienstdetails`"
       :columns="[
-	{ 
-		title: 'Aktion',
-		field: 'action',
-		formatter: 'textarea',
-		width: 77
-	},
-	{ 
-		title: 'Quelle',
-		field: 'src',
-		formatter: 'textarea',
-		sorter: 'ip'
-	},
-	{ 
-		title: 'Ziel',
-		field: 'dst',
-		formatter: 'textarea',
-		sorter: 'ip'
-	},
-	{ 
-		title: 'Protokoll',
-		field: 'prt',
-		formatter: 'textarea',
-		width: 92
-	},
-]"
+        {
+          title: 'Aktion',
+          field: 'action',
+          formatter: 'textarea',
+          width: 77,
+        },
+        {
+          title: 'Quelle',
+          field: 'src',
+          formatter: 'textarea',
+          sorter: 'ip',
+        },
+        {
+          title: 'Ziel',
+          field: 'dst',
+          formatter: 'textarea',
+          sorter: 'ip',
+        },
+        {
+          title: 'Protokoll',
+          field: 'prt',
+          formatter: 'textarea',
+          width: 92,
+        },
+      ]"
       reactiveData="true"
       :data="rulesData"
       :selectable="false"
@@ -39,6 +39,8 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 import Tabulator from "../Tabulator";
+import Vue from 'vue';
+
 export default {
   components: {
     Tabulator,
@@ -54,24 +56,25 @@ export default {
     data: [],
   }),
   computed: {
-    ...mapState("services", ["rulesData"]),
+    ...mapState("services", ["rulesData", "serviceTabNumber", "searchInput"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     selection: function () {
-      console.log('SELECTION RANGE');
+      console.log("SELECTION RANGE");
       this.getRules();
     },
     expandUser: function () {
-      console.log('EXPAND USER RANGE');
+      console.log("EXPAND USER RANGE");
       this.getRules();
     },
     IPAsName: function () {
-      console.log('IPASNAME RANGE');
+      console.log("IPASNAME RANGE");
       this.getRules();
     },
     filterBySearch: function () {
-      console.log('FILTER SEARCH RANGE');
+      console.log("FILTER SEARCH RANGE");
+      console.log(this.filterBySearch);
       this.getRules();
     },
   },
@@ -80,11 +83,27 @@ export default {
   },
   methods: {
     ...mapActions("services", ["getServiceRules"]),
+
+    createPayloadElement(payloadObj) {
+      let payload = {};
+
+      for (const [key, value] of Object.entries(payloadObj)) {
+        if (typeof value == "boolean") {
+          let boolval = "";
+          if (value == true) {
+            boolval = "on";
+          }
+          Vue.set(payload, key, boolval);
+        } else {
+          Vue.set(payload, key, value);
+        }
+      }
+      return payload;
+    },
     getRules() {
       var vm = this; // get vue instance
-      var si = this.search_input;
 
-      console.log('GET SETRVICE RULES DATA');
+      console.log("GET SETRVICE RULES DATA");
       if (
         !vm.getActiveOwner ||
         !vm.getActivePolicy ||
@@ -93,6 +112,21 @@ export default {
         vm.data = [];
         return;
       }
+
+      console.log("22");
+      let rulepayload = {};
+      let textsearch_payload = {};
+      let generalpayload = {};
+
+      if (vm.filterBySearch && vm.serviceTabNumber === 3) {
+        console.log('TAB NUMBER IS DA');
+        rulepayload = this.createPayloadElement(vm.searchInput.rules);
+        textsearch_payload = this.createPayloadElement(
+          vm.searchInput.textsearch
+        );
+        generalpayload = this.createPayloadElement(vm.searchInput.general);
+      }
+
       const payload = {
         expand_users: vm.expandUser ? 1 : 0,
         display_property: vm.IPAsName ? "name" : "ip",
@@ -100,41 +134,12 @@ export default {
         history: vm.getActivePolicy,
         service: vm.selection.map((row) => row.name).join(","),
         filter_rules: vm.filterBySearch ? 1 : 0,
-        search_ip1:
-          vm.filterBySearch && si.tab_search === 0 ? si.search_ip1 : "",
-        search_ip2:
-          vm.filterBySearch && si.tab_search === 0 ? si.search_ip2 : "",
-        search_proto:
-          vm.filterBySearch && si.tab_search === 0 ? si.search_proto : "",
-        search_supernet:
-          vm.filterBySearch && si.tab_search === 0 && si.search_supernet
-            ? "on"
-            : "",
-        search_subnet:
-          vm.filterBySearch && si.tab_search === 0 && si.search_subnet
-            ? "on"
-            : "",
-        search_range:
-          vm.filterBySearch && si.tab_search === 0 && si.search_range
-            ? "on"
-            : "",
-        search_string:
-          vm.filterBySearch && si.tab_search === 1 ? si.search_string : "",
-        search_in_desc:
-          vm.filterBySearch && si.tab_search === 1 && si.search_description
-            ? "on"
-            : "",
-        chosen_networks:
-          vm.filterBySearch && si.tab_search === 2 ? si.search_networks : "",
-        search_own: vm.filterBySearch && si.search_own ? "on" : "",
-        search_used: vm.filterBySearch && si.search_used ? "on" : "",
-        search_visible: vm.filterBySearch && si.search_visible ? "on" : "",
-        search_disable_at:
-          vm.filterBySearch && si.search_disable_at ? "on" : "",
-        search_case_sensitive:
-          vm.filterBySearch && si.search_case_sensitive ? "on" : "",
-        search_exact: vm.filterBySearch && si.search_exact ? "on" : "",
+        ...rulepayload,
+        ...textsearch_payload,
+        ...generalpayload,
+        chosen_networks: vm.searchInput.search_networks.join(","),
       };
+      console.log(payload);
       this.getServiceRules(payload);
       /* vm.axios.get('/get_rules', {
 				params: {

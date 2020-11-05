@@ -33,7 +33,7 @@ export default {
   }),
   computed: {
     ...mapState(["active"]),
-    ...mapState("services", ["adminsData"]),
+    ...mapState("services", ["adminsData","searchInput"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
@@ -80,9 +80,8 @@ export default {
         return;
       }
 
-    console.log('LADAAAAD ADMINS');
       const payload = {
-        chosen_networks: "",
+        chosen_networks: vm.searchInput.search_networks.join(","),
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
         owner: owner,
