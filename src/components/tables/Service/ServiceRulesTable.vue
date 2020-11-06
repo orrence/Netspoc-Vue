@@ -73,8 +73,7 @@ export default {
       this.getRules();
     },
     filterBySearch: function () {
-      console.log("FILTER SEARCH RANGE");
-      console.log(this.filterBySearch);
+  
       this.getRules();
     },
   },
@@ -127,6 +126,7 @@ export default {
         generalpayload = this.createPayloadElement(vm.searchInput.general);
       }
 
+      console.log(vm.selection);
       const payload = {
         expand_users: vm.expandUser ? 1 : 0,
         display_property: vm.IPAsName ? "name" : "ip",

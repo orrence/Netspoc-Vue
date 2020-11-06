@@ -41,9 +41,12 @@ export default {
   watch: {
     servicesData: {
       handler() {
-    
-        if (this.activetab) {
+        console.log("UPDATE THE SERVICE SELECTION");
+        console.log(this.servicesData);
+        if (this.activetab && this.servicesData.length > 0) {
           this.updateServiceSelection([this.servicesData[0]]);
+        } else {
+          this.updateServiceSelection([]);
         }
       },
     },
@@ -52,7 +55,6 @@ export default {
     ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
 
     passOnSelectionUpdate(row) {
-
       this.updateServiceSelection([row.getData()]);
       //this.$emit("selectionUpdate", data);
     },

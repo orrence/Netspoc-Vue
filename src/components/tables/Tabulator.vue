@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-
     <v-row dense :justify="'space-between'" :align="'center'">
       <v-col cols="auto">
         <v-btn icon color="red lighten-2" @click="downloadAsPDF">
@@ -29,7 +28,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-row >
+    <v-row>
       <v-col>
         <div ref="table" />
       </v-col>
@@ -79,10 +78,12 @@ export default {
       handler: function () {
         this.config.data = this.data;
         this.tabulator.setData(this.config.data);
-
-        if (typeof this.selectFirstRow != "undefined") {
-          this.tabulator.selectRow(this.config.data[0].name);
+        if (this.data.length > 0) {
+          if (typeof this.selectFirstRow != "undefined") {
+            this.tabulator.selectRow(this.config.data[0].name);
+          }
         }
+
         this.isLoaded = true;
         this.newData = false;
       },

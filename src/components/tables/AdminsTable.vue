@@ -29,7 +29,6 @@ export default {
   data: () => ({
     data: [],
     buffer: [],
-    requests: 0,
   }),
   computed: {
     ...mapState(["active"]),
@@ -50,12 +49,7 @@ export default {
         this.getAdminsForAllOwner();
       },
     },
-    /*requests(amount) {
-      if (amount === 0) {
-        this.data = this.buffer;
-        this.buffer = [];
-      }
-    }, */
+    
   },
   mounted() {
     this.getAdminsForAllOwner();
@@ -63,23 +57,16 @@ export default {
   methods: {
     ...mapActions("services", ["getAdminsData"]),
     getAdminsForAllOwner() {
-      console.log('LOAD ADMINS');
-      console.log(this.selection);
+  
       if (this.selection.length > 0) {
         var owner = this.selection[0].owner.map((owner) => owner.name);
-        this.requests = owner.length;
-        for (let i = 0; i < owner.length; i++) {
-          this.getAdmins(owner[i]);
-        }
+        console.log(owner);
+         this.getAdmins(owner[0]);
       }
     },
     getAdmins(owner) {
       var vm = this;
-      if (!vm.getActiveOwner || !vm.getActivePolicy) {
-        this.requests--;
-        return;
-      }
-
+  
       const payload = {
         chosen_networks: vm.searchInput.search_networks.join(","),
         active_owner: vm.getActiveOwner,

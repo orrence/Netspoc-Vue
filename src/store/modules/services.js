@@ -53,9 +53,8 @@ export default {
             state.rulesData = payload;
         },
         RECEIVED_ADMINSDATA(state, payload) {
-            console.log('AJAX ADMINS DATA');
-            console.log(payload);
-            state.adminsData = payload.data.records;
+        
+            state.adminsData = payload;
         },
         SEARCH_UPDATE(state, payload) {
             payload.search_networks = state.searchInput.search_networks
@@ -69,8 +68,7 @@ export default {
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
         RECEIVED_USERSDATA(state, payload) {
-        
-            state.usersData = payload.data.records;
+            state.usersData = payload;
         },
         UPDATE_SERVICE_SELECTION(state, payload) {
             state.serviceSelection = payload;
@@ -99,7 +97,14 @@ export default {
             return Vue.axios.get('/service_list', {
                 params: payload.data
             }).then(res => {
+                console.log('RECEIVED DATA');
+                console.log(res.data);
                 commit('RECEIVED_SERVICESDATA', res.data);
+                if(res.data.totalCount == 0){
+                    commit('RECEIVED_RULESDATA', []);
+                    commit('RECEIVED_ADMINSDATA', []);
+                }
+            
             })
         },
         getServiceRules({ commit }, payload) {
@@ -128,15 +133,8 @@ export default {
             return Vue.axios.get('/get_admins', {
                 params: payload
             }).then(function (response) {
-                commit('RECEIVED_ADMINSDATA', response);
-                /* var admins = response.data.records;
-                 for (let i = 0; i < admins.length; i++) {
-                   vm.buffer.push({
-                     owner: owner,
-                     email: admins[i].email,
-                   });
-                 }
-                 vm.requests--; */
+                commit('RECEIVED_ADMINSDATA', response.data.records);
+        
             })
         },
 
@@ -144,7 +142,7 @@ export default {
             return Vue.axios.get('/get_users', {
                 params: payload
             }).then(function (response) {
-                commit('RECEIVED_USERSDATA', response);
+                commit('RECEIVED_USERSDATA', response.data.records);
 
             })
         },

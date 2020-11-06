@@ -63,23 +63,21 @@ export default {
   components: {
     ServiceTable,
   },
-  props: ["serviceTab"],
   data: () => ({
     relations: ["owner", "user", "visible"],
     showLoadingCircle: true,
   }),
   computed: {
-    ...mapState("services", ["searchInput", "searchArea"]),
+    ...mapState("services", ["searchInput", "searchArea","serviceTabNumber"]),
     ...mapState(["active"]),
     ...mapState("services", ["servicesData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
     serviceTabModel: {
       get() {
-        return this.serviceTab;
+        return this.serviceTabNumber;
       },
       set(val) {
         this.$store.commit('services/UPDATE_SERVICE_TAB_NUMBER',val);
-        this.$emit("selectionUpdate", val);
       },
     },
   },
@@ -115,7 +113,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
+    ...mapActions("services", ["getServicesList"]),
     onChangeTab(data) {
       this.showLoadingCircle = true;
       this.getServices(data);
@@ -144,7 +142,6 @@ export default {
         !vm.getActiveOwner ||
         (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)
       ) {
-        //this.updateServiceSelection([]);
         // vm.$emit("selectionUpdate", vm.data);
         return;
       }
