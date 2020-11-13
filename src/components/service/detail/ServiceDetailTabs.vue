@@ -1,6 +1,7 @@
 <template>
   <v-card tile>
     <v-tabs
+      @change="onChangeTab"
       background-color="lightgray"
       v-model="tab_details"
       slider-color="orange"
@@ -56,7 +57,7 @@ import ServiceRulesTable from "../../tables/Service/ServiceRulesTable";
 import AdditionalFilterOptions from "./AdditionalFilterOptions";
 import AdditionalServiceInfo from "./AdditionalServiceInfo";
 
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -84,7 +85,29 @@ export default {
     },
   },
   computed: {
-    ...mapState("services", ["searchInput", "serviceSelection","serviceTabNumber"]),
+    ...mapState("services", [
+      "searchInput",
+      "serviceSelection",
+      "serviceTabNumber",
+    ]),
+    ...mapGetters(["getActiveOwner", "getActivePolicy"]),
+  },
+  methods: {
+    onChangeTab(data) {
+      console.log(data);
+      if (data == 0) {
+        const payload = {
+          chosen_networks: this.searchInput.search_networks.join(","),
+          active_owner: this.getActiveOwner,
+          history: this.getActivePolicy,
+          owner: "",
+        };
+        this.$store.dispatch("services/getAdminsData", payload);
+      }
+
+      //this.getServices(data);
+      // this.$store.dispatch('requestActive');
+    },
   },
 };
 </script>

@@ -8,6 +8,7 @@ export default {
         adminsData: [],
         searchArea: "regeln",
         serviceTabNumber: 0,
+        showLoadingCircle: true,
         searchInput: {
             rules: {
                 search_ip1: "",
@@ -70,6 +71,9 @@ export default {
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;
         },
+        SET_LOADING_CIRCLE(state,payload) {
+            state.showLoadingCircle = payload;
+        },
         UPDATE_SERVICE_SELECTION(state, payload) {
             state.serviceSelection = payload;
         },
@@ -97,8 +101,7 @@ export default {
             return Vue.axios.get('/service_list', {
                 params: payload.data
             }).then(res => {
-                console.log('RECEIVED DATA');
-                console.log(res.data);
+            
                 commit('RECEIVED_SERVICESDATA', res.data);
                 if(res.data.totalCount == 0){
                     commit('RECEIVED_RULESDATA', []);

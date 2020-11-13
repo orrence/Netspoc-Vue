@@ -25,21 +25,18 @@
     <v-tabs-items v-model="serviceTabModel">
       <v-tab-item :key="0" transition="false">
         <ServiceTable
-
           :activetab="serviceTabModel == 0 ? true : false"
           compID="table_services_own"
         />
       </v-tab-item>
       <v-tab-item :key="1" transition="false">
         <ServiceTable
-      
           :activetab="serviceTabModel == 1 ? true : false"
           compID="table_services_used"
         />
       </v-tab-item>
       <v-tab-item :key="2" transition="false">
         <ServiceTable
-       
           :activetab="serviceTabModel == 2 ? true : false"
           compID="table_services_usable"
         />
@@ -58,17 +55,16 @@
 import ServiceTable from "../tables/Service/ServiceTable";
 import { mapState, mapGetters, mapActions } from "vuex";
 import EventBus from "../../plugins/event-bus";
-import Vue from 'vue'
+import Vue from "vue";
 export default {
   components: {
     ServiceTable,
   },
   data: () => ({
     relations: ["owner", "user", "visible"],
-    showLoadingCircle: true,
   }),
   computed: {
-    ...mapState("services", ["searchInput", "searchArea","serviceTabNumber"]),
+    ...mapState("services", ["searchInput", "searchArea", "serviceTabNumber","showLoadingCircle"]),
     ...mapState(["active"]),
     ...mapState("services", ["servicesData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
@@ -77,7 +73,7 @@ export default {
         return this.serviceTabNumber;
       },
       set(val) {
-        this.$store.commit('services/UPDATE_SERVICE_TAB_NUMBER',val);
+        this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", val);
       },
     },
   },
@@ -97,9 +93,10 @@ export default {
     },
     servicesData: {
       handler() {
-        this.showLoadingCircle = false;
-      }
-    }
+        this.$store.commit("services/SET_LOADING_CIRCLE", false);
+
+      },
+    },
   },
   created() {
     var vm = this;
@@ -115,26 +112,26 @@ export default {
   methods: {
     ...mapActions("services", ["getServicesList"]),
     onChangeTab(data) {
-      this.showLoadingCircle = true;
+      this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.getServices(data);
       // this.$store.dispatch('requestActive');
     },
-  createPayloadElement(payloadObj) {
-        let payload = {};
-  
-        for (const [key, value] of Object.entries(payloadObj)) {
-          if (typeof value == "boolean") {
-            let boolval = "";
-            if (value == true) {
-              boolval = "on";
-            }
-            Vue.set(payload, key, boolval);
-          } else {
-            Vue.set(payload, key, value);
+    createPayloadElement(payloadObj) {
+      let payload = {};
+
+      for (const [key, value] of Object.entries(payloadObj)) {
+        if (typeof value == "boolean") {
+          let boolval = "";
+          if (value == true) {
+            boolval = "on";
           }
+          Vue.set(payload, key, boolval);
+        } else {
+          Vue.set(payload, key, value);
         }
-        return payload;
-      },
+      }
+      return payload;
+    },
     getServices(tabitem) {
       var vm = this; // get vue instance
 
@@ -173,7 +170,7 @@ export default {
           ...generalpayload,
         };
       }
-      console.log('SEARCH NOW');
+      console.log("SEARCH NOW");
       console.log(basepayload);
       this.getServicesList({ data: basepayload });
     },
@@ -191,7 +188,7 @@ export default {
   opacity: 0.9;
 }
 .loadingcircle {
-  position:absolute;
+  position: absolute;
   left: 34%;
   top: 40%;
   margin: 0 auto;
