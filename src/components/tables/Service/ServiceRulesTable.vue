@@ -61,15 +61,12 @@ export default {
   },
   watch: {
     selection: function () {
-      console.log("SELECTION RANGE");
       this.getRules();
     },
     expandUser: function () {
-      console.log("EXPAND USER RANGE");
       this.getRules();
     },
     IPAsName: function () {
-      console.log("IPASNAME RANGE");
       this.getRules();
     },
     filterBySearch: function () {
@@ -102,7 +99,6 @@ export default {
     getRules() {
       var vm = this; // get vue instance
 
-      console.log("GET SETRVICE RULES DATA");
       if (
         !vm.getActiveOwner ||
         !vm.getActivePolicy ||
@@ -112,13 +108,11 @@ export default {
         return;
       }
 
-      console.log("22");
       let rulepayload = {};
       let textsearch_payload = {};
       let generalpayload = {};
 
       if (vm.filterBySearch && vm.serviceTabNumber === 3) {
-        console.log('TAB NUMBER IS DA');
         rulepayload = this.createPayloadElement(vm.searchInput.rules);
         textsearch_payload = this.createPayloadElement(
           vm.searchInput.textsearch
@@ -126,7 +120,6 @@ export default {
         generalpayload = this.createPayloadElement(vm.searchInput.general);
       }
 
-      console.log(vm.selection);
       const payload = {
         expand_users: vm.expandUser ? 1 : 0,
         display_property: vm.IPAsName ? "name" : "ip",
@@ -139,34 +132,8 @@ export default {
         ...generalpayload,
         chosen_networks: vm.searchInput.search_networks.join(","),
       };
-      console.log(payload);
       this.getServiceRules(payload);
-      /* vm.axios.get('/get_rules', {
-				params: {
-					
-				}})
-				.then(function (response) {
-					var resdata = response.data.records;
-					for (let j = 0; j < resdata.length; j++) {
-						resdata[j].src = resdata[j].src.join("\n");
-						switch (resdata[j].has_user) {
-							case "both":
-								resdata[j].src = "User";
-								resdata[j].dst = "User";
-								break;
-							case "src":
-								resdata[j].src = "User";
-								break;
-							default:
-						}
-					}
-					vm.data = resdata;
-				})
-				.catch(function (error) {
-					vm.data = [];
-					alert('get_rules: ' + error);
-				}
-			); */
+     
     },
   },
 };

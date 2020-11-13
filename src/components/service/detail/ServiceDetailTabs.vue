@@ -94,7 +94,6 @@ export default {
   },
   methods: {
     onChangeTab(data) {
-      console.log(data);
       if (data == 0) {
         const payload = {
           chosen_networks: this.searchInput.search_networks.join(","),

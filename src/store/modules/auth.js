@@ -40,7 +40,6 @@ export default {
         },
         loginUser({ dispatch, commit }, creds) {
             return Vue.axios.post('/login_vue', creds.data).then(res => {  
-                console.log(res);             
                 if(res.data.success) {
                     dispatch('setLoggedIn', true);
                     commit('SET_LOGIN_ERROR',false);

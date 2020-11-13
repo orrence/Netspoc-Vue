@@ -44,7 +44,6 @@ export default {
     },
     selection: {
       handler() {
-        console.log('LOAD ADMINS DATA NOW');
         this.admins = {};
         this.getAdminsForAllOwner();
       },
@@ -60,7 +59,6 @@ export default {
   
       if (this.selection.length > 0) {
         var owner = this.selection[0].owner.map((owner) => owner.name);
-        console.log(owner);
          this.getAdmins(owner[0]);
       }
     },

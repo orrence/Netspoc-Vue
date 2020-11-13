@@ -62,7 +62,6 @@ export default {
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
         UPDATE_SEARCH_AREA(state, payload) {
-            console.log(payload);
             state.searchArea = payload;
         },
         SET_NETWORK_SELECTION(state, payload) {

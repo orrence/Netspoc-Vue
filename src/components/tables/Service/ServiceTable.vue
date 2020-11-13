@@ -41,8 +41,7 @@ export default {
   watch: {
     servicesData: {
       handler() {
-        console.log("UPDATE THE SERVICE SELECTION");
-        console.log(this.servicesData);
+  
         if (this.activetab && this.servicesData.length > 0) {
           this.updateServiceSelection([this.servicesData[0]]);
         } else {

@@ -8,15 +8,13 @@
           slider-color="orange"
           grow
         >
-      
-           <v-tab>Netzauswahl</v-tab>
+          <v-tab>Netzauswahl</v-tab>
         </v-tabs>
         <v-tabs-items v-model="networkselection">
           <v-tab-item>
-            
-            <NetworkTable  @selectionUpdate="captureSelectionUpdate" />
+            <NetworkTable @selectionUpdate="captureSelectionUpdate" />
           </v-tab-item>
-        </v-tabs-items>  
+        </v-tabs-items>
 
         <v-row dense :justify="'end'">
           <v-col>
@@ -30,7 +28,7 @@
 <script>
 import NetworkTable from "../../tables/Network/NetworkTable";
 import urlSearchParams from "../../mixins/urlSearchParams";
-import EventBus from '../../../plugins/event-bus';
+import EventBus from "../../../plugins/event-bus";
 import { mapState } from "vuex";
 
 export default {
@@ -39,29 +37,13 @@ export default {
     NetworkTable,
   },
   data: () => ({
-    cluster: {
-      
-    },
+    cluster: {},
     networkselection: 0,
     search_networks: [],
   }),
-   computed: {
-      ...mapState("services", ["searchInput"]),
+  computed: {
+    ...mapState("services", ["searchInput"]),
   },
-  mounted() {
-    console.log(this.selectedNetworks);
-  },
-  /*beforeRouteUpdate() {
-    console.log("ROUTE CHANGE");
-    if (this.$route.hash != "") {
-      this.setSearchParams();
-      if (this.cluster.search_string) {
-        this.tab_search = 0;
-      } else {
-        this.tab_search = 1;
-      }
-    }
-  },*/
   methods: {
     setSearchParams() {
       this.cluster = this.getFiltersFromUrl(this.cluster, true);
@@ -71,24 +53,22 @@ export default {
     },
 
     searchUpdate() {
-
       this.$emit("closeSearch");
       this.emitSearchInputToParent();
-      this.updateUrlHash(this.$store.getters['services/getsearchInputPlain']);
+      this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
 
-   
-      console.log('SEARH NETWORD');
-      console.log(this.search_networks);
-         EventBus.$emit('selectionUpdated','network');
-      this.$emit('changeBadgeVal',this.search_networks);
+      EventBus.$emit("selectionUpdated", "network");
+      this.$emit("changeBadgeVal", this.search_networks);
     },
     captureSelectionUpdate(data) {
       this.search_networks = data;
 
-     // this.$store.commit("services/SET_NETWORK_SELECTION", { ...this.cluster.search_networks });
+      // this.$store.commit("services/SET_NETWORK_SELECTION", { ...this.cluster.search_networks });
     },
     emitSearchInputToParent() {
-       this.$store.commit("services/SET_NETWORK_SELECTION", { search_networks: this.search_networks });
+      this.$store.commit("services/SET_NETWORK_SELECTION", {
+        search_networks: this.search_networks,
+      });
     },
   },
 };

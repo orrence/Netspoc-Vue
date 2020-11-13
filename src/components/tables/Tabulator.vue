@@ -187,7 +187,6 @@ export default {
       this.tabulator.deselectRow();
     },
     emitSelectionUpdate() {
-      console.log("TABULATOR SELECTION UDPATE");
       this.$emit("selectionUpdate", this.selected);
     },
     visibilityChanged(isVisible) {

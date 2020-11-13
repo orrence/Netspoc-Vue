@@ -85,15 +85,13 @@ export default {
         chosen_networks: "",
       };
 
-      this.getNetworks(params).then(function (response) {
-        console.log("AXIOS RESPOSNE");
+      this.getNetworks(params).then(function () {
          let filters = vm.getFiltersFromUrl(
           vm.$store.getters["services/getsearchInputPlain"],
           true
         );
        
         vm.networks = filters.search_networks; 
-        console.log(response);
       });
     },
     cellclicked() {},

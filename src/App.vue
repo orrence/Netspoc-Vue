@@ -46,8 +46,7 @@ export default {
   created() {
     var me = this;
     EventBus.$on("httperror", function (selection) {
-      console.log("ERROR NOW");
-      console.log(selection);
+
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);
 

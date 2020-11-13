@@ -150,7 +150,6 @@ export default {
       textsearch_payload = this.createPayloadElement(vm.searchInput.textsearch);
       generalpayload = this.createPayloadElement(vm.searchInput.general);
 
-      console.log(rulepayload);
       let basepayload;
       if (typeof this.relations[tabitem] !== "undefined") {
         basepayload = {
@@ -170,8 +169,7 @@ export default {
           ...generalpayload,
         };
       }
-      console.log("SEARCH NOW");
-      console.log(basepayload);
+    
       this.getServicesList({ data: basepayload });
     },
   },
