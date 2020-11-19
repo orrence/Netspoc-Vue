@@ -18,7 +18,7 @@
           id="cb_filter_search"
           :value="filterBySearch"
           @change="filterBySearchChange"
-          :disabled="tab_services !== 3"
+          :disabled="serviceTabNumber !== 3"
           label="Filtern nach Suche"
         /> 
       </v-col>
@@ -26,8 +26,20 @@
 </template>
 
 <script>
+import {mapState } from "vuex";
+
 export default {
     props: ['expandUser','tab_details','tab_services','filterBySearch','IPAsName'],
+    computed: {
+         ...mapState("services", ["serviceTabNumber"]),
+    },
+    watch: {
+      serviceTabNumber: {
+        handler() {
+         
+        }
+      }
+    },
     methods: {
         expandUserChange(val) {
             this.$emit('expandUserChanged', val);

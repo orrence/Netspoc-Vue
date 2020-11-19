@@ -31,7 +31,7 @@
       reactiveData="true"
       :data="rulesData"
       :selectable="false"
-      :groupBy="selection.length > 1 ? 'service' : ''"
+      :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
   </div>
 </template>
@@ -46,7 +46,6 @@ export default {
     Tabulator,
   },
   props: [
-    "selection",
     "expandUser",
     "IPAsName",
     "filterBySearch",
@@ -56,11 +55,12 @@ export default {
     data: [],
   }),
   computed: {
-    ...mapState("services", ["rulesData", "serviceTabNumber", "searchInput"]),
+    ...mapState("services", ["rulesData", "serviceTabNumber", "searchInput","serviceSelection"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
-    selection: function () {
+    serviceSelection: function () {
+      console.log('LOAD SELECTION');
       this.getRules();
     },
     expandUser: function () {
@@ -73,9 +73,6 @@ export default {
   
       this.getRules();
     },
-  },
-  mounted() {
-    //this.getRules();
   },
   methods: {
     ...mapActions("services", ["getServiceRules"]),
@@ -98,16 +95,10 @@ export default {
     },
     getRules() {
       var vm = this; // get vue instance
-
-      if (
-        !vm.getActiveOwner ||
-        !vm.getActivePolicy ||
-        vm.selection.length !== 1
-      ) {
-        vm.data = [];
+      if( vm.serviceSelection.length !== 1) {
         return;
       }
-
+  
       let rulepayload = {};
       let textsearch_payload = {};
       let generalpayload = {};
@@ -125,7 +116,7 @@ export default {
         display_property: vm.IPAsName ? "name" : "ip",
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
-        service: vm.selection.map((row) => row.name).join(","),
+        service: vm.serviceSelection.map((row) => row.name).join(","),
         filter_rules: vm.filterBySearch ? 1 : 0,
         ...rulepayload,
         ...textsearch_payload,

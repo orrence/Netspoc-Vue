@@ -51,12 +51,7 @@ export default {
   methods: {
     ...mapActions("networks", ["getNetworkResources"]),
     loadNetworkResources() {
-      var vm = this; // get vue instance
-
-      if (!vm.getActiveOwner || !vm.getActivePolicy || !vm.selection) {
-        vm.data = [];
-        return;
-      }
+      var vm = this;
 
       const params = {
         active_owner: vm.getActiveOwner,

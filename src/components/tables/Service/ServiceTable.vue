@@ -55,7 +55,6 @@ export default {
 
     passOnSelectionUpdate(row) {
       this.updateServiceSelection([row.getData()]);
-      //this.$emit("selectionUpdate", data);
     },
   },
 };

@@ -18,11 +18,8 @@
         <div v-else>{{ data.length }} {{ name }} verfügbar</div>
       </v-col>
 
-      <v-col v-if="selectable" cols="auto">
-        <v-btn icon color="blue lighten-2" @click="selectAll">
-          <span class="material-icons">add_circle_outline</span>
-        </v-btn>
-
+      <v-col v-if="selectable > 1" cols="auto">
+    
         <v-btn icon color="orange lighten-2" @click="deselectAll">
           <span class="material-icons">remove_circle_outline</span>
         </v-btn>
@@ -108,73 +105,14 @@ export default {
     },
   },
   mounted() {
-    /* if (this.height) {
-			this.$refs.table.setAttribute("style", "height:" + this.height + ";");
-		} else {
-			this.$nextTick(function() {
-				window.addEventListener('resize', this.resize);
-				this.resize();
-			});
-		} */
+ 
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
-    //this.config.minHeight = "200px";
     this.config.maxHeight = "500px";
     this.config = Object.assign({}, this.config, this.tableconfig);
-    //  var vm = this; // important
-
-    /*this.config.rowClick = function (e, row) {
-      if (!vm.selectable) return;
-
-      var ctrl = e.ctrlKey;
-      var shift = e.shiftKey;
-
-      if (ctrl && shift) {
-        let a, b;
-        if (vm.lastClick > row.getIndex()) {
-          a = row.getIndex();
-          b = vm.lastClick;
-        } else {
-          a = vm.lastClick;
-          b = row.getIndex();
-        }
-        for (a; a <= b; a++) {
-          if (vm.tabulator.getRow(a).isSelected()) vm.tabulator.deselectRow(a);
-          else vm.tabulator.selectRow(a);
-        }
-      } else if (ctrl) {
-        row.isSelected() ? row.deselect() : row.select();
-      } else if (shift) {
-        vm.deselectAll();
-        var a, b;
-        if (vm.lastClick > row.getIndex()) {
-          a = row.getIndex();
-          b = vm.lastClick;
-        } else {
-          a = vm.lastClick;
-          b = row.getIndex();
-        }
-        for (a; a <= b; a++) {
-          vm.tabulator.selectRow(a);
-        }
-      } else {
-        vm.deselectAll();
-        row.toggleSelect();
-      }
-      vm.lastClick = row.getIndex();
-    }; */
-
-    /*this.config.rowSelectionChanged = function (data) {
-      vm.selectedRows = data.length;
-      vm.selected = data;
-      vm.emitSelectionUpdate();
-    }; */
-
+   
     this.newTable();
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.resize);
   },
   methods: {
     newTable() {
@@ -189,31 +127,7 @@ export default {
     emitSelectionUpdate() {
       this.$emit("selectionUpdate", this.selected);
     },
-    visibilityChanged(isVisible) {
-      this.isVisible = isVisible;
-
-      if (!this.height) {
-        this.resize();
-      }
-      if (isVisible) {
-        if (this.newConfig) {
-          this.config.groupBy = this.groupBy;
-          this.newTable();
-          this.newConfig = false;
-          this.newData = false;
-        } else if (this.newData) {
-          this.config.data = this.data;
-          this.tabulator.replaceData(this.config.data);
-          this.newData = false;
-          if (typeof this.selectedNetworks != "undefined") {
-            this.selectedNetworks.forEach((param) => {
-              this.tabulator.selectRow(param);
-            });
-          }
-          this.isLoaded = true;
-        }
-      }
-    },
+   
     downloadAsPDF() {
       this.tabulator.download("pdf", `${this.name}.pdf`, {
         orientation: "portrait", //set page orientation to portrait
@@ -226,17 +140,6 @@ export default {
         `${this.name}_${this.getActiveOwner}_${this.getActivePolicy}.xlsx`,
         { sheetName: this.name }
       );
-    },
-    resize() {
-      this.$refs.table.setAttribute(
-        "style",
-        "min-height:200px; height:" +
-          (window.innerHeight -
-            this.$refs.table.getBoundingClientRect().top -
-            50) +
-          "px;"
-      );
-      // this.tabulator.redraw();
     },
   },
 };

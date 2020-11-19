@@ -25,7 +25,7 @@
         },
       ]"
       :data="usersData"
-      :groupBy="selection.length > 1 ? 'service' : ''"
+      :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
   </div>
 </template>
@@ -37,16 +37,16 @@ export default {
   components: {
     Tabulator,
   },
-  props: ["filterBySearch", "selection"],
+  props: ["filterBySearch"],
   data: () => ({
     data: [],
   }),
   computed: {
-    ...mapState("services", ["usersData","searchInput"]),
+    ...mapState("services", ["usersData","searchInput","serviceSelection"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
-    selection: function () {
+    serviceSelection: function () {
       this.getUsers();
     },
   },
@@ -67,18 +67,14 @@ export default {
     },
     getUsers() {
       var vm = this; // get vue instance
-      if (
-        !vm.getActiveOwner ||
-        !vm.getActivePolicy ||
-        vm.selection.length !== 1
-      ) {
-        vm.data = [];
+
+      if(vm.serviceSelection.length !== 1) {
         return;
       }
       const params = {
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
-        service: vm.selection.map((row) => row.name).join(","),
+        service: vm.serviceSelection.map((row) => row.name).join(","),
         expand_users: vm.expandUser ? 1 : 0,
         display_property: vm.IPAsName ? "name" : "ip",
         filter_rules: vm.filterBySearch ? 1 : 0,

@@ -28,7 +28,6 @@
     <v-tabs-items v-model="tab_details">
       <v-tab-item :key="0">
         <service-rules-table
-          :selection="serviceSelection"
           :expandUser="expandUser"
           :IPAsName="IPAsName"
           :filterBySearch="filterBySearch && serviceTabNumber === 3"
@@ -38,7 +37,6 @@
       <v-tab-item :key="1">
         <service-users-table
           :filterBySearch="filterBySearch"
-          :selection="serviceSelection"
         />
       </v-tab-item>
     </v-tabs-items>
@@ -75,15 +73,7 @@ export default {
     filterBySearch: true,
     admins: {},
   }),
-  watch: {
-    searchInput: {
-      deep: true,
-      handler() {
-        // this.tabservices = 3;
-        // this.getServices(3);
-      },
-    },
-  },
+
   computed: {
     ...mapState("services", [
       "searchInput",
@@ -103,9 +93,6 @@ export default {
         };
         this.$store.dispatch("services/getAdminsData", payload);
       }
-
-      //this.getServices(data);
-      // this.$store.dispatch('requestActive');
     },
   },
 };
