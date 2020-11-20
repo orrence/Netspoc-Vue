@@ -60,7 +60,6 @@ export default {
   },
   watch: {
     serviceSelection: function () {
-      console.log('LOAD SELECTION');
       this.getRules();
     },
     expandUser: function () {

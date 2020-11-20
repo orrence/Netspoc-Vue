@@ -20,7 +20,7 @@ sub test_services {
     $browser->find_element('//div[contains(@class, "v-tab") and text()="Eigene"]')->click();
     sleep 1;
     # Find changed services
-    my $services = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]');
+    my $services = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services_own"]');
     ok(0 == scalar @{$browser->find_child_elements($services, './/div[@class="tabulator-cell" and text()="Test10"]')}, 'Test 10 removed');
     ok(1 == scalar @{$browser->find_child_elements($services, './/div[@class="tabulator-cell" and text()="Test11"]')}, 'Found service test 11');
     ok(1 == scalar @{$browser->find_child_elements($services, './/div[@class="tabulator-cell" and text()="Test12"]')}, 'Found service test 12');

@@ -50,7 +50,7 @@ export default {
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);
 
-      me.dialog = true;
+     // me.dialog = true;
     });
   },
 };

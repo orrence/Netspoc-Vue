@@ -4,6 +4,7 @@
       elevation="2"
       class="ma-4 ml-0"
       raised
+      id="btn_open_search"
       color="secondary"
       @click.stop="openNavDrawer('search')"
     >

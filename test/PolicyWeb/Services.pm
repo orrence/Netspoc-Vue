@@ -11,6 +11,7 @@ sub test {
     subtest 'Own services grid' => sub {test_own_services($browser)};
     subtest 'Service details' => sub {test_service_details($browser)};
     subtest 'Search' => sub {test_search($browser)};
+    done_testing();
 }
 
 # This function tests the navigation tab
@@ -29,8 +30,8 @@ sub test_service_buttons {
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab") and contains(text(), "Genutzte")]')}, 'Button: Genutzte');
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab") and contains(text(), "Nutzbare")]')}, 'Button: Nutzbare');
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab")]/i[contains(@class, "v-icon") and contains(text(), "search")]')}, 'Button: Suche');
-    ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Services PDF');
-    ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Services XLSX');
+    ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-window-item--active")]/div[@id="table_services_own"]//span[contains(@class, "material-icons") and contains(text(), "picture_as_pdf")]')}, 'Button: Download Services PDF');
+    ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-window-item--active")]/div[@id="table_services_own"]//span[contains(@class, "material-icons") and contains(text(), "border_all")]')}, 'Button: Download Services XLSX');
     my $details = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Details zum Dienst")]');
     ok($details, 'Button: Details zum Dienst');
     ok(1 == scalar @{$browser->find_elements('//div[contains(@class, "v-tab") and contains(text(), "Benutzer (User) des Dienstes")]')}, 'Button: Benutzer (User) des Dienstes');
@@ -46,7 +47,7 @@ sub test_own_services {
     my ($browser) = @_;
     my $own = $browser->find_element('//div[contains(@class, "v-tab") and contains(text(), "Eigene")]');
     $own->click();
-    my $container = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]');
+    my $container = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services_own"]');
     my $table = $browser->find_child_element($container, './/div[contains(@class, "tabulator")]');
     ok($table, 'Table: Own services');
     my @rows = $browser->find_child_elements($table, './/div[contains(@class, "tabulator-row")]');
@@ -63,7 +64,7 @@ sub test_own_services {
 # Argument 0 => The browser for the tests
 sub test_service_details {
     my ($browser) = @_;
-    my $services = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services"]');
+    my $services = $browser->find_element('//div[contains(@class, "v-window-item--active")]/div[@id="table_services_own"]');
     my $details = $browser->find_element('//div[@id="table_services_rules"]');
     my $owner = $browser->find_element('//div[@id="table_admins"]');
     $browser->find_child_element($services, './/div[contains(@class, "tabulator-cell") and contains(text(), "Test4")]')->click();
@@ -120,10 +121,14 @@ sub test_service_details {
 # Argument 0 => The browser for the tests
 sub test_search {
     my ($browser) = @_;
-    my $search_options = $browser->find_element('//button[contains(text(), "Suchoptionen")]');
+    my $search_options = $browser->find_element('.//button[@id="btn_open_search"]');
+    
     $search_options->click();
+    sleep 1;
     # Find search inputs
-    my $container = $browser->find_child_element($search_options, '../div[contains(@class, "v-expansion-panel-content")]');
+    
+    my $container = $browser->find_element('.//div[@id="searchbar"]');
+
     my $input_ip1 = $browser->find_child_element($container, './/input[@id="txtf_search_ip1"]');
     ok($input_ip1, 'Found input field: IP1');
     my $input_ip2 = $browser->find_child_element($container, './/input[@id="txtf_search_ip2"]');
@@ -215,9 +220,9 @@ sub test_search {
     $input_ip1->send_keys('10.2.2.2');
     $input_start->click();
     $browser->execute_script('window.scrollTo(0,0)');
-    $search_options->click();
+    #$search_options->click();
     sleep 1;
-    $browser->find_element('//div[contains(@class, "v-window-item--active")]//div[@id="table_services"]//div[contains(@class, "tabulator-cell") and contains(text(), "Test9")]')->click();
+    $browser->find_element('//div[contains(@class, "v-window-item--active")]//div[@id="table_services_searchresult"]//div[contains(@class, "tabulator-cell") and contains(text(), "Test9")]')->click();
     $browser->find_element('//input[@id="cb_show_names"]/../../../..')->click();
     my $details = $browser->find_element('//div[@id="table_services_rules"]');
     sleep 1;
@@ -250,10 +255,11 @@ sub check_search_result() {
     my ($browser, $expected, $message) = @_;
     $browser->find_element('.//button[@id="btn_search_start"]')->click();
     $browser->execute_script('window.scrollTo(0,0)');
-    my $search_options = $browser->find_element('//button[contains(text(), "Suchoptionen")]');
-    $search_options->click();
+    my $search_options = $browser->find_element('.//button[@id="btn_open_search"]');
+
+    #$search_options->click();
     sleep 1;
-    my @services = $browser->find_elements('//div[contains(@class, "v-window-item--active")]//div[@id="table_services"]//div[contains(@class, "tabulator-cell")]');
+    my @services = $browser->find_elements('//div[contains(@class, "v-window-item--active")]//div[@id="table_services_own"]//div[contains(@class, "tabulator-cell")]');
     ok(scalar @services == $expected, $message);
     $search_options->click();
     sleep 1;
