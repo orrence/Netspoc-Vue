@@ -78,13 +78,7 @@ export default {
     },
   },
   watch: {
-    searchInput: {
-      deep: true,
-      handler() {
-        // this.tabservices = 3;
-        // this.getServices(3);
-      },
-    },
+
     active: {
       deep: true,
       handler() {
@@ -104,6 +98,10 @@ export default {
       if (selection == "search") {
         vm.serviceTabModel = 3;
         vm.getServices(3);
+      } else if(selection == "start") {
+        console.log('SELECTION IS START');
+         vm.serviceTabModel = 1;
+        vm.getServices(1);
       } else {
         vm.getServices(this.serviceTabModel);
       }

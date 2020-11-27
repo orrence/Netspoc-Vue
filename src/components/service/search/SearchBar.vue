@@ -238,6 +238,7 @@ export default {
     },
 
     searchUpdate() {
+       this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.$emit("closeSearch");
       this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
       this.emitSearchInputToParent();

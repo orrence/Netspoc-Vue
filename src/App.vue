@@ -21,7 +21,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="dialog = false"> OK </v-btn>
+          <v-btn color="primary" text @click="dialog = false" id="error_ok_btn"> OK </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -50,7 +50,7 @@ export default {
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);
 
-     // me.dialog = true;
+      me.dialog = true;
     });
   },
 };

@@ -39,6 +39,7 @@ sub test_fail_login {
     $browser->find_element('//input[@id="txt_password"]')->send_keys('qwertz');
     $browser->find_element('//button[@id="btn_login"]')->click();
     sleep 1;
+    $browser->find_element('//button[@id="error_ok_btn"]')->click();
     ok($browser->get_current_url() =~ '/login', 'Login as not-guest failed');
     $browser->clear_input($browser->find_element('//input[@id="txt_login"]'));
 }

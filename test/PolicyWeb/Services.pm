@@ -11,7 +11,7 @@ sub test {
     subtest 'Own services grid' => sub {test_own_services($browser)};
     subtest 'Service details' => sub {test_service_details($browser)};
     subtest 'Search' => sub {test_search($browser)};
-    done_testing();
+   
 }
 
 # This function tests the navigation tab

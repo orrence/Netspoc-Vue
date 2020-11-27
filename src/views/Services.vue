@@ -30,6 +30,14 @@
         </v-btn>
       </v-badge>
     </div>
+    <v-btn
+      elevation="2"
+      raised
+      
+      @click.stop="clearSearchFilter()"
+    >
+      <v-icon left>mdi-search-web</v-icon>Filter zurücksetzen</v-btn
+    >
 
     <v-navigation-drawer v-model="drawer" absolute temporary width="500">
       <search-bar @closeSearch="drawer = !drawer" />
@@ -65,6 +73,7 @@ import SearchBar from "../components/service/search/SearchBar";
 import NetselectionBar from "../components/service/search/NetselectionBar";
 import { mapState } from "vuex";
 import urlSearchParams from "../components/mixins/urlSearchParams";
+import EventBus from "../plugins/event-bus";
 
 export default {
   mixins: [urlSearchParams],
@@ -120,6 +129,12 @@ export default {
     recieveSearchInput(newInput) {
       this.search_input = newInput;
     },
+    clearSearchFilter() {
+       this.$store.commit("services/SET_LOADING_CIRCLE", true);
+       EventBus.$emit("selectionUpdated", "start");
+
+       window.location.hash = '';
+    }
   },
 };
 </script>

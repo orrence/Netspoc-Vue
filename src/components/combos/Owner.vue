@@ -23,7 +23,9 @@ export default {
 		...mapGetters(['getActiveOwner', 'getOwners']),
 		select: {
 			get () { return this.getActiveOwner; },
-			set (val) { this.$store.dispatch('setActive', val); }
+			set (val) { 
+				this.$store.commit("services/SET_LOADING_CIRCLE", true);
+				this.$store.dispatch('setActive', val); }
 		},
 	},
 	mounted () {
