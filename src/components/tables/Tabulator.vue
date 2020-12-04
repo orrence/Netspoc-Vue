@@ -19,7 +19,6 @@
       </v-col>
 
       <v-col v-if="selectable > 1" cols="auto">
-    
         <v-btn icon color="orange lighten-2" @click="deselectAll">
           <span class="material-icons">remove_circle_outline</span>
         </v-btn>
@@ -38,21 +37,20 @@ import { mapGetters } from "vuex";
 import Tabulator from "tabulator-tables";
 
 export default {
-  props: [
-    "tableconfig",
-    "groupBy",
-    "selectable",
-    "columns",
-    "data",
-    "height",
-    "name",
-    "maxSelections",
-    "selectedNetworks",
-    "selectFirstRow",
-  ],
+  props: {
+    tableconfig: Object,
+    groupBy: String,
+    selectable: Boolean,
+    columns: Array,
+    data: Array,
+    height: String,
+    name: String,
+    maxSelections: Number,
+    selectedNetworks: [Array, String],
+    selectfirstrow: String,
+  },
   data: () => ({
     isVisible: false,
-    newData: false,
     isLoaded: false,
     newConfig: false,
     tabulator: null, //variable to hold your table
@@ -71,18 +69,17 @@ export default {
   computed: mapGetters(["getActiveOwner", "getActivePolicy"]),
   watch: {
     //update table if data changes
+    selectfirstrow: {
+      handler: function () {
+        console.log("FIRST ROW IS NOW LOADED");
+      },
+    },
     data: {
       handler: function () {
         this.config.data = this.data;
         this.tabulator.setData(this.config.data);
-        if (this.data.length > 0) {
-          if (typeof this.selectFirstRow != "undefined") {
-            this.tabulator.selectRow(this.config.data[0].name);
-          }
-        }
 
         this.isLoaded = true;
-        this.newData = false;
       },
     },
     groupBy: {
@@ -105,14 +102,18 @@ export default {
     },
   },
   mounted() {
- 
+  
+  
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
     this.config.maxHeight = "500px";
     this.config = Object.assign({}, this.config, this.tableconfig);
-   
+
     this.newTable();
+    if (this.data.length > 0 && this.selectfirstrow) {
+      this.tabulator.selectRow(this.config.data[0].name);
+    }
   },
   methods: {
     newTable() {
@@ -127,7 +128,7 @@ export default {
     emitSelectionUpdate() {
       this.$emit("selectionUpdate", this.selected);
     },
-   
+
     downloadAsPDF() {
       this.tabulator.download("pdf", `${this.name}.pdf`, {
         orientation: "portrait", //set page orientation to portrait

@@ -2,6 +2,7 @@
   <div :id="compID">
     <div v-if="!showLoadingCircle">
       <Tabulator
+        selectfirstrow="true"
         :tableconfig="{
           reactiveData: true,
           selectable: 1,
@@ -16,10 +17,9 @@
             field: 'name',
           },
         ]"
-        :selectFirstRow="true"
+       
         :data="servicesData"
-        :selectable="true"
-        :groupBy="''"
+        :groupBy="'affe'"
       />
     </div>
     <div v-else style="min-height: 400px">
@@ -46,12 +46,9 @@ export default {
   watch: {
     servicesData: {
       handler() {
-
         if (this.activetab && this.servicesData.length > 0) {
           this.updateServiceSelection([this.servicesData[0]]);
-        } else {
-          this.updateServiceSelection([]);
-        }
+        } 
       },
     },
   },
