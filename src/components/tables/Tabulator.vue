@@ -107,7 +107,7 @@ export default {
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
-    this.config.maxHeight = "500px";
+    //this.config.maxHeight = "500px";
     this.config = Object.assign({}, this.config, this.tableconfig);
 
     this.newTable();

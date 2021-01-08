@@ -103,7 +103,9 @@ export default {
          vm.serviceTabModel = 1;
         vm.getServices(1);
       } else {
-        vm.getServices(this.serviceTabModel);
+        console.log('NEW RLATIOAN');
+        console.log(this.serviceTabModel);
+        vm.getServices(this.serviceTabModel ? 'undefined' : 0);
       }
     });
   },
@@ -132,7 +134,8 @@ export default {
     },
     getServices(tabitem) {
       var vm = this; // get vue instance
-
+      console.log('SEARHC INPUT');
+      console.log(vm.searchInput);
       if (
         !vm.getActiveOwner ||
         (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)

@@ -4,6 +4,7 @@ import Vue from 'vue';
 import axios from "axios";
 import router from '../router';
 import EventBus from './event-bus';
+import store from '../store'
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -12,8 +13,8 @@ import EventBus from './event-bus';
 
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
-  baseURL: '/backend/'
-  // timeout: 60 * 1000, // Timeout
+  baseURL: '/backend/',
+  timeout: 30 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
 
@@ -40,6 +41,7 @@ _axios.interceptors.response.use(
     // Do something with response error
     const response = error.response;
     if(response.data.msg == 'Login required') {
+      store.dispatch('setLoggedIn', false);
       router.replace({
         path: '/login',
         query: { redirect: router.currentRoute.fullPath}

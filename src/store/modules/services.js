@@ -97,8 +97,9 @@ export default {
 
     actions: {
         getServicesList({ commit }, payload) {
+    
             return Vue.axios.get('/service_list', {
-                params: payload.data
+                params: payload.data,
             }).then(res => {
             
                 commit('RECEIVED_SERVICESDATA', res.data);
