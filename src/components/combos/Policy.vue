@@ -1,7 +1,7 @@
 <template>
   <v-autocomplete
     id="combo_policy"
-    label="Policy"
+    label="Stand"
     v-model="policy"
     :items="getHistory"
     :item-text="show"

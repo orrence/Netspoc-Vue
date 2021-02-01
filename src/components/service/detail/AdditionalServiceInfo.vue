@@ -1,21 +1,15 @@
 <template>
-  <v-row dense>
+  <v-row dense ref="additionalfilter">
     <v-col>
       <v-row class="mx-2" dense :justify="'start'">
         <v-col cols="12">
-          <v-text-field
-            :value="serviceSelection[0].name"
-            label="Name"
-            dense
-            outlined
-            readonly
-          />
+          <v-text-field :value="name" label="Name" dense outlined readonly />
         </v-col>
       </v-row>
       <v-row class="mx-2" dense :justify="'start'">
         <v-col cols="12">
           <v-text-field
-            :value="serviceSelection[0].description"
+            :value="description"
             label="Beschreibung"
             dense
             outlined
@@ -34,15 +28,10 @@
           />
         </v-col>
       </v-row>
-      <v-row
-        class="mx-2"
-        v-if="serviceSelection[0].disable_at"
-        dense
-        :justify="'start'"
-      >
+      <v-row class="mx-2" v-if="disable_at != ''" dense :justify="'start'">
         <v-col cols="12">
           <v-text-field
-            :value="serviceSelection[0].disable_at"
+            :value="disable_at"
             label="Befristet bis:"
             dense
             outlined
@@ -50,12 +39,7 @@
           />
         </v-col>
       </v-row>
-      <v-row
-        class="mx-2"
-        v-if="serviceSelection[0].disabled"
-        dense
-        :justify="'start'"
-      >
+      <v-row class="mx-2" v-if="disabled != ''" dense :justify="'start'">
         <v-col cols="12">
           <v-text-field
             value="Disabled"
@@ -71,16 +55,34 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  props: ["serviceSelection"],
+  data: () => ({
+    name: "",
+    description: "",
+    disable_at: "",
+    disabled: "",
+    owner: "",
+  }),
   computed: {
-    owner() {
-      let myowner = "";
-      this.serviceSelection[0].owner.forEach((param) => {
-        myowner = param.name + "," + myowner;
-      });
-      return myowner;
+    ...mapState("services", ["serviceSelection"]),
+  },
+  watch: {
+    serviceSelection: function () {
+      if (this.serviceSelection.length > 0) {
+        let myowner = "";
+        this.name = this.serviceSelection[0].name;
+        this.description = this.serviceSelection[0].description;
+        this.serviceSelection[0].owner.forEach((param) => {
+          myowner = param.name + "," + myowner;
+        });
+        this.owner = myowner;
+      }
     },
+  },
+  mounted() {
+    let height = this.$refs.additionalfilter.clientHeight;
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card tile>
+  <v-card tile class="fill-height" elevation="1">
     <v-tabs
       @change="onChangeTab"
       background-color="lightgray"
@@ -20,11 +20,7 @@
       @filterBySearchChanged="filterBySearch = $event"
     />
 
-    <additional-service-info
-      v-if="serviceSelection.length == 1"
-      :serviceSelection="serviceSelection"
-    />
-
+    
     <v-tabs-items v-model="tab_details">
       <v-tab-item :key="0">
         <service-rules-table
@@ -35,15 +31,14 @@
         />
       </v-tab-item>
       <v-tab-item :key="1">
-        <service-users-table
-          :filterBySearch="filterBySearch"
-        />
+        <service-users-table :filterBySearch="filterBySearch" />
       </v-tab-item>
     </v-tabs-items>
 
     <AdminsTable
       v-if="serviceSelection.length < 2"
       :selection="serviceSelection"
+      :activetab="tab_details"
     />
   </v-card>
 </template>
@@ -53,7 +48,6 @@ import ServiceUsersTable from "../../tables/Service/ServiceUsersTable";
 import AdminsTable from "../../tables/AdminsTable";
 import ServiceRulesTable from "../../tables/Service/ServiceRulesTable";
 import AdditionalFilterOptions from "./AdditionalFilterOptions";
-import AdditionalServiceInfo from "./AdditionalServiceInfo";
 
 import { mapState, mapGetters } from "vuex";
 
@@ -63,7 +57,7 @@ export default {
     AdminsTable,
     ServiceRulesTable,
     AdditionalFilterOptions,
-    AdditionalServiceInfo,
+    
   },
   data: () => ({
     pnl_search: 0,
@@ -82,16 +76,11 @@ export default {
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
+
   methods: {
     onChangeTab(data) {
       if (data == 0) {
-        const payload = {
-          chosen_networks: this.searchInput.search_networks.join(","),
-          active_owner: this.getActiveOwner,
-          history: this.getActivePolicy,
-          owner: "",
-        };
-        this.$store.dispatch("services/getAdminsData", payload);
+        this.$store.dispatch("services/getAdminsData", "");
       }
     },
   },

@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid>
+  <div>
     <v-row dense :justify="'space-between'" :align="'center'">
-      <v-col cols="auto">
+      <v-col cols="auto" class="pa-0">
         <v-btn icon color="red lighten-2" @click="downloadAsPDF">
           <span class="material-icons">picture_as_pdf</span>
         </v-btn>
@@ -11,25 +11,22 @@
         </v-btn>
       </v-col>
 
-      <v-col v-if="selectable" cols="auto">
+      <v-col v-if="showCountHeader" cols="auto">
         <div v-if="selectedRows > 1">
           {{ selectedRows }} {{ name }} ausgewählt
         </div>
         <div v-else>{{ data.length }} {{ name }} verfügbar</div>
       </v-col>
-
-      <v-col v-if="selectable > 1" cols="auto">
-        <v-btn icon color="orange lighten-2" @click="deselectAll">
-          <span class="material-icons">remove_circle_outline</span>
-        </v-btn>
-      </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <div ref="table" />
-      </v-col>
-    </v-row>
-  </v-container>
+    <v-container
+      fluid
+      class="pa-1"
+      ref="tablecontainer"
+      :style="{ height: tabulatorheight + 'px' }"
+    >
+      <div ref="table" />
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -40,11 +37,12 @@ export default {
   props: {
     tableconfig: Object,
     groupBy: String,
-    selectable: Boolean,
+    showCountHeader: Boolean,
     columns: Array,
     data: Array,
     height: String,
     name: String,
+    variableHeight: Number,
     maxSelections: Number,
     selectedNetworks: [Array, String],
     selectfirstrow: String,
@@ -53,6 +51,7 @@ export default {
     isVisible: false,
     isLoaded: false,
     newConfig: false,
+    tabulatorheight: 200,
     tabulator: null, //variable to hold your table
     selected: [],
     selectedRows: 0,
@@ -69,9 +68,9 @@ export default {
   computed: mapGetters(["getActiveOwner", "getActivePolicy"]),
   watch: {
     //update table if data changes
-    selectfirstrow: {
+    variableHeight: {
       handler: function () {
-        console.log("FIRST ROW IS NOW LOADED");
+        this.tabulatorheight = this.variableHeight - 36;
       },
     },
     data: {
@@ -102,15 +101,26 @@ export default {
     },
   },
   mounted() {
-  
-  
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
-    //this.config.maxHeight = "500px";
+
+    if (typeof this.variableHeight != "number") {
+      let tabheight =
+        window.innerHeight -
+        this.$refs.tablecontainer.getBoundingClientRect().top -
+        14;
+      this.tabulatorheight = tabheight;
+    } else {
+      this.tabulatorheight = this.variableHeight;
+    }
+    this.config.maxHeight = "100%";
+    this.config.height = "100%";
+
     this.config = Object.assign({}, this.config, this.tableconfig);
 
     this.newTable();
+
     if (this.data.length > 0 && this.selectfirstrow) {
       this.tabulator.selectRow(this.config.data[0].name);
     }

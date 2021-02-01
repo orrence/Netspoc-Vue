@@ -9,8 +9,8 @@ export const requestOwners = ({ commit }) => {
             }
             commit('setOwners', recurare);
         })
-        .catch(function (error) {
-            alert('get_owners: ' + error);
+        .catch(function () {
+           
         });
 };
 
@@ -27,12 +27,10 @@ export const requestActive = ({ commit, dispatch, state }) => {
                             policy: state.history[0]
                         });
                 })
-                .catch(function (error) {
-                    alert('get_history in setActive: ' + error);
+                .catch(function () {
                 });
         })
-        .catch(function (error) {
-            alert('get_owner: ' + error);
+        .catch(function () {
         });
 };
 
@@ -52,13 +50,11 @@ export const setActive = ({ commit, dispatch, state }, newActiveOwner) => {
                                 policy: state.history[0]
                             });
                     })
-                    .catch(function (error) {
-                        alert('get_history in setActive: ' + error);
+                    .catch(function () {
                     });
             }
         })
-        .catch(function (error) {
-            alert('setActiveOwner: ' + error);
+        .catch(function () {
         });
 };
 
@@ -77,7 +73,6 @@ export const requestHistory = ({ commit }, owner) => {
             let recurare = response.data.records;
             commit('setHistory', recurare);
         })
-        .catch(function (error) {
-            alert('get_history: ' + error);
+        .catch(function () {
         });
 };

@@ -74,8 +74,7 @@ const router = new VueRouter ({
 router.beforeEach ((to, from, next) => {
 	if(to.matched.some(record => record.meta.requiresAuth)) {
 		// todo check if is already loggedin
-		console.log('IS LOGGED IN ?');
-		console.log(store.getters['auth/getLoggedIn']);
+	
 		if (store.getters['auth/getLoggedIn'] == 'false' || store.getters['auth/getLoggedIn'] == null ) {
 			router.push('/login');
 		} 

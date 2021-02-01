@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="primary" dark v-if="getLoggedIn" elevate-on-scroll>
+  <v-app-bar app color="primary" dark v-if="getLoggedIn">
     <v-tabs  slider-color="orange">
       <v-tab id="tab_services" to="/services">Dienste</v-tab>
 

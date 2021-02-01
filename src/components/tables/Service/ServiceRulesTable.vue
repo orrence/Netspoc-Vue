@@ -1,65 +1,78 @@
 <template>
   <div id="table_services_rules">
-    <Tabulator
-      :name="`Dienstdetails`"
-      :columns="[
-        {
-          title: 'Aktion',
-          field: 'action',
-          formatter: 'textarea',
-          width: 77,
-        },
-        {
-          title: 'Quelle',
-          field: 'src',
-          formatter: 'textarea',
-          sorter: 'ip',
-        },
-        {
-          title: 'Ziel',
-          field: 'dst',
-          formatter: 'textarea',
-          sorter: 'ip',
-        },
-        {
-          title: 'Protokoll',
-          field: 'prt',
-          formatter: 'textarea',
-          width: 92,
-        },
-      ]"
-      reactiveData="true"
-      :data="rulesData"
-      :selectable="false"
-      :groupBy="serviceSelection.length > 1 ? 'service' : ''"
-    />
+    <additional-service-info />
+    <div ref="servicerulestable">
+      <Tabulator
+        :name="`Dienstdetails`"
+        :columns="[
+          {
+            title: 'Aktion',
+            field: 'action',
+            formatter: 'textarea',
+            width: 77,
+          },
+          {
+            title: 'Quelle',
+            field: 'src',
+            formatter: 'textarea',
+            sorter: 'ip',
+          },
+          {
+            title: 'Ziel',
+            field: 'dst',
+            formatter: 'textarea',
+            sorter: 'ip',
+          },
+          {
+            title: 'Protokoll',
+            field: 'prt',
+            formatter: 'textarea',
+            width: 92,
+          },
+        ]"
+        reactiveData="true"
+        :tableconfig="{}"
+        :variableHeight="tabheight"
+        :data="rulesData"
+        :selectable="false"
+        :groupBy="serviceSelection.length > 1 ? 'service' : ''"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 import Tabulator from "../Tabulator";
-import Vue from 'vue';
+import Vue from "vue";
+import AdditionalServiceInfo from "../../service/detail/AdditionalServiceInfo";
 
 export default {
   components: {
     Tabulator,
+    AdditionalServiceInfo,
   },
-  props: [
-    "expandUser",
-    "IPAsName",
-    "filterBySearch",
-    "search_input",
-  ],
+  props: ["expandUser", "IPAsName", "filterBySearch", "search_input"],
   data: () => ({
     data: [],
+    tabheight: 100,
   }),
   computed: {
-    ...mapState("services", ["rulesData", "serviceTabNumber", "searchInput","serviceSelection"]),
+    ...mapState("services", [
+      "rulesData",
+      "serviceTabNumber",
+      "searchInput",
+      "serviceSelection",
+    ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     serviceSelection: function () {
+      let restheight =
+        (window.innerHeight -
+          this.$refs.servicerulestable.getBoundingClientRect().top) *
+        0.5;
+      this.tabheight = restheight;
       this.getRules();
     },
     expandUser: function () {
@@ -69,9 +82,15 @@ export default {
       this.getRules();
     },
     filterBySearch: function () {
-  
       this.getRules();
     },
+  },
+  mounted() {
+    let restheight =
+      (window.innerHeight -
+        this.$refs.servicerulestable.getBoundingClientRect().top) *
+      0.5;
+    this.tabheight = restheight;
   },
   methods: {
     ...mapActions("services", ["getServiceRules"]),
@@ -94,10 +113,10 @@ export default {
     },
     getRules() {
       var vm = this; // get vue instance
-      if( vm.serviceSelection.length !== 1) {
+      if (vm.serviceSelection.length !== 1) {
         return;
       }
-  
+
       let rulepayload = {};
       let textsearch_payload = {};
       let generalpayload = {};
@@ -123,7 +142,6 @@ export default {
         chosen_networks: vm.searchInput.search_networks.join(","),
       };
       this.getServiceRules(payload);
-     
     },
   },
 };

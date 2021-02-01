@@ -1,11 +1,13 @@
 <template>
 <v-autocomplete
 	id="combo_owner"
-	label="Owner"
+	label="Verantwortungsbereich"
 	v-model="select"
 	:items="getOwners"
 	outlined
 	dense
+	loading="true"
+	:menu-props="{ auto: true, overflowY: false}"
 	color="orange"
 />
 </template>

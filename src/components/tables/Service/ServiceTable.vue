@@ -1,6 +1,6 @@
 <template>
-  <div :id="compID">
-    <div v-if="!showLoadingCircle">
+  <div :id="compID" ref="tableBox" class="Tesmnnn"> 
+    <div v-if="!showLoadingCircle" >
       <Tabulator
         selectfirstrow="true"
         :tableconfig="{
@@ -8,9 +8,11 @@
           selectable: 1,
           index: 'name',
           rowSelected: passOnSelectionUpdate,
-          maxHeight: '500px',
+ 
+         // maxHeight: '400px',
           //rowSelectionChanged: passOnSelectionUpdate
         }"
+         :showCountHeader="true"
         :name="'Dienste'"
         :columns="[
           {
@@ -18,9 +20,8 @@
             field: 'name',
           },
         ]"
-       
+        :groupBy="''"
         :data="servicesData"
-        :groupBy="'affe'"
       />
     </div>
     <div v-else style="min-height: 400px">
@@ -40,9 +41,11 @@ export default {
   props: ["compID", "activetab"],
   data: () => ({
     data: [],
+    tableheight: 200,
   }),
   computed: {
     ...mapState("services", ["servicesData", "showLoadingCircle"]),
+    
   },
   watch: {
     servicesData: {

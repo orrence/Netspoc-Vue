@@ -1,5 +1,5 @@
 <template>
-  <v-card tile>
+  <v-card tile class="fill-height" elevation="1">
     <v-tabs
       @change="onChangeTab"
       v-model="serviceTabModel"
@@ -22,8 +22,8 @@
         ></v-progress-circular>
       </div>
     </div>
-    <v-tabs-items v-model="serviceTabModel">
-      <v-tab-item :key="0" transition="false">
+    <v-tabs-items v-model="serviceTabModel" class="HAHHAA">
+      <v-tab-item :key="0" transition="false" class="fill-height">
         <ServiceTable
           :activetab="serviceTabModel == 0 ? true : false"
           compID="table_services_own"
@@ -48,6 +48,7 @@
         />
       </v-tab-item>
     </v-tabs-items>
+    
   </v-card>
 </template>
 
@@ -64,7 +65,12 @@ export default {
     relations: ["owner", "user", "visible"],
   }),
   computed: {
-    ...mapState("services", ["searchInput", "searchArea", "serviceTabNumber","showLoadingCircle"]),
+    ...mapState("services", [
+      "searchInput",
+      "searchArea",
+      "serviceTabNumber",
+      "showLoadingCircle",
+    ]),
     ...mapState(["active"]),
     ...mapState("services", ["servicesData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
@@ -78,7 +84,6 @@ export default {
     },
   },
   watch: {
-
     active: {
       deep: true,
       handler() {
@@ -88,7 +93,6 @@ export default {
     servicesData: {
       handler() {
         this.$store.commit("services/SET_LOADING_CIRCLE", false);
-
       },
     },
   },
@@ -98,14 +102,12 @@ export default {
       if (selection == "search") {
         vm.serviceTabModel = 3;
         vm.getServices(3);
-      } else if(selection == "start") {
-        console.log('SELECTION IS START');
-         vm.serviceTabModel = 1;
+      } else if (selection == "start") {
+        vm.serviceTabModel = 1;
         vm.getServices(1);
       } else {
-        console.log('NEW RLATIOAN');
-        console.log(this.serviceTabModel);
-        vm.getServices(this.serviceTabModel ? 'undefined' : 0);
+    
+        vm.getServices(this.serviceTabModel ? "undefined" : 0);
       }
     });
   },
@@ -134,8 +136,7 @@ export default {
     },
     getServices(tabitem) {
       var vm = this; // get vue instance
-      console.log('SEARHC INPUT');
-      console.log(vm.searchInput);
+    
       if (
         !vm.getActiveOwner ||
         (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)
@@ -170,7 +171,7 @@ export default {
           ...generalpayload,
         };
       }
-    
+
       this.getServicesList({ data: basepayload });
     },
   },

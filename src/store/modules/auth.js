@@ -8,10 +8,9 @@ export default {
         loginError: false,
     },
     getters: {
-        getLoggedIn: state => {
-            console.log('MY STATE');
-            console.log(state.loggedIn);
-            return state.loggedIn || localStorage.getItem('loggedIn');
+        getLoggedIn: () => {
+
+            return  localStorage.getItem('loggedIn');
         },
         getLoginError: state => {
             return state.loginError;
@@ -63,8 +62,7 @@ export default {
             ).then(function () {
                 dispatch('setLoggedIn', false);
                 router.push('/login');
-            }).catch(function (error) {
-                alert('logout: ' + error);
+            }).catch(function () {
             });
         }
     }

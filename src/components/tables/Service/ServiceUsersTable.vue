@@ -1,6 +1,7 @@
 <template>
-  <div id="table_services_user">
+  <div id="table_services_user" ref="serviceuserstable">
     <Tabulator
+      selectfirstrow="true"
       :tableconfig="{
         reactiveData: true,
         selectable: 1,
@@ -25,6 +26,7 @@
         },
       ]"
       :data="usersData"
+      :variableHeight="tabheight"
       :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
   </div>
@@ -40,9 +42,10 @@ export default {
   props: ["filterBySearch"],
   data: () => ({
     data: [],
+    tabheight: 100,
   }),
   computed: {
-    ...mapState("services", ["usersData","searchInput","serviceSelection"]),
+    ...mapState("services", ["usersData", "searchInput", "serviceSelection"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
@@ -51,24 +54,23 @@ export default {
     },
   },
   mounted() {
+    let restheight =
+      (window.innerHeight -
+        this.$refs.serviceuserstable.getBoundingClientRect().top) *
+      0.5;
+  
+    this.tabheight = restheight;
     this.getUsers();
   },
   methods: {
     ...mapActions("services", ["getServiceUsers"]),
     passOnSelectionUpdate(data) {
-  
-      const payload = {
-        chosen_networks: this.searchInput.search_networks.join(","),
-        active_owner: this.getActiveOwner,
-        history: this.getActivePolicy,
-        owner: data.getData().owner,
-      };
-      this.$store.dispatch('services/getAdminsData',payload);
+      this.$store.dispatch("services/getAdminsData", data.getData().owner);
     },
     getUsers() {
       var vm = this; // get vue instance
 
-      if(vm.serviceSelection.length !== 1) {
+      if (vm.serviceSelection.length !== 1) {
         return;
       }
       const params = {

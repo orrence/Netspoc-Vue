@@ -1,18 +1,17 @@
 <template>
-  <div id="table_admins">
+  <div id="table_admins" ref="adminstable">
     <Tabulator
       :name="`Verantwortliche`"
       :columns="[
-	{
-		title: 'Verantwortung',
-		field: 'email',
-	}
-]"
+        {
+          title: 'Verantwortung',
+          field: 'email',
+        },
+      ]"
       reactiveData="true"
+      :variableHeight="tabheight"
       :data="adminsData"
-      :selectable="false"
-      :groupBy="'owner'"
-
+      :showCountHeader="false"
     />
   </div>
 </template>
@@ -25,21 +24,22 @@ export default {
   components: {
     Tabulator,
   },
-  props: ["selection"],
+  props: ["selection", "activetab"],
   data: () => ({
     data: [],
     buffer: [],
+    tabheight: 100,
   }),
   computed: {
     ...mapState(["active"]),
-    ...mapState("services", ["adminsData","searchInput"]),
+    ...mapState("services", ["adminsData", "searchInput"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
-    active: {
-      deep: true,
+    activetab: {
       handler() {
-        this.getAdminsForAllOwner();
+        console.log("IT BECOME ACTIVE NOW");
+     //   this.calcHeight();
       },
     },
     selection: {
@@ -48,46 +48,26 @@ export default {
         this.getAdminsForAllOwner();
       },
     },
-    
   },
   mounted() {
+    this.calcHeight();
     this.getAdminsForAllOwner();
   },
   methods: {
     ...mapActions("services", ["getAdminsData"]),
+    calcHeight() {
+      let restheight =
+        window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
+      this.tabheight = restheight -11;
+    },
     getAdminsForAllOwner() {
-  
       if (this.selection.length > 0) {
         var owner = this.selection[0].owner.map((owner) => owner.name);
-         this.getAdmins(owner[0]);
+        this.getAdmins(owner[0]);
       }
     },
     getAdmins(owner) {
-      var vm = this;
-  
-      const payload = {
-        chosen_networks: vm.searchInput.search_networks.join(","),
-        active_owner: vm.getActiveOwner,
-        history: vm.getActivePolicy,
-        owner: owner,
-      };
-      this.$store.dispatch('services/getAdminsData',payload);
-      //this.getAdminsData(payload);
-
-      /*.then(function (response) {
-          var admins = response.data.records;
-          for (let i = 0; i < admins.length; i++) {
-            vm.buffer.push({
-              owner: owner,
-              email: admins[i].email,
-            });
-          }
-          vm.requests--;
-        })
-        .catch(function (error) {
-          vm.requests--;
-          alert(`get_admins(${owner}): ` + error);
-        }); */
+      this.$store.dispatch("services/getAdminsData", owner);
     },
   },
 };

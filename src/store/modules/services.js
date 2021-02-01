@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '../'
 
 export default {
     namespaced: true,
@@ -132,7 +133,13 @@ export default {
                 commit('RECEIVED_RULESDATA', resdata);
             })
         },
-        getAdminsData({ commit }, payload) {
+        getAdminsData({ commit }, ownerparam) {
+            const payload = {
+                chosen_networks: store.state.services.searchInput.search_networks.join(","),
+                active_owner: store.getters.getActiveOwner,
+                history: store.getters.getActivePolicy,
+                owner: ownerparam,
+              };
             return Vue.axios.get('/get_admins', {
                 params: payload
             }).then(function (response) {
@@ -141,12 +148,13 @@ export default {
             })
         },
 
-        getServiceUsers({ commit }, payload) {
+        getServiceUsers({ commit, dispatch }, payload) {
             return Vue.axios.get('/get_users', {
                 params: payload
             }).then(function (response) {
                 commit('RECEIVED_USERSDATA', response.data.records);
-
+        
+                dispatch('getAdminsData',response.data.records[0].owner);
             })
         },
         updateServiceSelection({ commit }, payload) {
