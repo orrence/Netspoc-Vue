@@ -55,7 +55,7 @@ export default {
             state.rulesData = payload;
         },
         RECEIVED_ADMINSDATA(state, payload) {
-        
+
             state.adminsData = payload;
         },
         SEARCH_UPDATE(state, payload) {
@@ -71,16 +71,16 @@ export default {
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;
         },
-        SET_LOADING_CIRCLE(state,payload) {
+        SET_LOADING_CIRCLE(state, payload) {
             state.showLoadingCircle = payload;
         },
         UPDATE_SERVICE_SELECTION(state, payload) {
             state.serviceSelection = payload;
         },
-        UPDATE_SERVICE_TAB_NUMBER(state,payload) {
+        UPDATE_SERVICE_TAB_NUMBER(state, payload) {
             state.serviceTabNumber = payload;
         },
-        UPDATE_SEARCH_FROM_URLHASH(state,payload) {
+        UPDATE_SEARCH_FROM_URLHASH(state, payload) {
             let temp = state.searchInput;
             for (const [key] of Object.entries(state.searchInput.rules)) {
                 temp.rules[key] = payload[key];
@@ -98,17 +98,17 @@ export default {
 
     actions: {
         getServicesList({ commit }, payload) {
-    
+
             return Vue.axios.get('/service_list', {
                 params: payload.data,
             }).then(res => {
-            
+
                 commit('RECEIVED_SERVICESDATA', res.data);
-                if(res.data.totalCount == 0){
+                if (res.data.totalCount == 0) {
                     commit('RECEIVED_RULESDATA', []);
                     commit('RECEIVED_ADMINSDATA', []);
                 }
-            
+
             })
         },
         getServiceRules({ commit }, payload) {
@@ -118,6 +118,8 @@ export default {
                 let resdata = res.data.records;
                 for (let j = 0; j < resdata.length; j++) {
                     resdata[j].src = resdata[j].src.join("\n");
+                    resdata[j].dst = resdata[j].dst.join("\n");
+                    resdata[j].prt = resdata[j].prt.join("\n");
                     switch (resdata[j].has_user) {
                         case "both":
                             resdata[j].src = "User";
@@ -125,6 +127,10 @@ export default {
                             break;
                         case "src":
                             resdata[j].src = "User";
+                            break;
+                        case "dst":
+                            resdata[j].src = "User";
+                            resdata[j].dst = "User";
                             break;
                         default:
                     }
@@ -139,12 +145,12 @@ export default {
                 active_owner: store.getters.getActiveOwner,
                 history: store.getters.getActivePolicy,
                 owner: ownerparam,
-              };
+            };
             return Vue.axios.get('/get_admins', {
                 params: payload
             }).then(function (response) {
                 commit('RECEIVED_ADMINSDATA', response.data.records);
-        
+
             })
         },
 
@@ -153,15 +159,15 @@ export default {
                 params: payload
             }).then(function (response) {
                 commit('RECEIVED_USERSDATA', response.data.records);
-        
-                dispatch('getAdminsData',response.data.records[0].owner);
+
+                dispatch('getAdminsData', response.data.records[0].owner);
             })
         },
         updateServiceSelection({ commit }, payload) {
             commit('UPDATE_SERVICE_SELECTION', payload);
         },
-         
-  
-       
+
+
+
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <v-container fluid id="servicefilters" class="py-0">
+    <v-container fluid id="servicefilters">
       <v-row>
         <v-col cols="12">
           <service-filters
@@ -28,7 +28,7 @@
       />
     </v-navigation-drawer>
 
-    <v-container fluid class="pt-0" :style="{ height: containerheight + 'px' }">
+    <v-container fluid class="pt-0" >
       <v-row no-gutters class="fill-height">
         <v-col cols="4" class="fill-height">
          <service-tabs class="mr-2" />
@@ -79,11 +79,11 @@ export default {
     window.removeEventListener("resize", this.resizeContainer);
   },
   mounted() {
-    let height = document.getElementById("servicefilters").clientHeight;
+   // let height = document.getElementById("servicefilters").clientHeight;
 
-    this.containerheight = window.innerHeight - 64 - height;
+   // this.containerheight = window.innerHeight - 64 - height;
     if (this.$route.hash == "") {
-      this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 0);
+      this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {
       let filters = this.getFiltersFromUrl(
         this.$store.getters["services/getsearchInputPlain"],

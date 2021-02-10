@@ -70,7 +70,9 @@ export const requestHistory = ({ commit }, owner) => {
         }
     })
         .then(function (response) {
+            console.log('GET HISTORY');
             let recurare = response.data.records;
+            console.log(recurare);
             commit('setHistory', recurare);
         })
         .catch(function () {

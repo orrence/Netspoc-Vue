@@ -8,9 +8,8 @@
           selectable: 1,
           index: 'name',
           rowSelected: passOnSelectionUpdate,
- 
-         // maxHeight: '400px',
-          //rowSelectionChanged: passOnSelectionUpdate
+          
+      
         }"
          :showCountHeader="true"
         :name="'Dienste'"

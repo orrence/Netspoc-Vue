@@ -6,8 +6,7 @@
 	:items="getOwners"
 	outlined
 	dense
-	loading="true"
-	:menu-props="{ auto: true, overflowY: false}"
+	:menu-props="{ auto: true}"
 	color="orange"
 />
 </template>
@@ -39,6 +38,11 @@ export default {
 			.then(() => {
 				this.loadedActiveOwner = true;
 			});
+	},
+	methods: {
+		filterClicked() {
+			console.log('FILTER WAS CLICKED');
+		}
 	}
 }
 </script>

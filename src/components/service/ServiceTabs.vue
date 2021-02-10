@@ -9,7 +9,7 @@
       <v-tab>Eigene</v-tab>
       <v-tab>Genutzte</v-tab>
       <v-tab>Nutzbare</v-tab>
-      <v-tab>
+      <v-tab v-if="serviceTabModel == 3">
         <v-icon>search</v-icon>
       </v-tab>
     </v-tabs>
@@ -41,7 +41,7 @@
           compID="table_services_usable"
         />
       </v-tab-item>
-      <v-tab-item :key="3">
+      <v-tab-item v-if="serviceTabModel == 3" :key="3">
         <ServiceTable
           :activetab="serviceTabModel == 3 ? true : false"
           compID="table_services_searchresult"
@@ -178,7 +178,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .loadingoverlay {
   position: absolute;
   height: 100%;

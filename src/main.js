@@ -7,16 +7,16 @@ import './plugins/axios'
 import './plugins/vueObserveVisibility'
 
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
-import 'vue-tabulator/dist/scss/bootstrap/tabulator_bootstrap4.scss'
+//import 'vue-tabulator/dist/scss/bootstrap/tabulator_bootstrap4.scss'
 import 'tabulator-tables/dist/css/tabulator.min.css'
 // import 'tabulator-tables/dist/css/materialize/tabulator_materialize.min.css'
 import Tabulator from 'tabulator-tables';
-import VueTabulator from 'vue-tabulator';
+//import VueTabulator from 'vue-tabulator';
 import App from './App.vue'
 
-Vue.use(VueTabulator, {
+/*Vue.use(VueTabulator, {
     name: 'MyTable'
-})
+})*/
 Tabulator.prototype.extendModule("sort", "sorters", {
     ip:function(a, b){
         var ip2numeric = function(dot) {
@@ -34,7 +34,6 @@ Tabulator.prototype.extendModule("sort", "sorters", {
         return a - b;
     },
 });
-
 
 Vue.config.productionTip = true
 

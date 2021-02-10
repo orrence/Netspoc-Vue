@@ -7,16 +7,18 @@
         selectable: 20,
         index: 'name',
         rowSelectionChanged: passOnSelectionUpdate,
-
+       
       }"
       :columns="[
         {
-          formatter: 'rowSelection',
-          titleFormatter: 'rowSelection',
+           formatter: 'rowSelection',
+          //formatter: 'tickCross',
+          // titleFormatter: 'rowSelection',
           hozAlign: 'center',
           width: 10,
           headerSort: false,
           field: 'selected',
+          cellClick: (e, cell) => this.cellclicked(e, cell),
         },
         {
           title: 'IP-Addresse',
@@ -36,7 +38,6 @@
       :selectedNetworks="networks"
       :groupBy="''"
       :height="height"
-  
     />
   </div>
 </template>
@@ -75,7 +76,7 @@ export default {
     ...mapActions("networks", ["getNetworks"]),
     loadNetworks() {
       var vm = this; // get vue instance
-     /* if (!vm.getActiveOwner) {
+      /* if (!vm.getActiveOwner) {
         vm.data = [];
         return;
       } */
@@ -86,19 +87,29 @@ export default {
       };
 
       this.getNetworks(params).then(function () {
-         let filters = vm.getFiltersFromUrl(
+        let filters = vm.getFiltersFromUrl(
           vm.$store.getters["services/getsearchInputPlain"],
           true
         );
-       
-        vm.networks = filters.search_networks; 
+
+        vm.networks = filters.search_networks;
       });
     },
-    cellclicked() {},
-    passOnSelectionUpdate(data) {
+    cellclicked(e, cell) {
+      console.log(cell);
+      cell.setValue(!cell.getValue());
+      e.stopPropagation();
+    },
+    rowwasclicked(e, row) {
+      console.log("ROW CLICK");
+      console.log(e);
+      console.log(row);
+    },
+    passOnSelectionUpdate(data, rows) {
+      console.log(rows);
       this.$emit(
         "selectionUpdate",
-       data.map((row) => row.name)
+        data.map((row) => row.name)
       );
     },
   },

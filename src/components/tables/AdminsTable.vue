@@ -36,12 +36,6 @@ export default {
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
-    activetab: {
-      handler() {
-        console.log("IT BECOME ACTIVE NOW");
-     //   this.calcHeight();
-      },
-    },
     selection: {
       handler() {
         this.admins = {};
@@ -56,9 +50,11 @@ export default {
   methods: {
     ...mapActions("services", ["getAdminsData"]),
     calcHeight() {
+    
+      let menuheight = document.getElementById('apptoolbar').clientHeight;
       let restheight =
-        window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
-      this.tabheight = restheight -11;
+        window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top-menuheight;
+      this.tabheight = restheight -3;
     },
     getAdminsForAllOwner() {
       if (this.selection.length > 0) {

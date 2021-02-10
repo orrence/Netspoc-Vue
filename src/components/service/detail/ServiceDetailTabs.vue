@@ -1,5 +1,5 @@
 <template>
-  <v-card tile class="fill-height" elevation="1">
+  <v-card tile class="fill-height" elevation="1" v-if="appLoaded">
     <v-tabs
       @change="onChangeTab"
       background-color="lightgray"
@@ -75,6 +75,9 @@ export default {
       "serviceTabNumber",
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
+    appLoaded: function() {
+      return this.$store.getters['auth/getLoggedIn'];
+    }
   },
 
   methods: {

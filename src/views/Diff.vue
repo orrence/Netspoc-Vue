@@ -87,13 +87,17 @@ export default {
 			this.oldPolicy = newSelected;
 		},
 		getOlderPolicies () {
-			if (!this.getActivePolicy) {
-				return;
-			}
+			console.log('ACTIVE POLIFY');
+			console.log(this.getActivePolicy);
+			
 			var history = this.getHistory;
+			console.log(this.getHistory);
 			var active = this.active.policy.date;
 			var newOld = [];
 			for (let i = 0; i < history.length; i++) {
+				console.log(active);
+				console.log('HALLO');
+				console.log(history[i].date);
 				if (active > history[i].date) {
 					newOld.push(history[i]);
 				}

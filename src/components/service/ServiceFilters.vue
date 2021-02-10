@@ -26,30 +26,44 @@
           color="secondary"
           @click.stop="openNav('netselection')"
         >
-          <v-icon left>mdi-search-web</v-icon>Netzauswahl
+          Netzauswahl
         </v-btn>
       </v-badge>
     </div>
-    <v-btn elevation="2" raised @click.stop="clearFilter()">
-        <v-icon left>mdi-search-web</v-icon>Filter zurücksetzen</v-btn
-      >
+    <v-btn
+      :disabled="isSearchActive"
+      elevation="2"
+      raised
+      @click.stop="clearFilter()"
+    >
+      Filter zurücksetzen</v-btn
+    >
   </div>
 </template>
 
 <script>
 export default {
   props: {
-		networkCount: {
-			required: true
-		}
-	},
+    networkCount: {
+      required: true,
+    },
+  },
+  computed: {
+    isSearchActive: function () {
+      if(this.$route.hash != "") {
+        return false;
+      } 
+      return true;
+    },
+  },
   methods: {
     openNav(type) {
       this.$emit("openNavDrawer", type);
     },
+
     clearFilter() {
       this.$emit("clearSearchFilter");
-    }
+    },
   },
 };
 </script>

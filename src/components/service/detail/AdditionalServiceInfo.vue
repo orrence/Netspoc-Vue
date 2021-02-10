@@ -1,7 +1,7 @@
 <template>
   <v-row dense ref="additionalfilter">
     <v-col>
-      <v-row class="mx-2" dense :justify="'start'">
+      <v-row class="ma-2" dense :justify="'start'">
         <v-col cols="12">
           <v-text-field :value="name" label="Name" dense outlined readonly />
         </v-col>
@@ -80,9 +80,6 @@ export default {
         this.owner = myowner;
       }
     },
-  },
-  mounted() {
-    let height = this.$refs.additionalfilter.clientHeight;
   },
 };
 </script>

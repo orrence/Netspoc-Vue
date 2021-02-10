@@ -8,9 +8,9 @@ export default {
         loginError: false,
     },
     getters: {
-        getLoggedIn: () => {
+        getLoggedIn: state => {
 
-            return  localStorage.getItem('loggedIn');
+            return  localStorage.getItem('loggedIn') && state.loggedIn;
         },
         getLoginError: state => {
             return state.loginError;
@@ -29,18 +29,19 @@ export default {
         setLoggedIn({ commit }, bool) {
             commit('SET_LOGGED_IN', bool);
         },
-        requestLoggedIn({getters}) {
+        requestLoggedIn({ commit}) {
            
-            return getters.getLoggedIn;
-            /* return Vue.axios.get('/set')
+          //  return getters.getLoggedIn;
+             return Vue.axios.get('/set')
                 .then(function (response) {
                     let recurare = response.data.success;
+                    console.log('LOGGED IN');
+                    console.log(recurare);
                     commit('SET_LOGGED_IN', recurare);
-
                 })
                 .catch(function () {
                     commit('SET_LOGGED_IN', false);
-                }); */
+                }); 
         },
         loginUser({ commit }, creds) {
             return Vue.axios.post('/login_vue', creds.data).then(res => {  

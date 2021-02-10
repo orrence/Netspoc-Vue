@@ -101,6 +101,7 @@ export default {
     },
   },
   mounted() {
+    let me = this;
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
@@ -109,16 +110,22 @@ export default {
       let tabheight =
         window.innerHeight -
         this.$refs.tablecontainer.getBoundingClientRect().top -
-        14;
+        4;
       this.tabulatorheight = tabheight;
     } else {
       this.tabulatorheight = this.variableHeight;
     }
     this.config.maxHeight = "100%";
     this.config.height = "100%";
-
+    this.config.keybindings = {
+        "navUp" : false, //disable navUp keybinding
+    },
     this.config = Object.assign({}, this.config, this.tableconfig);
-
+    this.config.rowClick = function(e,row) {
+      me.tabulator.deselectRow();
+      me.tabulator.selectRow(row.getData().name);
+    }
+     
     this.newTable();
 
     if (this.data.length > 0 && this.selectfirstrow) {
@@ -154,6 +161,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style scoped>
