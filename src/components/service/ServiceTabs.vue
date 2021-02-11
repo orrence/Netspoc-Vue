@@ -22,7 +22,7 @@
         ></v-progress-circular>
       </div>
     </div>
-    <v-tabs-items v-model="serviceTabModel" class="HAHHAA">
+    <v-tabs-items v-model="serviceTabModel" >
       <v-tab-item :key="0" transition="false" class="fill-height">
         <ServiceTable
           :activetab="serviceTabModel == 0 ? true : false"

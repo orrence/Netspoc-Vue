@@ -1,5 +1,5 @@
 <template>
-  <div :id="compID" ref="tableBox" class="Tesmnnn"> 
+  <div :id="compID" ref="tableBox"> 
     <div v-if="!showLoadingCircle" >
       <Tabulator
         selectfirstrow="true"
@@ -8,8 +8,6 @@
           selectable: 1,
           index: 'name',
           rowSelected: passOnSelectionUpdate,
-          
-      
         }"
          :showCountHeader="true"
         :name="'Dienste'"

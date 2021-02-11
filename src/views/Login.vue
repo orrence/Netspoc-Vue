@@ -72,7 +72,7 @@ export default {
     ...mapState("auth", ["loginError"]),
   },
   methods: {
-    ...mapActions("auth", ["setLoggedIn", "loginUser"]),
+    ...mapActions("auth", [ "loginUser"]),
 
     submit() {
       var vm = this;

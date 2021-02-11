@@ -41,7 +41,7 @@ _axios.interceptors.response.use(
     // Do something with response error
     const response = error.response;
     if(response.data.msg == 'Login required') {
-      store.dispatch('setLoggedIn', false);
+      store.dispatch['auth/setLoggedIn', false];
       router.replace({
         path: '/login',
         query: { redirect: router.currentRoute.fullPath}
@@ -52,7 +52,6 @@ _axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 Plugin.install = function(Vue) {
   Vue.axios = _axios;
   window.axios = _axios;
