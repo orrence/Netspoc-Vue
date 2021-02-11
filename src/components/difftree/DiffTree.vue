@@ -1,6 +1,7 @@
 <template>
-  <div v-if="loaded">
-    <!-- <v-checkbox 
+  <div>
+    <div v-if="loaded">
+      <!-- <v-checkbox 
 	v-model="collapse"
 	label="Nodes Zusammenfassen" 
 	/>
@@ -11,29 +12,37 @@
 		open-on-click
 		/> -->
 
-    <v-treeview :items="tree" open-all dense item-text="text" open-on-click>
-      <template v-slot:prepend="{ item, open }">
-        <span
-          style="color: green"
-          v-if="item.iconCls && item.iconCls == 'icon-add'"
-          class="material-icons"
-          >add_circle_outline</span
-        >
-        <span
-          style="color: red"
-          v-else-if="item.iconCls && item.iconCls == 'icon-delete'"
-          class="material-icons"
-          >remove_circle_outline</span
-        >
-        <v-icon v-else-if="item.leaf">
-          mdi-file-document-outline
-        </v-icon>
-        <v-icon v-else>
-          {{ open ? "mdi-folder-open" : "mdi-folder" }}
-        </v-icon>
-      </template>
-    </v-treeview>
-    <!-- {{ collapsedTree }} -->
+      <v-treeview :items="tree" open-all dense item-text="text" open-on-click>
+        <template v-slot:prepend="{ item, open }">
+          <span
+            style="color: green"
+            v-if="item.iconCls && item.iconCls == 'icon-add'"
+            class="material-icons"
+            >add_circle_outline</span
+          >
+          <span
+            style="color: red"
+            v-else-if="item.iconCls && item.iconCls == 'icon-delete'"
+            class="material-icons"
+            >remove_circle_outline</span
+          >
+          <v-icon v-else-if="item.leaf"> mdi-file-document-outline </v-icon>
+          <v-icon v-else>
+            {{ open ? "mdi-folder-open" : "mdi-folder" }}
+          </v-icon>
+        </template>
+      </v-treeview>
+      <!-- {{ collapsedTree }} -->
+    </div>
+    <div :class="loaded ? 'hidden' : ''" class="loadingoverlay">
+      <div class="loadingcircle">
+        <v-progress-circular
+          color="deep-orange"
+          indeterminate
+          size="94"
+        ></v-progress-circular>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -204,3 +213,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.loadingoverlay {
+	top: 0
+}
+</style>

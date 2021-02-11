@@ -179,20 +179,7 @@ export default {
 </script>
 
 <style>
-.loadingoverlay {
-  position: absolute;
-  height: 100%;
-  z-index: 999;
-  width: 100%;
-  background: #fff;
-  opacity: 0.9;
-}
-.loadingcircle {
-  position: absolute;
-  left: 34%;
-  top: 40%;
-  margin: 0 auto;
-}
+
 .hidden {
   display: none;
 }
