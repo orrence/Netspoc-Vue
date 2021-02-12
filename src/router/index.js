@@ -19,11 +19,18 @@ const routes = [
 		redirect: '/services',
 	},
 	{
+		path: '/ldap_login',
+		component: Login,
+		meta: {
+			title: 'Anmeldung'
+		}
+	},
+	{
 		path: '/login',
 		component: Login,
 		meta: {
 			title: 'Anmeldung'
-			}		
+		}
 	},
 	{
 		path: '*',
@@ -32,54 +39,54 @@ const routes = [
 			title: 'Page Not Found'
 		}
 	},
-			{
-				path: '/services',
-				component: Services,
-				props: true,
-				name: 'services',
-				meta: {
-					title: 'Dienste',
-					requiresAuth: true,
-				}
-			},
-			{
-				path: '/networks',
-				component: Networks,
-				meta: {
-					title: 'Netze',
-					requiresAuth: true,
-				}		
-			},
-			{
-				path: '/diff',
-				component: Diff,
-				meta: {
-					title: 'Unterschiede',
-					requiresAuth: true,
-				}
-			},
-		
-	
-	
-	
-	
+	{
+		path: '/services',
+		component: Services,
+		props: true,
+		name: 'services',
+		meta: {
+			title: 'Dienste',
+			requiresAuth: true,
+		}
+	},
+	{
+		path: '/networks',
+		component: Networks,
+		meta: {
+			title: 'Netze',
+			requiresAuth: true,
+		}
+	},
+	{
+		path: '/diff',
+		component: Diff,
+		meta: {
+			title: 'Unterschiede',
+			requiresAuth: true,
+		}
+	},
+
+
+
+
+
 ];
 
-const router = new VueRouter ({
+const router = new VueRouter({
 	routes,
 	mode: 'history'
 	// base: '/login'
 });
 
-router.beforeEach ((to, from, next) => {
-	if(to.matched.some(record => record.meta.requiresAuth)) {
+router.beforeEach((to, from, next) => {
+	if (to.matched.some(record => record.meta.requiresAuth)) {
 		// todo check if is already loggedin
-	
-		if (store.getters['auth/getLoggedIn'] == 'false' || store.getters['auth/getLoggedIn'] == null ) {
+
+		if (store.getters['auth/getLoggedIn'] == 'false' || store.getters['auth/getLoggedIn'] == null) {
 			router.push('/login');
-		} 
-			return next();
-		
+		}
+		return next();
+
 		/*store.dispatch('auth/requestLoggedIn')
 		.then(() => {
 			if (!store.getters['auth/getLoggedIn']) {
@@ -88,13 +95,13 @@ router.beforeEach ((to, from, next) => {
 				next();
 			}
 		});*/
-	} else  {
+	} else {
 		next();
 	}
-	
+
 });
 
-router.afterEach ((to) => {
+router.afterEach((to) => {
 	document.title = "PolicyWeb - " + to.meta.title;
 });
 

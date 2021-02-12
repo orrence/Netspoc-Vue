@@ -16,7 +16,8 @@ export default new Vuex.Store({
 		active: {
 			owner: null,
 			policy: null
-		}
+		},
+		loginpath: '/login'
 	},
 	getters,
 	mutations,

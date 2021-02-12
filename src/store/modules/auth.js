@@ -1,5 +1,6 @@
 import router from '../../router/index'
 import Vue from 'vue'
+import store from '../'
 
 export default {
     namespaced: true,
@@ -44,7 +45,12 @@ export default {
                 }); 
         },
         loginUser({ commit }, creds) {
-            return Vue.axios.post('/login_vue', creds.data).then(res => {  
+            let loginpath = store.state.loginpath;
+            let backendlogin = '/login_vue';
+            if(loginpath == '/ldap_login') {
+                backendlogin = '/ldap_login_vue';
+            }
+            return Vue.axios.post(backendlogin, creds.data).then(res => {  
                 if(res.data.success) {
                     commit('SET_LOGGED_IN', true);
                     commit('SET_LOGIN_ERROR',false);

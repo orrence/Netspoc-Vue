@@ -11,3 +11,6 @@ export const setHistory = (state, history) => {
 export const setActivePolicy = (state, activePolicy) => {
     state.active.policy = activePolicy;
 };
+export const setLoginpath = (state, path) => {
+    state.loginpath = path;
+};

@@ -42,8 +42,9 @@ _axios.interceptors.response.use(
     const response = error.response;
     if(response.data.msg == 'Login required') {
       store.dispatch['auth/setLoggedIn', false];
+      let loginpath = store.state.loginpath;
       router.replace({
-        path: '/login',
+        path: loginpath,
         query: { redirect: router.currentRoute.fullPath}
       })
     } else {

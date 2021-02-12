@@ -1,12 +1,12 @@
 <template>
-  <v-app   :style="{ height: windowheight + 'px', overflow: 'hidden' }">
+  <v-app :style="{ height: windowheight + 'px', overflow: 'hidden' }">
     <app-toolbar color="primary" />
 
     <v-main>
       <div class="fluid grid-list-md grey lighten-5 fill-height">
-         <keep-alive>
-            <router-view />
-          </keep-alive>
+        <keep-alive>
+          <router-view />
+        </keep-alive>
       </div>
     </v-main>
 
@@ -53,9 +53,16 @@ export default {
   mounted() {
     this.windowheight = window.innerHeight;
   },
- async created() {
+
+  created() {
     var me = this;
-    this.$store.dispatch('auth/requestLoggedIn');
+
+    if (this.$route.path == "/ldap_login" || this.$route.path == "/login") {
+      this.$store.commit("setLoginpath", this.$route.path);
+    }
+
+    this.$store.dispatch("auth/requestLoggedIn");
+    // To-DO Warum eventbus, eventuell auch mit VueX Watcher
     EventBus.$on("httperror", function (selection) {
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);
