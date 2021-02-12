@@ -62,7 +62,6 @@ export default {
             }).catch(err => {
                 console.log(err);
             })
-
         },
         logoutUser({ dispatch }) {
             return Vue.axios.get('/logout'

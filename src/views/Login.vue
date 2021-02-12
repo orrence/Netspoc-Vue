@@ -92,15 +92,15 @@ export default {
     ...mapState("auth", ["loginError"]),
   },
   created() {
-    if (this.$route.path == "ldap_login") {
+    if (this.$route.path == this.$LDAPLOGIN) {
       this.isLDAPLogin = true;
     }
   },
   watch: {
     $route(to) {
-      if (to.path == "/ldap_login") {
+      if (to.path == this.$LDAPLOGIN) {
         this.isLDAPLogin = true;
-      } else if (to.path == "/login") {
+      } else if (to.path == this.$STANDARDLOGIN) {
         this.isLDAPLogin = false;
       }
     },
@@ -112,8 +112,13 @@ export default {
       var vm = this;
 
       this.$store.commit("setLoginpath", this.$route.path);
+      let user = "email";
+      if(this.$route.path == this.$LDAPLOGIN) {
+        user = "user";
+      }
       const formData = new FormData();
-      formData.append("email", vm.login);
+      formData.append(user, vm.login);
+      
       formData.append("pass", vm.password);
       formData.append("app", "foo");
       this.loginUser({ data: formData });

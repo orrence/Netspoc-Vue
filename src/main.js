@@ -17,6 +17,9 @@ import App from './App.vue'
 /*Vue.use(VueTabulator, {
     name: 'MyTable'
 })*/
+Vue.prototype.$LDAPLOGIN = '/ldap_login';
+Vue.prototype.$STANDARDLOGIN = '/login';
+
 Tabulator.prototype.extendModule("sort", "sorters", {
     ip:function(a, b){
         var ip2numeric = function(dot) {
