@@ -4,6 +4,7 @@ import store from '../store'
 import Services from '@/views/Services'
 import Networks from '@/views/Networks'
 import Diff from '@/views/Diff'
+import Responsibilities from '@/views/Responsibilities'
 import Login from '@/views/Login'
 import PageNotFound from '@/views/PageNotFound'
 
@@ -62,6 +63,14 @@ const routes = [
 		component: Diff,
 		meta: {
 			title: 'Unterschiede',
+			requiresAuth: true,
+		}
+	},
+	{
+		path: '/responsibilities',
+		component: Responsibilities,
+		meta: {
+			title: 'Verantwortlichkeiten',
 			requiresAuth: true,
 		}
 	},
