@@ -15,6 +15,7 @@
     "tabulator-tables": "^4.9.3",
     "vue": "^2.6.12",
     "vue-observe-visibility": "^0.4.6",
+    "vue-resize-observer": "^1.0.37",
     "vue-router": "^3.5.1",
     "vuetify": "^2.4.3",
     "vuex": "^3.6.2",
