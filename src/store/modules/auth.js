@@ -36,8 +36,7 @@ export default {
              return Vue.axios.get('/set')
                 .then(function (response) {
                     let recurare = response.data.success;
-                    console.log('LOGGED IN');
-                    console.log(recurare);
+                  
                     commit('SET_LOGGED_IN', recurare);
                 })
                 .catch(function () {

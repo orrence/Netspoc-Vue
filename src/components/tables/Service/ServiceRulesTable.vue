@@ -31,6 +31,7 @@
           },
         ]"
         reactiveData="true"
+        :showDownloadButtons="false"
         :tableconfig="{}"
         :variableHeight="tabheight"
         :data="rulesData"
@@ -121,6 +122,7 @@ export default {
       let textsearch_payload = {};
       let generalpayload = {};
 
+      // TO-DO Code kommentieren und an einer zentralen Stelle widerverwendbar machen
       if (vm.filterBySearch && vm.serviceTabNumber === 3) {
         rulepayload = this.createPayloadElement(vm.searchInput.rules);
         textsearch_payload = this.createPayloadElement(

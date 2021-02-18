@@ -52,6 +52,18 @@ export default {
   },
   mounted() {
     this.windowheight = window.innerHeight;
+
+   /* let xlsxscript = document.createElement("script");
+    xlsxscript.setAttribute("src", "js/xlsx.full.min.js");
+    document.head.appendChild(xlsxscript);
+
+    let pdfscript = document.createElement("script");
+    pdfscript.setAttribute("src", "js/jspdf.min.js");
+    document.head.appendChild(pdfscript);
+
+    let autotablescript = document.createElement("script");
+    autotablescript.setAttribute("src", "js/jspdf.plugin.autotable.js");
+    document.head.appendChild(autotablescript); */
   },
 
   created() {
@@ -62,7 +74,8 @@ export default {
     }
 
     this.$store.dispatch("auth/requestLoggedIn");
-    // To-DO Warum eventbus, eventuell auch mit VueX Watcher
+   
+   // To-DO Warum eventbus, eventuell auch mit VueX Watcher
     EventBus.$on("httperror", function (selection) {
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);

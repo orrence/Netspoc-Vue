@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row dense :justify="'space-between'" :align="'center'">
-      <v-col cols="auto" class="pa-0">
+      <v-col v-if="showDownloadButtons" cols="auto" class="pa-0">
         <v-btn icon color="red lighten-2" @click="downloadAsPDF">
           <span class="material-icons">picture_as_pdf</span>
         </v-btn>
@@ -32,6 +32,7 @@
 <script>
 import { mapGetters } from "vuex";
 import Tabulator from "tabulator-tables";
+import { jsPDF } from "jspdf";
 
 export default {
   props: {
@@ -46,6 +47,10 @@ export default {
     maxSelections: Number,
     selectedNetworks: [Array, String],
     selectfirstrow: String,
+    showDownloadButtons: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: () => ({
     isVisible: false,
@@ -70,6 +75,7 @@ export default {
     //update table if data changes
     variableHeight: {
       handler: function () {
+        // TO-DO Dynamisch berechnen
         this.tabulatorheight = this.variableHeight - 36;
       },
     },
@@ -101,6 +107,7 @@ export default {
     },
   },
   mounted() {
+
     let me = this;
     this.config.columns = this.columns;
     this.config.data = this.data;
@@ -117,15 +124,13 @@ export default {
     }
     this.config.maxHeight = "100%";
     this.config.height = "100%";
-    this.config.keybindings = {
-        "navUp" : false, //disable navUp keybinding
-    },
+
     this.config = Object.assign({}, this.config, this.tableconfig);
-    this.config.rowClick = function(e,row) {
+    this.config.rowClick = function (e, row) {
       me.tabulator.deselectRow();
       me.tabulator.selectRow(row.getData().name);
-    }
-     
+    };
+
     this.newTable();
 
     if (this.data.length > 0 && this.selectfirstrow) {
@@ -147,12 +152,14 @@ export default {
     },
 
     downloadAsPDF() {
+      console.log(jsPDF);
       this.tabulator.download("pdf", `${this.name}.pdf`, {
         orientation: "portrait", //set page orientation to portrait
         title: this.name, //add title to report
       });
     },
     downloadAsExcel() {
+      console.log(this.tabulator.download())
       this.tabulator.download(
         "xlsx",
         `${this.name}_${this.getActiveOwner}_${this.getActivePolicy}.xlsx`,
@@ -161,7 +168,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>

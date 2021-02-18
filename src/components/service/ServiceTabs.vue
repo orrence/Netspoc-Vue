@@ -98,6 +98,7 @@ export default {
   },
   created() {
     var vm = this;
+    this.getServices(1);
     EventBus.$on("selectionUpdated", function (selection) {
       if (selection == "search") {
         vm.serviceTabModel = 3;

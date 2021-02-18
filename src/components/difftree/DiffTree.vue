@@ -82,107 +82,7 @@ export default {
       this.getDiff();
     },
   },
-  methods: {
-    morphTree(tree) {
-      if (tree.length === 0) {
-        return;
-      }
-      for (let i = 0; i < tree.length; i++) {
-        Object.defineProperty(tree[i], "id", {
-          value: this.ic++,
-          writable: false,
-        });
-        if (tree[i].text) {
-          Object.defineProperty(
-            tree[i],
-            "name",
-            Object.getOwnPropertyDescriptor(tree[i], "text")
-          );
-        } else {
-          Object.defineProperty(
-            tree[i],
-            "name",
-            Object.getOwnPropertyDescriptor(tree[i], "iconCls")
-          );
-        }
-
-        delete tree[i]["text"];
-
-        if (!tree[i].leaf) {
-          this.morphTree(tree[i].children);
-        }
-      }
-    },
-    extraMorphTree(targetTree, tree) {
-      for (let i = 0; i < tree.length; i++) {
-        targetTree[i] = { ...tree[i] };
-        this.helpExtraMorphTree(targetTree[i]);
-      }
-    },
-    helpExtraMorphTree(node) {
-      if (node.leaf) {
-        return;
-      }
-      if (node.children.length == 1 && !node.children[0].leaf) {
-        if (!node.children[0].iconCls) {
-          node.name += "/" + node.children[0].name;
-          node.children = node.children[0].children;
-          this.helpExtraMorphTree(node);
-        } else {
-          for (let i = 0; i < node.children[0].children.length; i++) {
-            switch (node.children[0].iconCls) {
-              case "icon-add":
-                node.children[0].children[i].name =
-                  "+ " + node.children[0].children[i].name;
-                break;
-              case "icon-delete":
-                node.children[0].children[i].name =
-                  "- " + node.children[0].children[i].name;
-                break;
-              case "icon-page_edit":
-                node.children[0].children[i].name =
-                  "! " + node.children[0].children[i].name;
-                break;
-              default:
-                node.children[0].children[i].name =
-                  "? " + node.children[0].children[i].name;
-                break;
-            }
-          }
-          node.children = node.children[0].children;
-        }
-      } else {
-        let swapList = [];
-        for (let i = 0; i < node.children.length; i++) {
-          if (!node.children[i].iconCls) {
-            swapList.push(node.children[i]);
-            this.helpExtraMorphTree(node.children[i]);
-          } else {
-            for (let j = 0; j < node.children[i].children.length; j++) {
-              switch (node.children[i].iconCls) {
-                case "icon-add":
-                  node.children[i].children[j].name =
-                    "+ " + node.children[i].children[j].name;
-                  break;
-                case "icon-delete":
-                  node.children[i].children[j].name =
-                    "- " + node.children[i].children[j].name;
-                  break;
-                case "icon-page_edit":
-                  node.children[i].children[j].name =
-                    "! " + node.children[i].children[j].name;
-                  break;
-                default:
-                  node.children[i].children[j].name =
-                    "? " + node.children[i].children[j].name;
-              }
-              swapList.push(node.children[i].children[j]);
-            }
-          }
-        }
-        node.children = swapList;
-      }
-    },
+  methods: {  
     getDiff() {
       var vm = this; // get vue instance
       vm.loaded = false;
@@ -200,8 +100,7 @@ export default {
         .then(function (response) {
           vm.ic = 0;
           vm.tree = Object.values(response.data);
-          //vm.morphTree(vm.tree);
-          // vm.extraMorphTree(vm.collapsedTree, vm.tree); // experimental
+    
           vm.loaded = true;
         })
         .catch(function (error) {

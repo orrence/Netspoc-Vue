@@ -25,7 +25,7 @@ export default {
         var history = this.getHistory;
         for (var i = 0; i < history.length; i++) {
           if (val.slice(13) === history[i].policy) {
-			this.$store.commit("services/SET_LOADING_CIRCLE", true);
+            this.$store.commit("services/SET_LOADING_CIRCLE", true);
             this.setActivePolicy(history[i]);
             return;
           }
@@ -38,6 +38,6 @@ export default {
     show(val) {
       return val.date + " | " + val.policy;
     },
-  },
+  }
 };
 </script>
