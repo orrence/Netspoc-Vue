@@ -11,6 +11,7 @@
       reactiveData="true"
       :variableHeight="tabheight"
       :data="adminsData"
+      @resizeTab="onResizeTab"
       :showCountHeader="false"
     />
   </div>
@@ -50,11 +51,12 @@ export default {
   methods: {
     ...mapActions("services", ["getAdminsData"]),
     calcHeight() {
-    
-      let menuheight = document.getElementById('apptoolbar').clientHeight;
       let restheight =
-        window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top-menuheight;
-      this.tabheight = restheight -3;
+        window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
+      this.tabheight = restheight - 3;
+    },
+    onResizeTab() {
+      this.calcHeight();
     },
     getAdminsForAllOwner() {
       if (this.selection.length > 0) {

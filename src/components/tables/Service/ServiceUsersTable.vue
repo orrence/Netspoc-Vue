@@ -26,6 +26,7 @@
         },
       ]"
       :data="usersData"
+      @resizeTab="onResizeTab"
       :variableHeight="tabheight"
       :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
@@ -67,8 +68,11 @@ export default {
     passOnSelectionUpdate(data) {
       this.$store.dispatch("services/getAdminsData", data.getData().owner);
     },
+    onResizeTab() {
+      console.log('TAB GETS RESIZED');
+    },
     getUsers() {
-      var vm = this; // get vue instance
+      var vm = this;
 
       if (vm.serviceSelection.length !== 1) {
         return;

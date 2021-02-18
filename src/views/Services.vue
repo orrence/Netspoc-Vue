@@ -81,9 +81,7 @@ export default {
     window.removeEventListener("resize", this.resizeContainer);
   },
   mounted() {
-    // let height = document.getElementById("servicefilters").clientHeight;
 
-    // this.containerheight = window.innerHeight - 64 - height;
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {
@@ -99,6 +97,7 @@ export default {
   },
   methods: {
     resizeContainer() {
+      console.log('RESIZE NOW');
       let height = document.getElementById("servicefilters").clientHeight;
 
       this.containerheight = window.innerHeight - 64 - height;

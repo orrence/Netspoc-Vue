@@ -5,18 +5,13 @@ import vuetify from './plugins/vuetify';
 
 import './plugins/axios'
 import './plugins/vueObserveVisibility'
-
+import VueResizeObserver from 'vue-resize-observer';
+Vue.use(VueResizeObserver);
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
-//import 'vue-tabulator/dist/scss/bootstrap/tabulator_bootstrap4.scss'
 import 'tabulator-tables/dist/css/tabulator.min.css'
-// import 'tabulator-tables/dist/css/materialize/tabulator_materialize.min.css'
 import Tabulator from 'tabulator-tables';
-//import VueTabulator from 'vue-tabulator';
 import App from './App.vue'
 
-/*Vue.use(VueTabulator, {
-    name: 'MyTable'
-})*/
 Vue.prototype.$LDAPLOGIN = '/ldap_login';
 Vue.prototype.$STANDARDLOGIN = '/login';
 

@@ -31,10 +31,10 @@
           },
         ]"
         reactiveData="true"
-        :showDownloadButtons="false"
         :tableconfig="{}"
         :variableHeight="tabheight"
         :data="rulesData"
+         @resizeTab="onResizeTab"
         :selectable="false"
         :groupBy="serviceSelection.length > 1 ? 'service' : ''"
       />
@@ -69,11 +69,7 @@ export default {
   },
   watch: {
     serviceSelection: function () {
-      let restheight =
-        (window.innerHeight -
-          this.$refs.servicerulestable.getBoundingClientRect().top) *
-        0.5;
-      this.tabheight = restheight;
+      this.calcHeight();
       this.getRules();
     },
     expandUser: function () {
@@ -87,15 +83,20 @@ export default {
     },
   },
   mounted() {
-    let restheight =
-      (window.innerHeight -
-        this.$refs.servicerulestable.getBoundingClientRect().top) *
-      0.5;
-    this.tabheight = restheight;
+    this.calcHeight();
   },
   methods: {
     ...mapActions("services", ["getServiceRules"]),
-
+    calcHeight() {
+      let restheight =
+        (window.innerHeight -
+          this.$refs.servicerulestable.getBoundingClientRect().top) *
+        0.5;
+      this.tabheight = restheight;
+    },
+    onResizeTab() {
+      this.calcHeight();
+    },
     createPayloadElement(payloadObj) {
       let payload = {};
 
