@@ -94,8 +94,11 @@ export default {
       },
     },
   },
+
   created() {
     var vm = this;
+    console.log('SERVICE TAB NUMER');
+    console.log(this.serviceTabNumber);
     this.getServices(this.serviceTabNumber);
     EventBus.$on("selectionUpdated", function (selection) {
       if (selection == "search") {

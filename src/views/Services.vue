@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <v-container fluid id="servicefilters">
+    <v-container fluid>
       <v-row>
         <v-col cols="12">
           <service-filters
@@ -72,12 +72,6 @@ export default {
     ...mapState("services", ["searchInput", "serviceTabNumber"]),
   },
   created() {
-    window.addEventListener("resize", this.resizeContainer);
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.resizeContainer);
-  },
-  mounted() {
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {
@@ -92,10 +86,6 @@ export default {
     }
   },
   methods: {
-    resizeContainer() {
-      let height = document.getElementById("servicefilters").clientHeight;
-      this.containerheight = window.innerHeight - 64 - height;
-    },
     toggleBatchValue(val) {
       this.networkCount = val.length;
     },
