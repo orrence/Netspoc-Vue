@@ -38,11 +38,6 @@ export default {
 			.then(() => {
 				this.loadedActiveOwner = true;
 			});
-	},
-	methods: {
-		filterClicked() {
-			console.log('FILTER WAS CLICKED');
-		}
 	}
 }
 </script>

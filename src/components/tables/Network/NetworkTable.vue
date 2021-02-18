@@ -71,7 +71,9 @@ export default {
       },
     },
   },
-  created() {},
+  mounted() {
+     this.loadNetworks();
+  },
   methods: {
     ...mapActions("networks", ["getNetworks"]),
     loadNetworks() {
@@ -96,17 +98,10 @@ export default {
       });
     },
     cellclicked(e, cell) {
-      console.log(cell);
       cell.setValue(!cell.getValue());
       e.stopPropagation();
     },
-    rowwasclicked(e, row) {
-      console.log("ROW CLICK");
-      console.log(e);
-      console.log(row);
-    },
-    passOnSelectionUpdate(data, rows) {
-      console.log(rows);
+    passOnSelectionUpdate(data) {
       this.$emit(
         "selectionUpdate",
         data.map((row) => row.name)

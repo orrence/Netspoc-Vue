@@ -1,52 +1,53 @@
 <template>
   <div class="flex">
-    <v-container fluid id="servicefilters">
-      <v-row>
-        <v-col cols="12">
-          <service-filters
-            :networkCount="networkCount"
-            @clearSearchFilter="clearSearchFilter"
-            @openNavDrawer="openNavDrawer"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
+    <div v-if="getActiveLoaded">
+      <v-container fluid id="servicefilters">
+        <v-row>
+          <v-col cols="12">
+            <service-filters
+              :networkCount="networkCount"
+              @clearSearchFilter="clearSearchFilter"
+              @openNavDrawer="openNavDrawer"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary width="500">
-      <search-bar @closeSearch="drawer = !drawer" />
-    </v-navigation-drawer>
+      <v-navigation-drawer v-model="drawer" absolute temporary width="500">
+        <search-bar @closeSearch="drawer = !drawer" />
+      </v-navigation-drawer>
 
-    <v-navigation-drawer
-      v-model="netselectiondrawer"
-      absolute
-      temporary
-      width="500"
-    >
-      <netselection-bar
-        @closeSearch="netselectiondrawer = !netselectiondrawer"
-        @changeBadgeVal="toggleBatchValue"
-      />
-    </v-navigation-drawer>
+      <v-navigation-drawer
+        v-model="netselectiondrawer"
+        absolute
+        temporary
+        width="500"
+      >
+        <netselection-bar
+          @closeSearch="netselectiondrawer = !netselectiondrawer"
+          @changeBadgeVal="toggleBatchValue"
+        />
+      </v-navigation-drawer>
 
-    <v-container fluid class="pt-0" >
-      <v-row no-gutters class="fill-height">
-        <v-col cols="4" class="fill-height">
-         <service-tabs class="mr-2" />
-        </v-col>
-        <v-col cols="8">
-          <service-detail-tabs class="ml-2" :search_input="searchInput" />
-        </v-col>
-      </v-row>
-    </v-container>
+      <v-container fluid class="pt-0">
+        <v-row no-gutters class="fill-height">
+          <v-col cols="4" class="fill-height">
+            <service-tabs class="mr-2" />
+          </v-col>
+          <v-col cols="8">
+            <service-detail-tabs class="ml-2" :search_input="searchInput" />
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
   </div>
 </template>
-
 <script>
 import ServiceTabs from "../components/service/ServiceTabs";
 import ServiceDetailTabs from "../components/service/detail/ServiceDetailTabs";
 import SearchBar from "../components/service/search/SearchBar";
 import NetselectionBar from "../components/service/search/NetselectionBar";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import urlSearchParams from "../components/mixins/urlSearchParams";
 import EventBus from "../plugins/event-bus";
 import ServiceFilters from "../components/service/ServiceFilters.vue";
@@ -70,7 +71,8 @@ export default {
     networkCount: 0,
   }),
   computed: {
-    ...mapState("services", ["searchInput", "serviceTabNumber"]),
+    ...mapGetters(["getActiveLoaded"]),
+    ...mapState("services", ["searchInput", "serviceTabNumber"])
   },
   created() {
     window.addEventListener("resize", this.resizeContainer);
@@ -79,9 +81,9 @@ export default {
     window.removeEventListener("resize", this.resizeContainer);
   },
   mounted() {
-   // let height = document.getElementById("servicefilters").clientHeight;
+    // let height = document.getElementById("servicefilters").clientHeight;
 
-   // this.containerheight = window.innerHeight - 64 - height;
+    // this.containerheight = window.innerHeight - 64 - height;
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {

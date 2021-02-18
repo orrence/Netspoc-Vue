@@ -12,7 +12,7 @@
         </v-tabs>
         <v-tabs-items v-model="networkselection">
           <v-tab-item>
-            <NetworkTable @selectionUpdate="captureSelectionUpdate" />
+            <NetworkTable  @selectionUpdate="captureSelectionUpdate" />
           </v-tab-item>
         </v-tabs-items>
 
@@ -43,6 +43,9 @@ export default {
   }),
   computed: {
     ...mapState("services", ["searchInput"]),
+    isLoadingComplete: function () {
+      return this.active.owner != null && this.active.policy != null;
+    },
   },
   methods: {
     setSearchParams() {

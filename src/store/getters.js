@@ -13,3 +13,7 @@ export const getOwners = state => {
 export const getHistory = state => {
     return state.history;
 };
+
+export const getActiveLoaded = state => {
+    return state.active.policy != null && state.active.owner != null;
+}

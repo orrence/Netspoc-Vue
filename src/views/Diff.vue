@@ -57,7 +57,6 @@ export default {
   }),
   mounted() {
     this.calcHeight();
-    this.getOlderPolicies();
   },
   computed: {
     ...mapState(["active"]),
