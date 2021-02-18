@@ -5,7 +5,7 @@
     <v-main>
       <div class="fluid grid-list-md grey lighten-5 fill-height">
         <keep-alive>
-          <router-view />
+          <router-view v-if="getActiveLoaded" />
         </keep-alive>
       </div>
     </v-main>
@@ -37,6 +37,7 @@
 <script>
 import AppToolbar from "./components/AppToolbar";
 import EventBus from "./plugins/event-bus";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -49,6 +50,9 @@ export default {
       windowheight: 600,
       errortext: "",
     };
+  },
+  computed: {
+    ...mapGetters(["getActiveLoaded"]),
   },
   mounted() {
     this.windowheight = window.innerHeight;

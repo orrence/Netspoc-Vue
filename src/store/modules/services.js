@@ -6,8 +6,8 @@ export default {
     state: {
         servicesData: [],
         rulesData: [],
-        adminsData: [],
-        searchArea: "regeln",
+        rulesAdminsData: [],
+        usersAdminsData: [],
         serviceTabNumber: 1,
         showLoadingCircle: true,
         searchInput: {
@@ -54,16 +54,16 @@ export default {
         RECEIVED_RULESDATA(state, payload) {
             state.rulesData = payload;
         },
-        RECEIVED_ADMINSDATA(state, payload) {
-
-            state.adminsData = payload;
+        RECEIVED_RULES_ADMINSDATA(state, payload) {
+            state.rulesAdminsData = payload;
         },
+        RECEIVED_USERS_ADMINSDATA(state, payload) {
+            state.usersAdminsData = payload;
+        },
+        
         SEARCH_UPDATE(state, payload) {
             payload.search_networks = state.searchInput.search_networks
             state.searchInput = Object.assign({}, state.searchInput, payload);
-        },
-        UPDATE_SEARCH_AREA(state, payload) {
-            state.searchArea = payload;
         },
         SET_NETWORK_SELECTION(state, payload) {
             state.searchInput = Object.assign({}, state.searchInput, payload);
@@ -111,7 +111,7 @@ export default {
 
             })
         },
-        getServiceRules({ commit }, payload) {
+        getServiceRules({ commit, state, dispatch }, payload) {
             return Vue.axios.get('/get_rules', {
                 params: payload
             }).then(res => {
@@ -135,11 +135,21 @@ export default {
                         default:
                     }
                 }
+                var owner = state.serviceSelection[0].owner.map((owner) => owner.name);
 
+                dispatch('getAdminsData', owner[0]).then((response) => { 
+                    console.log('HELLO MY RESPONSE');
+                    commit('RECEIVED_RULES_ADMINSDATA', response.data.records);
+
+                    console.log(response.data.records);
+                });
+                // Lade ADMIN mit aktullen owner
                 commit('RECEIVED_RULESDATA', resdata);
             })
         },
-        getAdminsData({ commit }, ownerparam) {
+        getAdminsData(_,ownerparam) {
+            console.log('OWNERPARAM');
+            console.log(ownerparam);
             const payload = {
                 chosen_networks: store.state.services.searchInput.search_networks.join(","),
                 active_owner: store.getters.getActiveOwner,
@@ -148,10 +158,10 @@ export default {
             };
             return Vue.axios.get('/get_admins', {
                 params: payload
-            }).then(function (response) {
-                commit('RECEIVED_ADMINSDATA', response.data.records);
-
-            })
+            }).then((response) => {
+                return response;
+            }
+            )
         },
 
         getServiceUsers({ commit, dispatch }, payload) {
@@ -160,7 +170,12 @@ export default {
             }).then(function (response) {
                 commit('RECEIVED_USERSDATA', response.data.records);
 
-                dispatch('getAdminsData', response.data.records[0].owner);
+                dispatch('getAdminsData', response.data.records[0].owner).then((response) => { 
+                    console.log('HELLO MY RESPONSE NEW');
+                    commit('RECEIVED_USERS_ADMINSDATA', response.data.records);
+
+                    console.log(response.data.records);
+                });
             })
         },
         updateServiceSelection({ commit }, payload) {

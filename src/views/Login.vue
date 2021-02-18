@@ -113,14 +113,14 @@ export default {
 
       this.$store.commit("setLoginpath", this.$route.path);
       let user = "email";
+      
       if(this.$route.path == this.$LDAPLOGIN) {
         user = "user";
       }
       const formData = new FormData();
+
       formData.append(user, vm.login);
-      
       formData.append("pass", vm.password);
-      formData.append("app", "foo");
       this.loginUser({ data: formData });
     },
     clear() {

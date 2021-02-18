@@ -6,7 +6,6 @@
           <v-tabs
             background-color="lightgray"
             v-model="tabsearchArea"
-            @change="changeTab"
             slider-color="orange"
             grow
           >
@@ -198,7 +197,7 @@ export default {
     tabsearchArea: 0,
   }),
   computed: {
-    ...mapState("services", ["searchInput", "searchArea"]),
+    ...mapState("services", ["searchInput"]),
   },
   mounted() {
     if (this.$route.hash != "") {
@@ -232,9 +231,6 @@ export default {
 
       this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
       this.cluster = this.searchInput;
-    },
-    changeTab(num) {
-      this.$store.commit("services/UPDATE_SEARCH_AREA", this.tabnames[num]);
     },
 
     searchUpdate() {

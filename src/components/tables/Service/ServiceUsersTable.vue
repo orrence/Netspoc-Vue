@@ -26,19 +26,23 @@
         },
       ]"
       :data="usersData"
-      @resizeTab="onResizeTab"
+      @resizeTab="calcHeight"
       :variableHeight="tabheight"
       :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
+    <AdminsTable :data="usersAdminsData" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import Tabulator from "../Tabulator";
+import AdminsTable from "../../tables/AdminsTable";
+
 export default {
   components: {
     Tabulator,
+    AdminsTable,
   },
   props: ["filterBySearch"],
   data: () => ({
@@ -46,27 +50,33 @@ export default {
     tabheight: 100,
   }),
   computed: {
-    ...mapState("services", ["usersData", "searchInput", "serviceSelection"]),
+    ...mapState("services", ["usersData", "searchInput", "serviceSelection","usersAdminsData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     serviceSelection: function () {
       this.getUsers();
     },
+    usersData: function() {
+      console.log('USER LOADED');
+      console.log(this.usersData);
+    }
   },
   mounted() {
-    let restheight =
-      (window.innerHeight -
-        this.$refs.serviceuserstable.getBoundingClientRect().top) *
-      0.5;
-  
-    this.tabheight = restheight;
     this.getUsers();
   },
   methods: {
     ...mapActions("services", ["getServiceUsers"]),
     passOnSelectionUpdate(data) {
       this.$store.dispatch("services/getAdminsData", data.getData().owner);
+    },
+    calcHeight() {
+      let restheight =
+        (window.innerHeight -
+          this.$refs.serviceuserstable.getBoundingClientRect().top) *
+        0.5;
+
+      this.tabheight = restheight;
     },
     getUsers() {
       var vm = this;

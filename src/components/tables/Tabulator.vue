@@ -22,6 +22,7 @@
       fluid
       class="pa-1"
       ref="tablecontainer"
+      v-observe-visibility="visibilityChanged"
       v-resize="onResize"
       :style="{ height: tabulatorheight + 'px' }"
     >
@@ -51,14 +52,13 @@ export default {
       type: Boolean,
       default: true,
     },
-    test: String,
   },
   data: () => ({
-    isVisible: false,
+    isVisible: true,
     isLoaded: false,
     newConfig: false,
     tabulatorheight: 200,
-    tabulator: null, //variable to hold your table
+    tabulator: null,
     selected: [],
     selectedRows: 0,
     lastClick: 0,
@@ -144,7 +144,10 @@ export default {
       }
     },
     onResize() {
-      this.calcHeight();
+      if (this.isVisible) {
+        console.log('GET RESIZED');
+        this.calcHeight();
+      }
     },
     deselectAll() {
       this.tabulator.deselectRow();
@@ -152,7 +155,12 @@ export default {
     emitSelectionUpdate() {
       this.$emit("selectionUpdate", this.selected);
     },
-
+    visibilityChanged(isVisible) {
+      console.log("VISIVLTIIT");
+      this.isVisible = isVisible;
+      this.$emit("resizeTab");
+      
+    },
     downloadAsPDF() {
       this.tabulator.download("pdf", `${this.name}.pdf`, {
         orientation: "portrait", //set page orientation to portrait

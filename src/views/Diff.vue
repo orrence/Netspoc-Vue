@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="getActiveLoaded" fluid>
+  <v-container fluid>
     <h3>Vergleiche den ausgewählten Stand mit einem älteren</h3>
     <v-row dense :align="'center'">
       <v-col cols="6">
@@ -29,7 +29,7 @@
       <v-col>
         <v-card
           class="overflow-auto"
-           v-resize="calcHeight"
+          v-resize="calcHeight"
           :style="{ height: difftreeheight + 'px' }"
           tile
         >
@@ -57,13 +57,11 @@ export default {
     difftreeheight: 200,
   }),
   mounted() {
-    if (this.getActiveLoaded) {
-      this.getOlderPolicies();
-    }
+    this.getOlderPolicies();
   },
   computed: {
     ...mapState(["active"]),
-    ...mapGetters(["getHistory", "getActivePolicy", "getActiveLoaded"]),
+    ...mapGetters(["getHistory", "getActivePolicy"]),
     availablePolicies() {
       if (this.olderPolicies && this.olderPolicies.length === 0)
         return "Keine älteren Stände verfügbar.";

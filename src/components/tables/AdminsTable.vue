@@ -10,8 +10,8 @@
       ]"
       reactiveData="true"
       :variableHeight="tabheight"
-      :data="adminsData"
-      @resizeTab="onResizeTab"
+      :data="data"
+      @resizeTab="calcHeight"
       :showCountHeader="false"
     />
   </div>
@@ -19,54 +19,28 @@
 
 <script>
 import Tabulator from "./Tabulator";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   components: {
     Tabulator,
   },
-  props: ["selection", "activetab"],
+  props: ["data"],
   data: () => ({
-    data: [],
-    buffer: [],
     tabheight: 100,
   }),
   computed: {
-    ...mapState(["active"]),
-    ...mapState("services", ["adminsData", "searchInput"]),
-    ...mapGetters(["getActiveOwner", "getActivePolicy"]),
-  },
-  watch: {
-    selection: {
-      handler() {
-        this.admins = {};
-        this.getAdminsForAllOwner();
-      },
-    },
+    ...mapState("services", ["adminsData"]),
   },
   mounted() {
     this.calcHeight();
-    this.getAdminsForAllOwner();
   },
   methods: {
-    ...mapActions("services", ["getAdminsData"]),
     calcHeight() {
       let restheight =
         window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
       this.tabheight = restheight - 3;
-    },
-    onResizeTab() {
-      this.calcHeight();
-    },
-    getAdminsForAllOwner() {
-      if (this.selection.length > 0) {
-        var owner = this.selection[0].owner.map((owner) => owner.name);
-        this.getAdmins(owner[0]);
-      }
-    },
-    getAdmins(owner) {
-      this.$store.dispatch("services/getAdminsData", owner);
-    },
-  },
+    }
+  }
 };
 </script>

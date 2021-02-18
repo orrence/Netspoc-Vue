@@ -66,7 +66,6 @@ export default {
   computed: {
     ...mapState("services", [
       "searchInput",
-      "searchArea",
       "serviceTabNumber",
       "showLoadingCircle",
     ]),

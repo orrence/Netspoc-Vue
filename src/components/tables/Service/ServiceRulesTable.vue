@@ -39,6 +39,9 @@
         :groupBy="serviceSelection.length > 1 ? 'service' : ''"
       />
     </div>
+    <AdminsTable
+      :data="rulesAdminsData"
+    />
   </div>
 </template>
 
@@ -47,11 +50,14 @@ import { mapGetters, mapActions, mapState } from "vuex";
 import Tabulator from "../Tabulator";
 import Vue from "vue";
 import AdditionalServiceInfo from "../../service/detail/AdditionalServiceInfo";
+import AdminsTable from "../../tables/AdminsTable";
 
 export default {
   components: {
     Tabulator,
     AdditionalServiceInfo,
+    AdminsTable
+
   },
   props: ["expandUser", "IPAsName", "filterBySearch", "search_input"],
   data: () => ({
@@ -64,12 +70,12 @@ export default {
       "serviceTabNumber",
       "searchInput",
       "serviceSelection",
+      "rulesAdminsData"
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     serviceSelection: function () {
-      this.calcHeight();
       this.getRules();
     },
     expandUser: function () {
@@ -95,6 +101,7 @@ export default {
       this.tabheight = restheight;
     },
     onResizeTab() {
+      console.log('RESIZE IT NOW');
       this.calcHeight();
     },
     createPayloadElement(payloadObj) {

@@ -17,7 +17,6 @@
             field: 'name',
           },
         ]"
-        :test="compID"
         :groupBy="''"
         :data="servicesData"
       />
