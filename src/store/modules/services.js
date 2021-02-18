@@ -60,7 +60,6 @@ export default {
         RECEIVED_USERS_ADMINSDATA(state, payload) {
             state.usersAdminsData = payload;
         },
-        
         SEARCH_UPDATE(state, payload) {
             payload.search_networks = state.searchInput.search_networks
             state.searchInput = Object.assign({}, state.searchInput, payload);
@@ -110,6 +109,9 @@ export default {
                 }
 
             })
+        },
+        setUsersAdminData({commit}, payload) {
+            commit('RECEIVED_USERS_ADMINSDATA', payload);
         },
         getServiceRules({ commit, state, dispatch }, payload) {
             return Vue.axios.get('/get_rules', {
@@ -171,10 +173,7 @@ export default {
                 commit('RECEIVED_USERSDATA', response.data.records);
 
                 dispatch('getAdminsData', response.data.records[0].owner).then((response) => { 
-                    console.log('HELLO MY RESPONSE NEW');
                     commit('RECEIVED_USERS_ADMINSDATA', response.data.records);
-
-                    console.log(response.data.records);
                 });
             })
         },

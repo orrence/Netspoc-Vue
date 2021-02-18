@@ -37,6 +37,7 @@
       :data="networksData"
       :selectedNetworks="networks"
       :groupBy="''"
+      :rowClickableFn="true"
       :height="height"
     />
   </div>

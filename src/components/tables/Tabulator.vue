@@ -52,6 +52,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    rowClickableFn: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     isVisible: true,
@@ -116,10 +120,12 @@ export default {
     this.config.maxHeight = "100%";
     this.config.height = "100%";
     this.config = Object.assign({}, this.config, this.tableconfig);
-    this.config.rowClick = function (e, row) {
-      me.tabulator.deselectRow();
-      me.tabulator.selectRow(row.getData().name);
-    };
+    if (this.rowClickableFn) {
+      this.config.rowClick = function (e, row) {
+        me.tabulator.deselectRow();
+        me.tabulator.selectRow(row.getData().name);
+      };
+    }
 
     this.newTable();
 
@@ -145,7 +151,7 @@ export default {
     },
     onResize() {
       if (this.isVisible) {
-        console.log('GET RESIZED');
+        console.log("GET RESIZED");
         this.calcHeight();
       }
     },
@@ -156,10 +162,8 @@ export default {
       this.$emit("selectionUpdate", this.selected);
     },
     visibilityChanged(isVisible) {
-      console.log("VISIVLTIIT");
       this.isVisible = isVisible;
-      this.$emit("resizeTab");
-      
+      // this.$emit("resizeTab");
     },
     downloadAsPDF() {
       this.tabulator.download("pdf", `${this.name}.pdf`, {

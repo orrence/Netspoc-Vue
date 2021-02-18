@@ -7,7 +7,6 @@
         selectable: 1,
 
         rowSelected: passOnSelectionUpdate,
-        //rowSelectionChanged: passOnSelectionUpdate
       }"
       :name="`Dienstbenutzer`"
       :columns="[
@@ -50,16 +49,17 @@ export default {
     tabheight: 100,
   }),
   computed: {
-    ...mapState("services", ["usersData", "searchInput", "serviceSelection","usersAdminsData"]),
+    ...mapState("services", [
+      "usersData",
+      "searchInput",
+      "serviceSelection",
+      "usersAdminsData",
+    ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     serviceSelection: function () {
       this.getUsers();
-    },
-    usersData: function() {
-      console.log('USER LOADED');
-      console.log(this.usersData);
     }
   },
   mounted() {
@@ -68,7 +68,13 @@ export default {
   methods: {
     ...mapActions("services", ["getServiceUsers"]),
     passOnSelectionUpdate(data) {
-      this.$store.dispatch("services/getAdminsData", data.getData().owner);
+      let me = this;
+      this.$store
+        .dispatch("services/getAdminsData", data.getData().owner)
+        .then((response) => {
+      
+          me.$store.dispatch('services/setUsersAdminData',response.data.records)
+        });
     },
     calcHeight() {
       let restheight =
