@@ -68,9 +68,6 @@ export default {
     passOnSelectionUpdate(data) {
       this.$store.dispatch("services/getAdminsData", data.getData().owner);
     },
-    onResizeTab() {
-      console.log('TAB GETS RESIZED');
-    },
     getUsers() {
       var vm = this;
 

@@ -51,6 +51,7 @@ export default {
       type: Boolean,
       default: true,
     },
+    test: String,
   },
   data: () => ({
     isVisible: false,
@@ -114,7 +115,6 @@ export default {
 
     this.config.maxHeight = "100%";
     this.config.height = "100%";
-
     this.config = Object.assign({}, this.config, this.tableconfig);
     this.config.rowClick = function (e, row) {
       me.tabulator.deselectRow();
@@ -144,7 +144,6 @@ export default {
       }
     },
     onResize() {
-      console.log("TABULÖATOR RESIZE");
       this.calcHeight();
     },
     deselectAll() {

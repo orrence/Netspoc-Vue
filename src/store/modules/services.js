@@ -8,7 +8,7 @@ export default {
         rulesData: [],
         adminsData: [],
         searchArea: "regeln",
-        serviceTabNumber: 0,
+        serviceTabNumber: 1,
         showLoadingCircle: true,
         searchInput: {
             rules: {

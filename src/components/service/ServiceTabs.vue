@@ -22,7 +22,7 @@
         ></v-progress-circular>
       </div>
     </div>
-    <v-tabs-items v-model="serviceTabModel" >
+    <v-tabs-items v-model="serviceTabModel">
       <v-tab-item :key="0" transition="false" class="fill-height">
         <ServiceTable
           :activetab="serviceTabModel == 0 ? true : false"
@@ -48,7 +48,6 @@
         />
       </v-tab-item>
     </v-tabs-items>
-    
   </v-card>
 </template>
 
@@ -98,7 +97,7 @@ export default {
   },
   created() {
     var vm = this;
-    this.getServices(1);
+    this.getServices(this.serviceTabNumber);
     EventBus.$on("selectionUpdated", function (selection) {
       if (selection == "search") {
         vm.serviceTabModel = 3;
@@ -107,7 +106,6 @@ export default {
         vm.serviceTabModel = 1;
         vm.getServices(1);
       } else {
-    
         vm.getServices(this.serviceTabModel ? "undefined" : 0);
       }
     });
@@ -137,12 +135,8 @@ export default {
     },
     getServices(tabitem) {
       var vm = this; // get vue instance
-    
-      if (
-        !vm.getActiveOwner ||
-        (typeof this.relations[tabitem] === "undefined" && !vm.searchInput)
-      ) {
-        // vm.$emit("selectionUpdate", vm.data);
+
+      if (typeof this.relations[tabitem] === "undefined" && !vm.searchInput) {
         return;
       }
       let rulepayload = {};
@@ -180,7 +174,6 @@ export default {
 </script>
 
 <style>
-
 .hidden {
   display: none;
 }

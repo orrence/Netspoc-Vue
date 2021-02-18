@@ -72,7 +72,7 @@ export default {
   }),
   computed: {
     ...mapGetters(["getActiveLoaded"]),
-    ...mapState("services", ["searchInput", "serviceTabNumber"])
+    ...mapState("services", ["searchInput", "serviceTabNumber"]),
   },
   created() {
     window.addEventListener("resize", this.resizeContainer);
@@ -81,7 +81,6 @@ export default {
     window.removeEventListener("resize", this.resizeContainer);
   },
   mounted() {
-
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {
@@ -97,9 +96,7 @@ export default {
   },
   methods: {
     resizeContainer() {
-      console.log('RESIZE NOW');
       let height = document.getElementById("servicefilters").clientHeight;
-
       this.containerheight = window.innerHeight - 64 - height;
     },
     toggleBatchValue(val) {
