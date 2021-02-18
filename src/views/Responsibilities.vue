@@ -2,10 +2,10 @@
 <v-container fluid>
 	<v-row dense :justify="'center'">
 		<v-col cols="3">
-			<OwnerAdminTable/>
+			<OwnerAdminTable  v-if="getActiveLoaded"/>
 		</v-col>
 		<v-col cols="3">
-			<OwnerWatcherTable/>
+			<OwnerWatcherTable v-if="getActiveLoaded"/>
 		</v-col>
 		<v-col cols="3">
 		</v-col>
@@ -18,6 +18,7 @@
 <script>
 import OwnerAdminTable   from '../components/tables/Responsibility/OwnerAdminTable';
 import OwnerWatcherTable from '../components/tables/Responsibility/OwnerWatcherTable';
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -27,8 +28,8 @@ export default {
 	data: () => ({
 		superiorOwner : ''
 	}),
-	methods: {
-		
-	}
+  computed: {
+    ...mapGetters(["getActiveLoaded"]),
+  },
 }
 </script>
