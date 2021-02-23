@@ -1,22 +1,12 @@
 <template>
-  <div id="table_responsibilities">
+  <div id="table_watchers">
     <Tabulator
       :name="`Zuschauer`"
       :tableconfig="{
         reactiveData: true,
-        selectable: 20,
         index: 'name',
       }"
       :columns="[
-        {
-           formatter: 'rowSelection',
-          //formatter: 'tickCross',
-          // titleFormatter: 'rowSelection',
-          hozAlign: 'center',
-          width: 10,
-          headerSort: false,
-          field: 'selected',
-        },
         {
           title: 'Zuschauer (Watcher)',
           field: 'email',
