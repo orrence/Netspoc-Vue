@@ -83,8 +83,8 @@ const routes = [
 
 const router = new VueRouter({
 	routes,
-	mode: 'history'
-	// base: '/login'
+	mode: 'history',
+	base: '/netspocvue/'
 });
 
 /*router.beforeEach((to, from, next) => {
