@@ -101,7 +101,6 @@ export default {
       this.tabheight = restheight;
     },
     onResizeTab() {
-      console.log('RESIZE IT NOW');
       this.calcHeight();
     },
     createPayloadElement(payloadObj) {

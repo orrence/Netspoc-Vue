@@ -5,7 +5,7 @@
     <v-main>
       <div class="fluid grid-list-md grey lighten-5 fill-height">
         <keep-alive>
-          <router-view v-if="getActiveLoaded" />
+          <router-view v-if="initComplete" />
         </keep-alive>
       </div>
     </v-main>
@@ -49,15 +49,23 @@ export default {
       dialog: false,
       windowheight: 600,
       errortext: "",
+      isPublicRoute: false,
     };
   },
   computed: {
     ...mapGetters(["getActiveLoaded"]),
+    initComplete() {
+  
+      if(this.isPublicRoute) {
+        return true;
+      }
+      return this.getActiveLoaded;
+    },
   },
   mounted() {
     this.windowheight = window.innerHeight;
 
-   /* let xlsxscript = document.createElement("script");
+    /* let xlsxscript = document.createElement("script");
     xlsxscript.setAttribute("src", "js/xlsx.full.min.js");
     document.head.appendChild(xlsxscript);
 
@@ -78,8 +86,11 @@ export default {
     }
 
     this.$store.dispatch("auth/requestLoggedIn");
-   
-   // To-DO Warum eventbus, eventuell auch mit VueX Watcher
+    let meta = this.$route.meta;
+    if (meta.requiresAuth == undefined || !meta.requiresAuth) {
+      this.isPublicRoute = true;
+    }
+    // To-DO Warum eventbus, eventuell auch mit VueX Watcher
     EventBus.$on("httperror", function (selection) {
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);

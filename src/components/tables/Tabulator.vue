@@ -151,7 +151,6 @@ export default {
     },
     onResize() {
       if (this.isVisible) {
-        console.log("GET RESIZED");
         this.calcHeight();
       }
     },

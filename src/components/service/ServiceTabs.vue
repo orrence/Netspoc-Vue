@@ -53,25 +53,18 @@
 
 <script>
 import ServiceTable from "../tables/Service/ServiceTable";
-import { mapState, mapGetters, mapActions } from "vuex";
-import EventBus from "../../plugins/event-bus";
-import Vue from "vue";
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     ServiceTable,
   },
-  data: () => ({
-    relations: ["owner", "user", "visible"],
-  }),
   computed: {
     ...mapState("services", [
-      "searchInput",
       "serviceTabNumber",
       "showLoadingCircle",
     ]),
     ...mapState(["active"]),
     ...mapState("services", ["servicesData"]),
-    ...mapGetters(["getActiveOwner", "getActivePolicy"]),
     serviceTabModel: {
       get() {
         return this.serviceTabNumber;
@@ -94,82 +87,17 @@ export default {
       },
     },
   },
-
   created() {
-    var vm = this;
-    console.log('SERVICE TAB NUMER');
-    console.log(this.serviceTabNumber);
-    this.getServices(this.serviceTabNumber);
-    EventBus.$on("selectionUpdated", function (selection) {
-      if (selection == "search") {
-        vm.serviceTabModel = 3;
-        vm.getServices(3);
-      } else if (selection == "start") {
-        vm.serviceTabModel = 1;
-        vm.getServices(1);
-      } else {
-        vm.getServices(this.serviceTabModel ? "undefined" : 0);
-      }
-    });
+    this.getServices();
   },
   methods: {
     ...mapActions("services", ["getServicesList"]),
-    onChangeTab(data) {
+    onChangeTab() {
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
-      this.getServices(data);
-      // this.$store.dispatch('requestActive');
+      this.getServices();
     },
-    createPayloadElement(payloadObj) {
-      let payload = {};
-
-      for (const [key, value] of Object.entries(payloadObj)) {
-        if (typeof value == "boolean") {
-          let boolval = "";
-          if (value == true) {
-            boolval = "on";
-          }
-          Vue.set(payload, key, boolval);
-        } else {
-          Vue.set(payload, key, value);
-        }
-      }
-      return payload;
-    },
-    getServices(tabitem) {
-      var vm = this; // get vue instance
-
-      if (typeof this.relations[tabitem] === "undefined" && !vm.searchInput) {
-        return;
-      }
-      let rulepayload = {};
-      let textsearch_payload = {};
-      let generalpayload = {};
-
-      rulepayload = this.createPayloadElement(vm.searchInput.rules);
-      textsearch_payload = this.createPayloadElement(vm.searchInput.textsearch);
-      generalpayload = this.createPayloadElement(vm.searchInput.general);
-
-      let basepayload;
-      if (typeof this.relations[tabitem] !== "undefined") {
-        basepayload = {
-          chosen_networks: vm.searchInput.search_networks.join(","),
-          active_owner: vm.getActiveOwner,
-          history: vm.getActivePolicy,
-          relation: this.relations[tabitem],
-        };
-      } else {
-        basepayload = {
-          chosen_networks: vm.searchInput.search_networks.join(","),
-          active_owner: vm.getActiveOwner,
-          history: vm.getActivePolicy,
-          relation: "",
-          ...rulepayload,
-          ...textsearch_payload,
-          ...generalpayload,
-        };
-      }
-
-      this.getServicesList({ data: basepayload });
+    getServices() {
+      this.getServicesList();
     },
   },
 };

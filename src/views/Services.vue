@@ -47,7 +47,6 @@ import SearchBar from "../components/service/search/SearchBar";
 import NetselectionBar from "../components/service/search/NetselectionBar";
 import { mapState } from "vuex";
 import urlSearchParams from "../components/mixins/urlSearchParams";
-import EventBus from "../plugins/event-bus";
 import ServiceFilters from "../components/service/ServiceFilters.vue";
 
 export default {
@@ -108,8 +107,8 @@ export default {
     },
     clearSearchFilter() {
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
-      EventBus.$emit("selectionUpdated", "start");
-
+      this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
+      this.$store.dispatch("services/getServicesList");
       window.location.hash = "";
     },
   },
