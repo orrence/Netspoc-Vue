@@ -8,6 +8,7 @@
 			<OwnerWatcherTable v-if="getActiveLoaded"/>
 		</v-col>
 		<v-col cols="3">
+			<OwnerSupervisorTable v-if="getActiveLoaded"/>
 		</v-col>
 		<v-col cols="3">
 		</v-col>
@@ -18,15 +19,16 @@
 <script>
 import OwnerAdminTable   from '../components/tables/Responsibility/OwnerAdminTable';
 import OwnerWatcherTable from '../components/tables/Responsibility/OwnerWatcherTable';
+import OwnerSupervisorTable from '../components/tables/Responsibility/OwnerSupervisorTable';
 import { mapGetters } from "vuex";
 
 export default {
 	components: {
 		OwnerAdminTable,
-		OwnerWatcherTable
+		OwnerWatcherTable,
+		OwnerSupervisorTable
 	},
 	data: () => ({
-		superiorOwner : ''
 	}),
   computed: {
     ...mapGetters(["getActiveLoaded"]),

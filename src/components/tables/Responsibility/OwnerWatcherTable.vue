@@ -12,7 +12,7 @@
           field: 'email',
         },
       ]"
-      :data="ownerAdminsData"
+      :data="ownerWatchersData"
       :height="height"
     />
   </div>
@@ -32,17 +32,30 @@ export default {
   data: () => ({
     data: [],
     selectionModel: "",
-    ownerAdmins: "",
   }),
+  mounted() {
+    this.loadOwnerWatchers();
+  },
   computed: {
-    ...mapState("responsibilities", ["ownerAdminsData"]),
+    ...mapState("responsibilities", ["ownerWatchersData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
   },
   created() {},
   methods: {
-    ...mapActions("responsibilities", ["getOwnerAdmins"]),
+    ...mapActions("responsibilities", ["getOwnerWatchers"]),
+      loadOwnerWatchers() {
+      var vm = this;
+
+      const params = {
+        active_owner: vm.getActiveOwner,
+        history: vm.getActivePolicy,
+      };
+      console.log( "Load owner admins")
+      console.dir(params)
+      this.getOwnerWatchers(params);
+    },
   },
 }
 </script>
