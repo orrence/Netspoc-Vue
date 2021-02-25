@@ -32,7 +32,6 @@
 <script>
 import { mapGetters } from "vuex";
 import Tabulator from "tabulator-tables";
-import { jsPDF } from "jspdf";
 
 export default {
   props: {
@@ -105,6 +104,11 @@ export default {
         });
       },
     },
+    columns: {
+      handler: function() {
+        this.tabulator.setColumns(this.columns);
+      }
+    }
   },
   mounted() {
 
@@ -152,7 +156,6 @@ export default {
     },
 
     downloadAsPDF() {
-      console.log(jsPDF);
       this.tabulator.download("pdf", `${this.name}.pdf`, {
         orientation: "portrait", //set page orientation to portrait
         title: this.name, //add title to report
