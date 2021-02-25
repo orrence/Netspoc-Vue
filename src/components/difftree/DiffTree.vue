@@ -1,17 +1,6 @@
 <template>
   <div>
     <div v-if="loaded">
-      <!-- <v-checkbox 
-	v-model="collapse"
-	label="Nodes Zusammenfassen" 
-	/>
-		<v-treeview
-		:items="collapsedTree"
-		open-all
-		dense
-		open-on-click
-		/> -->
-
       <v-treeview :items="tree" open-all dense item-text="text" open-on-click>
         <template v-slot:prepend="{ item, open }">
           <span
@@ -32,7 +21,6 @@
           </v-icon>
         </template>
       </v-treeview>
-      <!-- {{ collapsedTree }} -->
     </div>
     <div :class="loaded ? 'hidden' : ''" class="loadingoverlay">
       <div class="loadingcircle">
@@ -59,13 +47,11 @@ export default {
   },
   data: () => ({
     collapse: true,
-    tree: [],
-    collapsedTree: [],
     loaded: false,
-    ic: 1,
   }),
   computed: {
     ...mapState(["active"]),
+    ...mapState("diff", ["tree"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   mounted() {
@@ -75,45 +61,31 @@ export default {
     active: {
       deep: true,
       handler() {
-        this.getDiff();
+        this.$store.commit("diff/SET_TREE", []);
       },
     },
     oldPolicy() {
       this.getDiff();
     },
   },
-  methods: {  
+  methods: {
     getDiff() {
-      var vm = this; // get vue instance
+      var vm = this;
       vm.loaded = false;
-      if (!vm.getActiveOwner) {
-        return;
-      }
-      vm.axios
-        .get("/get_diff", {
-          params: {
-            active_owner: vm.getActiveOwner,
-            history: vm.getActivePolicy,
-            version: vm.oldPolicy,
-          },
-        })
-        .then(function (response) {
-          vm.ic = 0;
-          vm.tree = Object.values(response.data);
-    
-          vm.loaded = true;
-        })
-        .catch(function (error) {
-          vm.tree = [];
-          vm.collapsedTree = [];
-          alert("get_diff: " + error);
-        });
+      let params = {
+        active_owner: vm.getActiveOwner,
+        history: vm.getActivePolicy,
+        version: vm.oldPolicy,
+      };
+      this.$store.dispatch("diff/requestDiff", params).then(function () {
+        vm.loaded = true;
+      });
     },
   },
 };
 </script>
 <style scoped>
 .loadingoverlay {
-	top: 0
+  top: 0;
 }
 </style>

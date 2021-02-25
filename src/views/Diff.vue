@@ -71,15 +71,11 @@ export default {
     },
   },
   watch: {
-    getActivePolicy(val, oldVal) {
-      if (val !== oldVal) {
+    active(val, oldVal) {
+      if (val.owner !== oldVal.owner) {
         this.getOlderPolicies();
+        this.oldPolicy = null;
 
-        if (this.olderPolicies.length > 0) {
-          this.oldPolicy = this.olderPolicies[0];
-        } else {
-          this.oldPolicy = null;
-        }
       }
     },
   },
@@ -105,6 +101,8 @@ export default {
           newOld.push(history[i]);
         }
       }
+      console.log('NEW OLD');
+      console.log(newOld);
       this.olderPolicies = newOld;
     },
   },
