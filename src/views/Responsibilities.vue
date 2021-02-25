@@ -42,8 +42,8 @@ export default {
   },
   methods: {
     captureSelectionUpdate(data) {
-      this.selection = data[0]
-      //console.log("SEL UPDATE!")
+      this.selection = data
+      console.log("SEL UPDATE!")
       console.dir(this.selection)
     },
   },

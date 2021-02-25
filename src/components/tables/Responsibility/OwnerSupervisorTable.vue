@@ -50,13 +50,15 @@ export default {
         this.loadOwnerSupervisors();
       },
     },
+    /*
     ownerSupervisorsData: {
       handler() {
         if (this.ownerSuperVisorsData.length > 0) {
-          this.updateServiceSelection([this.ownerSupervisorsData[0]]);
+          //this.updateSupertvisorSelection([this.ownerSupervisorsData[0]]);
         } 
       },
     },
+    */
   },
   methods: {
     ...mapActions("responsibilities", ["getOwnerSupervisors"]),
