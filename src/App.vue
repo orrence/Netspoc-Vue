@@ -55,8 +55,7 @@ export default {
   computed: {
     ...mapGetters(["getActiveLoaded"]),
     initComplete() {
-  
-      if(this.isPublicRoute) {
+      if (this.isPublicRoute) {
         return true;
       }
       return this.getActiveLoaded;
@@ -65,7 +64,7 @@ export default {
   mounted() {
     this.windowheight = window.innerHeight;
 
-    /* let xlsxscript = document.createElement("script");
+   /* let xlsxscript = document.createElement("script");
     xlsxscript.setAttribute("src", "js/xlsx.full.min.js");
     document.head.appendChild(xlsxscript);
 
@@ -102,6 +101,8 @@ export default {
 </script>
  
 <style>
+@import './assets/style.css';
+
 /*invisible element below input fields causes misalignment*/
 .v-text-field__details {
   display: none;
