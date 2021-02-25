@@ -37,11 +37,18 @@ export default {
   mounted() {
     this.loadOwnerAdmins();
   },
+  watch: {
+    active: {
+      deep: true,
+      handler() {
+        this.loadOwnerAdmins();
+      },
+    },
+  },
   computed: {
+    ...mapState(["active"]),
     ...mapState("responsibilities", ["ownerAdminsData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
-  },
-  watch: {
   },
   methods: {
     ...mapActions("responsibilities", ["getOwnerAdmins"]),
@@ -52,8 +59,6 @@ export default {
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
       };
-      console.log( "Load owner admins")
-      console.dir(params)
       this.getOwnerAdmins(params);
     },
   },

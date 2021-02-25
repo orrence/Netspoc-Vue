@@ -4,7 +4,10 @@
       :name="`Verantwortliche`"
       :tableconfig="{
         reactiveData: true,
+        selectable: 20,
         index: 'name',
+        rowSelectionChanged: passOnSelectionUpdate,
+       
       }"
       :columns="[
         {
@@ -13,7 +16,6 @@
         },
       ]"
       :data="ownerSupervisorsData"
-      :height="height"
     />
   </div>
 </template>
@@ -37,10 +39,24 @@ export default {
     this.loadOwnerSupervisors();
   },
   computed: {
+    ...mapState(["active"]),
     ...mapState("responsibilities", ["ownerSupervisorsData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
+    active: {
+      deep: true,
+      handler() {
+        this.loadOwnerSupervisors();
+      },
+    },
+    ownerSupervisorsData: {
+      handler() {
+        if (this.ownerSuperVisorsData.length > 0) {
+          this.updateServiceSelection([this.ownerSupervisorsData[0]]);
+        } 
+      },
+    },
   },
   methods: {
     ...mapActions("responsibilities", ["getOwnerSupervisors"]),
@@ -51,9 +67,13 @@ export default {
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
       };
-      console.log( "Load owner admins")
-      console.dir(params)
       this.getOwnerSupervisors(params);
+    },
+    passOnSelectionUpdate(data) {
+      this.$emit(
+        "selectionUpdate",
+        data.map((row) => row.name)
+      );
     },
   },
 }

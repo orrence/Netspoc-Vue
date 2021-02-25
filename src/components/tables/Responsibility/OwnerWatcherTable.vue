@@ -37,12 +37,18 @@ export default {
     this.loadOwnerWatchers();
   },
   computed: {
+    ...mapState(["active"]),
     ...mapState("responsibilities", ["ownerWatchersData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
-  },
-  created() {},
+    active: {
+      deep: true,
+      handler() {
+        this.loadOwnerWatchers();
+      },
+    },
+  },  created() {},
   methods: {
     ...mapActions("responsibilities", ["getOwnerWatchers"]),
       loadOwnerWatchers() {
@@ -52,8 +58,6 @@ export default {
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,
       };
-      console.log( "Load owner admins")
-      console.dir(params)
       this.getOwnerWatchers(params);
     },
   },

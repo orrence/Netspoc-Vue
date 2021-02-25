@@ -6,6 +6,7 @@ export default {
         ownerAdminsData: [],
         ownerWatchersData: [],
         ownerSupervisorsData: [],
+        ownerSupervisorAdminsData: [],
     },
     mutations: {
         RECEIVED_OWNERADMINSDATA(state, payload) {
@@ -16,6 +17,9 @@ export default {
         },
         RECEIVED_OWNERSUPERVISORSDATA(state, payload) {
             state.ownerSupervisorsData = payload.records;
+        },
+        RECEIVED_OWNERSUPERVISORADMINSDATA(state, payload) {
+            state.ownerSupervisorAdminsData = payload.records;
         },
     },
     actions: {
@@ -40,6 +44,14 @@ export default {
                 params: payload
             }).then(res => {
                 commit('RECEIVED_OWNERSUPERVISORSDATA', res.data);
+                return res.data;
+            })
+        },
+        getOwnerSupervisorAdmins({ commit }, payload) {
+            return Vue.axios.get('/get_admins_watchers', {
+                params: payload
+            }).then(res => {
+                commit('RECEIVED_OWNERSUPERVISORADMINSDATA', res.data);
                 return res.data;
             })
         },
