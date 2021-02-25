@@ -48,7 +48,6 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 import Tabulator from "../Tabulator";
-import Vue from "vue";
 import AdditionalServiceInfo from "../../service/detail/AdditionalServiceInfo";
 import AdminsTable from "../../tables/AdminsTable";
 
@@ -59,7 +58,7 @@ export default {
     AdminsTable
 
   },
-  props: ["expandUser", "IPAsName", "filterBySearch", "search_input"],
+  props: ["search_input"],
   data: () => ({
     data: [],
     tabheight: 100,
@@ -70,7 +69,10 @@ export default {
       "serviceTabNumber",
       "searchInput",
       "serviceSelection",
-      "rulesAdminsData"
+      "rulesAdminsData",
+      "IPAsName",
+      "expandUser",
+      "filterBySearch"
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
@@ -103,54 +105,11 @@ export default {
     onResizeTab() {
       this.calcHeight();
     },
-    createPayloadElement(payloadObj) {
-      let payload = {};
-
-      for (const [key, value] of Object.entries(payloadObj)) {
-        if (typeof value == "boolean") {
-          let boolval = "";
-          if (value == true) {
-            boolval = "on";
-          }
-          Vue.set(payload, key, boolval);
-        } else {
-          Vue.set(payload, key, value);
-        }
-      }
-      return payload;
-    },
     getRules() {
-      var vm = this; // get vue instance
-      if (vm.serviceSelection.length !== 1) {
+      /*if (this.serviceSelection.length !== 1) {
         return;
-      }
-
-      let rulepayload = {};
-      let textsearch_payload = {};
-      let generalpayload = {};
-
-      // TO-DO Code kommentieren und an einer zentralen Stelle widerverwendbar machen
-      if (vm.filterBySearch && vm.serviceTabNumber === 3) {
-        rulepayload = this.createPayloadElement(vm.searchInput.rules);
-        textsearch_payload = this.createPayloadElement(
-          vm.searchInput.textsearch
-        );
-        generalpayload = this.createPayloadElement(vm.searchInput.general);
-      }
-
-      const payload = {
-        expand_users: vm.expandUser ? 1 : 0,
-        display_property: vm.IPAsName ? "name" : "ip",
-        active_owner: vm.getActiveOwner,
-        history: vm.getActivePolicy,
-        service: vm.serviceSelection.map((row) => row.name).join(","),
-        filter_rules: vm.filterBySearch ? 1 : 0,
-        ...rulepayload,
-        ...textsearch_payload,
-        ...generalpayload,
-        chosen_networks: vm.searchInput.search_networks.join(","),
-      };
-      this.getServiceRules(payload);
+      }*/
+      this.getServiceRules();
     },
   },
 };

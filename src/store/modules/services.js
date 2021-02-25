@@ -10,6 +10,9 @@ export default {
         usersAdminsData: [],
         serviceTabNumber: 1,
         showLoadingCircle: true,
+        filterBySearch: false,
+        expandUser: false,
+        IPAsName:false,
         relations: ["owner", "user","visible"],
         searchInput: {
             rules: {
@@ -93,7 +96,17 @@ export default {
             }
             temp.search_networks = payload.search_networks;
             state.searchInput = temp;
-        }
+        },
+        SET_IPASNAME(state,payload) {
+            state.IPAsName = payload;
+        },
+        SET_EXPAND_USER(state,payload) {
+            state.expandUser = payload;
+        },
+        FILTER_BY_SEARCH(state,payload) {
+            state.filterBySearch = payload;
+        },
+    
     },
 
     actions: {
@@ -137,9 +150,11 @@ export default {
             }).then(res => {
 
                 commit('RECEIVED_SERVICESDATA', res.data);
+                console.log('SERVICES DATA');
+                console.log(res.data);
                 if (res.data.totalCount == 0) {
-                    commit('RECEIVED_RULESDATA', []);
-                    commit('RECEIVED_ADMINSDATA', []);
+                    commit('services/RECEIVED_RULESDATA', [], {root: true});
+                    commit('services/RECEIVED_USERS_ADMINSDATA', [], {root: true});
                 }
 
             })
@@ -147,7 +162,33 @@ export default {
         setUsersAdminData({ commit }, payload) {
             commit('RECEIVED_USERS_ADMINSDATA', payload);
         },
-        getServiceRules({ commit, state, dispatch }, payload) {
+        getServiceRules({ commit, state, dispatch }) {
+
+            let rulepayload = {};
+            let textsearch_payload = {};
+            let generalpayload = {};
+                  
+            if (state.filterBySearch && state.serviceTabNumber === 3) {
+              rulepayload = this.createPayloadElement(state.searchInput.rules);
+              textsearch_payload = this.createPayloadElement(
+                state.searchInput.textsearch
+              );
+              generalpayload = this.createPayloadElement(state.searchInput.general);
+            }
+      
+            const payload = {
+              expand_users: state.expandUser ? 1 : 0,
+              display_property: state.IPAsName ? "name" : "ip",
+              active_owner: store.getters.getActiveOwner,
+              history: store.getters.getActivePolicy,
+              service: state.serviceSelection.map((row) => row.name).join(","),
+              filter_rules: store.state.filterBySearch ? 1 : 0,
+              ...rulepayload,
+              ...textsearch_payload,
+              ...generalpayload,
+              chosen_networks: state.searchInput.search_networks.join(","),
+            };
+
             return Vue.axios.get('/get_rules', {
                 params: payload
             }).then(res => {

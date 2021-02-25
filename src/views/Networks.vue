@@ -29,6 +29,7 @@ export default {
   }),
   methods: {
     captureSelectionUpdate(data) {
+      console.log('DATEN LADEN');
       this.selection = data;
     },
   },
