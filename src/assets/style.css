@@ -84,15 +84,6 @@ body {
          url('fonts/roboto-v20-latin-900.ttf') format('truetype'), /* Safari, Android, iOS */
          url('fonts/roboto-v20-latin-900.svg#Roboto') format('svg'); /* Legacy iOS */
   }
-  @font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: url('fonts/MaterialIcons-Regular.ttf'); /* For IE6-8 */
-    src: local('Material Icons'),
-         local('MaterialIcons-Regular'),
-         url('fonts/MaterialIcons-Regular.ttf') format('truetype');
- }
  
   .material-icons {
     font-family: 'Material Icons';

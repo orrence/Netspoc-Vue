@@ -37,6 +37,7 @@
       :data="networksData"
       :selectedNetworks="networks"
       :groupBy="''"
+      :rowClickableFn="true"
       :height="height"
     />
   </div>
@@ -78,10 +79,7 @@ export default {
     ...mapActions("networks", ["getNetworks"]),
     loadNetworks() {
       var vm = this; // get vue instance
-      /* if (!vm.getActiveOwner) {
-        vm.data = [];
-        return;
-      } */
+
       const params = {
         active_owner: vm.getActiveOwner,
         history: vm.getActivePolicy,

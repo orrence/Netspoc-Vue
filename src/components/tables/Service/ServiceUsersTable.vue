@@ -7,7 +7,6 @@
         selectable: 1,
 
         rowSelected: passOnSelectionUpdate,
-        //rowSelectionChanged: passOnSelectionUpdate
       }"
       :name="`Dienstbenutzer`"
       :columns="[
@@ -26,18 +25,23 @@
         },
       ]"
       :data="usersData"
+      @resizeTab="calcHeight"
       :variableHeight="tabheight"
       :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
+    <AdminsTable :data="usersAdminsData" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import Tabulator from "../Tabulator";
+import AdminsTable from "../../tables/AdminsTable";
+
 export default {
   components: {
     Tabulator,
+    AdminsTable,
   },
   props: ["filterBySearch"],
   data: () => ({
@@ -45,30 +49,43 @@ export default {
     tabheight: 100,
   }),
   computed: {
-    ...mapState("services", ["usersData", "searchInput", "serviceSelection"]),
+    ...mapState("services", [
+      "usersData",
+      "searchInput",
+      "serviceSelection",
+      "usersAdminsData",
+    ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     serviceSelection: function () {
       this.getUsers();
-    },
+    }
   },
   mounted() {
-    let restheight =
-      (window.innerHeight -
-        this.$refs.serviceuserstable.getBoundingClientRect().top) *
-      0.5;
-  
-    this.tabheight = restheight;
     this.getUsers();
   },
   methods: {
     ...mapActions("services", ["getServiceUsers"]),
     passOnSelectionUpdate(data) {
-      this.$store.dispatch("services/getAdminsData", data.getData().owner);
+      let me = this;
+      this.$store
+        .dispatch("services/getAdminsData", data.getData().owner)
+        .then((response) => {
+      
+          me.$store.dispatch('services/setUsersAdminData',response.data.records)
+        });
+    },
+    calcHeight() {
+      let restheight =
+        (window.innerHeight -
+          this.$refs.serviceuserstable.getBoundingClientRect().top) *
+        0.5;
+
+      this.tabheight = restheight;
     },
     getUsers() {
-      var vm = this; // get vue instance
+      var vm = this;
 
       if (vm.serviceSelection.length !== 1) {
         return;

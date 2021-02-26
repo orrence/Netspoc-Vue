@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 export const requestOwners = ({ commit }) => {
     return Vue.axios.get('/get_owners')
         .then(function (response) {
@@ -19,8 +18,9 @@ export const requestActive = ({ commit, dispatch, state }) => {
         .then(function (response) {
             
             let newActiveOwner = response.data.records[0].name;
-            dispatch('requestHistory', newActiveOwner)
+            return dispatch('requestHistory', newActiveOwner)
                 .then(() => {
+                    console.log('POLICY LOADING IS', state.history[0]);
                     commit('setActive',
                         {
                             owner: newActiveOwner,
@@ -29,6 +29,7 @@ export const requestActive = ({ commit, dispatch, state }) => {
                 })
                 .catch(function () {
                 });
+            
         })
         .catch(function () {
         });
@@ -44,6 +45,7 @@ export const setActive = ({ commit, dispatch, state }, newActiveOwner) => {
             if (response.data.success) {
                 dispatch('requestHistory', newActiveOwner)
                     .then(() => {
+                      
                         commit('setActive',
                             {
                                 owner: newActiveOwner,
@@ -75,4 +77,12 @@ export const requestHistory = ({ commit }, owner) => {
         })
         .catch(function () {
         });
+};
+
+export const initApp = ({dispatch, commit}) => {
+    dispatch('requestOwners');
+    return dispatch('requestActive').then(() => {
+        commit('auth/SET_LOGGED_IN', true);
+        return true;
+    })
 };

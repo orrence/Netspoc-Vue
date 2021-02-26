@@ -12,7 +12,7 @@
         </v-tabs>
         <v-tabs-items v-model="networkselection">
           <v-tab-item>
-            <NetworkTable  @selectionUpdate="captureSelectionUpdate" />
+            <NetworkTable @selectionUpdate="captureSelectionUpdate" />
           </v-tab-item>
         </v-tabs-items>
 
@@ -28,7 +28,6 @@
 <script>
 import NetworkTable from "../../tables/Network/NetworkTable";
 import urlSearchParams from "../../mixins/urlSearchParams";
-import EventBus from "../../../plugins/event-bus";
 import { mapState } from "vuex";
 
 export default {
@@ -56,13 +55,13 @@ export default {
     },
 
     searchUpdate() {
-      this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.$emit("closeSearch");
+      this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.emitSearchInputToParent();
       this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
 
-      EventBus.$emit("selectionUpdated", "network");
       this.$emit("changeBadgeVal", this.search_networks);
+      this.$store.dispatch("services/getServicesList");
     },
     captureSelectionUpdate(data) {
       this.search_networks = data;

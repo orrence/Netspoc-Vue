@@ -6,7 +6,6 @@
           <v-tabs
             background-color="lightgray"
             v-model="tabsearchArea"
-            @change="changeTab"
             slider-color="orange"
             grow
           >
@@ -186,7 +185,6 @@
 </template>
 <script>
 import urlSearchParams from "../../mixins/urlSearchParams";
-import EventBus from "../../../plugins/event-bus";
 import { mapState } from "vuex";
 
 export default {
@@ -198,7 +196,7 @@ export default {
     tabsearchArea: 0,
   }),
   computed: {
-    ...mapState("services", ["searchInput", "searchArea"]),
+    ...mapState("services", ["searchInput"]),
   },
   mounted() {
     if (this.$route.hash != "") {
@@ -233,16 +231,15 @@ export default {
       this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
       this.cluster = this.searchInput;
     },
-    changeTab(num) {
-      this.$store.commit("services/UPDATE_SEARCH_AREA", this.tabnames[num]);
-    },
 
     searchUpdate() {
-       this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.$emit("closeSearch");
+      this.$store.commit("services/SET_LOADING_CIRCLE", true);
+
       this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
       this.emitSearchInputToParent();
-      EventBus.$emit("selectionUpdated", "search");
+      this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 3);
+      this.$store.dispatch("services/getServicesList");
     },
     captureSelectionUpdate(data) {
       this.cluster.search_networks = data;

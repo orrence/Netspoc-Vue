@@ -29,6 +29,7 @@
       <v-col>
         <v-card
           class="overflow-auto"
+          v-resize="calcHeight"
           :style="{ height: difftreeheight + 'px' }"
           tile
         >
@@ -56,7 +57,7 @@ export default {
     difftreeheight: 200,
   }),
   mounted() {
-    this.calcHeight();
+    this.getOlderPolicies();
   },
   computed: {
     ...mapState(["active"]),
@@ -70,16 +71,13 @@ export default {
     },
   },
   watch: {
-    getActivePolicy(val, oldVal) {
-      if (val !== oldVal) {
+    active: {
+      deep: true,
+      handler() {
+  
         this.getOlderPolicies();
-
-        if (this.olderPolicies.length > 0) {
-          this.oldPolicy = this.olderPolicies[0];
-        } else {
-          this.oldPolicy = null;
-        }
-      }
+        this.oldPolicy = null;
+      },
     },
   },
 
@@ -95,9 +93,6 @@ export default {
         window.innerHeight - this.$refs.diffree.getBoundingClientRect().top;
       this.difftreeheight = restheight - 10;
     },
-    childMessageReceived(newSelected) {
-      this.oldPolicy = newSelected;
-    },
     getOlderPolicies() {
       var history = this.getHistory;
       var active = this.active.policy.date;
@@ -107,6 +102,7 @@ export default {
           newOld.push(history[i]);
         }
       }
+ 
       this.olderPolicies = newOld;
     },
   },

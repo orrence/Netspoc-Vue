@@ -1,3 +1,4 @@
+
 export const getActiveOwner = state => {
     if(!state.active.owner) return null;
     return state.active.owner;
@@ -15,5 +16,5 @@ export const getHistory = state => {
 };
 
 export const getActiveLoaded = state => {
-    return state.active.policy != null && state.active.owner != null;
+    return state.active.policy != null && state.active.owner != null
 }
