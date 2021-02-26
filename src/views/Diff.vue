@@ -73,7 +73,7 @@ export default {
   watch: {
     active: {
       deep: true,
-      handler(val, oldVal) {
+      handler() {
   
         this.getOlderPolicies();
         this.oldPolicy = null;
