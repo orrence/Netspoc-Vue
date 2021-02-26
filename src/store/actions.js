@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 export const requestOwners = ({ commit }) => {
     return Vue.axios.get('/get_owners')
         .then(function (response) {
@@ -19,7 +18,7 @@ export const requestActive = ({ commit, dispatch, state }) => {
         .then(function (response) {
             
             let newActiveOwner = response.data.records[0].name;
-            dispatch('requestHistory', newActiveOwner)
+            return dispatch('requestHistory', newActiveOwner)
                 .then(() => {
                     commit('setActive',
                         {
@@ -29,6 +28,7 @@ export const requestActive = ({ commit, dispatch, state }) => {
                 })
                 .catch(function () {
                 });
+            
         })
         .catch(function () {
         });
@@ -75,4 +75,12 @@ export const requestHistory = ({ commit }, owner) => {
         })
         .catch(function () {
         });
+};
+
+export const initApp = ({dispatch, commit}) => {
+    dispatch('requestOwners');
+    return dispatch('requestActive').then(() => {
+        commit('auth/SET_LOGGED_IN', true);
+        return true;
+    })
 };

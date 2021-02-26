@@ -17,8 +17,6 @@ export default {
 	name: 'combo-owner',
 	data: () => ({
 		lastSelected: "",
-		loadedOwner: false,
-		loadedActiveOwner: false
 	}),
 	computed: {
 		...mapGetters(['getActiveOwner', 'getOwners']),
@@ -29,16 +27,7 @@ export default {
 				this.$store.dispatch('setActive', val); }
 		},
 	},
-	mounted () {
-		this.$store.dispatch('requestOwners')
-			.then(() => {
-				this.loadedOwner = true;
-			});
-		this.$store.dispatch('requestActive')
-			.then(() => {
-				this.loadedActiveOwner = true;
-			});
-	}
+
 }
 </script>
 

@@ -4,9 +4,7 @@
 
     <v-main>
       <div class="fluid grid-list-md grey lighten-5 fill-height">
-        <keep-alive>
-          <router-view v-if="initComplete" />
-        </keep-alive>
+        <router-view />
       </div>
     </v-main>
 
@@ -55,6 +53,8 @@ export default {
   computed: {
     ...mapGetters(["getActiveLoaded"]),
     initComplete() {
+      console.log("IS PUBLIC ROUTE");
+      console.log(this.isPublicRoute);
       if (this.isPublicRoute) {
         return true;
       }
@@ -64,7 +64,7 @@ export default {
   mounted() {
     this.windowheight = window.innerHeight;
 
-   /* let xlsxscript = document.createElement("script");
+    /* let xlsxscript = document.createElement("script");
     xlsxscript.setAttribute("src", "js/xlsx.full.min.js");
     document.head.appendChild(xlsxscript);
 
@@ -84,12 +84,10 @@ export default {
       this.$store.commit("setLoginpath", this.$route.path);
     }
 
-    this.$store.dispatch("auth/requestLoggedIn");
     let meta = this.$route.meta;
     if (meta.requiresAuth == undefined || !meta.requiresAuth) {
       this.isPublicRoute = true;
     }
-    // To-DO Warum eventbus, eventuell auch mit VueX Watcher
     EventBus.$on("httperror", function (selection) {
       me.errortext = selection.data.msg;
       me.$store.commit("services/SET_LOADING_CIRCLE", false);
@@ -101,7 +99,7 @@ export default {
 </script>
  
 <style>
-@import './assets/style.css';
+@import "./assets/style.css";
 
 /*invisible element below input fields causes misalignment*/
 .v-text-field__details {

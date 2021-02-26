@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar id="apptoolbar" app color="primary" dark v-if="getLoggedIn">
+  <v-app-bar id="apptoolbar" app color="primary" dark v-if="getLoggedIn && getActiveLoaded">
     <v-tabs  slider-color="orange">
       <v-tab id="tab_services" to="/services">Dienste</v-tab>
 
@@ -29,6 +29,7 @@ export default {
   },
   computed: {
     ...mapGetters("auth", ["getLoggedIn"]),
+    ...mapGetters(['getActiveLoaded']),
   },
   methods: {
     ...mapActions("auth", ["requestLoggedIn", "setLoggedIn", "logoutUser"]),

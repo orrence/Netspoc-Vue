@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-//import store from '../store'
+import store from '../store'
 import Services from '@/views/Services'
 import Networks from '@/views/Networks'
 import Diff from '@/views/Diff'
@@ -74,24 +74,24 @@ const routes = [
 
 const router = new VueRouter({
 	routes,
-	mode: 'history'
-	// base: '/login'
+	mode: 'history',
+	//base: '/login'
 });
 
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth)) {
-		// todo check if is already loggedin
-
-		if (store.getters['auth/getLoggedIn'] == 'false' || store.getters['auth/getLoggedIn'] == null) {
-			router.push('/login');
+		if (store.getters['getActiveLoaded']) {
+			next();
+		} else {
+			store.dispatch('initApp').then(() => {
+				next();
+			});
 		}
-		return next();
-
 	} else {
 		next();
 	}
 
-}); */
+});
 
 router.afterEach((to) => {
 	document.title = "PolicyWeb - " + to.meta.title;

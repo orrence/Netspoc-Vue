@@ -11,7 +11,7 @@ export default {
     getters: {
         getLoggedIn: state => {
 
-            return  localStorage.getItem('loggedIn') && state.loggedIn;
+            return state.loggedIn;
         },
         getLoginError: state => {
             return state.loginError;
@@ -20,7 +20,6 @@ export default {
     mutations: {
         SET_LOGGED_IN: (state, loggedIn) => {
             state.loggedIn = loggedIn;
-            localStorage.setItem('loggedIn',loggedIn);
         },
         SET_LOGIN_ERROR: (state, loginError) => {
             state.loginError = loginError;
@@ -66,6 +65,7 @@ export default {
             return Vue.axios.get('/logout'
             ).then(function () {
                 dispatch('setLoggedIn', false);
+                dispatch('services/')
                 router.push('/login');
             }).catch(function () {
             });
