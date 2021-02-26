@@ -1,8 +1,8 @@
 <template>
-  <v-app :style="{ height: windowheight + 'px', overflow: 'hidden' }">
+  <v-app>
     <app-toolbar color="primary" />
 
-    <v-main>
+    <v-main style="margin-top: 64px">
       <div class="fluid grid-list-md grey lighten-5 fill-height">
         <router-view />
       </div>
@@ -47,23 +47,12 @@ export default {
       dialog: false,
       windowheight: 600,
       errortext: "",
-      isPublicRoute: false,
     };
   },
   computed: {
     ...mapGetters(["getActiveLoaded"]),
-    initComplete() {
-      console.log("IS PUBLIC ROUTE");
-      console.log(this.isPublicRoute);
-      if (this.isPublicRoute) {
-        return true;
-      }
-      return this.getActiveLoaded;
-    },
   },
   mounted() {
-    this.windowheight = window.innerHeight;
-
     /* let xlsxscript = document.createElement("script");
     xlsxscript.setAttribute("src", "js/xlsx.full.min.js");
     document.head.appendChild(xlsxscript);
@@ -79,7 +68,7 @@ export default {
 
   created() {
     var me = this;
-
+    this.windowheight = window.innerHeight;
     if (this.$route.path == "/ldap_login" || this.$route.path == "/login") {
       this.$store.commit("setLoginpath", this.$route.path);
     }
@@ -104,6 +93,10 @@ export default {
 /*invisible element below input fields causes misalignment*/
 .v-text-field__details {
   display: none;
+}
+.v-application--wrap {
+  /* display: block;
+  min-height: 100% */
 }
 </style>
 	

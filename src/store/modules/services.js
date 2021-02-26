@@ -150,8 +150,7 @@ export default {
             }).then(res => {
 
                 commit('RECEIVED_SERVICESDATA', res.data);
-                console.log('SERVICES DATA');
-                console.log(res.data);
+        
                 if (res.data.totalCount == 0) {
                     commit('services/RECEIVED_RULESDATA', [], {root: true});
                     commit('services/RECEIVED_USERS_ADMINSDATA', [], {root: true});

@@ -28,6 +28,7 @@
       />
     </v-navigation-drawer>
 
+
     <v-container fluid class="pt-0">
       <v-row no-gutters class="fill-height">
         <v-col cols="4" class="fill-height">
@@ -71,6 +72,7 @@ export default {
     ...mapState("services", ["searchInput", "serviceTabNumber"]),
   },
   created() {
+    console.log('SERVICE AREA GETS LOADEWD');
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {

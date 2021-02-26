@@ -139,10 +139,12 @@ export default {
     },
     calcHeight() {
       if (typeof this.variableHeight != "number") {
+        console.log(window.innerHeight);
+        console.log(this.$refs.tablecontainer.getBoundingClientRect().top);
         let tabheight =
           window.innerHeight -
           this.$refs.tablecontainer.getBoundingClientRect().top -
-          4;
+          12;
         this.tabulatorheight = tabheight;
       } else {
         this.tabulatorheight = this.variableHeight;
@@ -151,6 +153,7 @@ export default {
     },
     onResize() {
       if (this.isVisible) {
+        console.log('CALC HEIGHT OF TABULATOR');
         this.calcHeight();
       }
     },

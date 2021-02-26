@@ -71,12 +71,13 @@ export default {
     },
   },
   watch: {
-    active(val, oldVal) {
-      if (val.owner !== oldVal.owner) {
+    active: {
+      deep: true,
+      handler(val, oldVal) {
+  
         this.getOlderPolicies();
         this.oldPolicy = null;
-
-      }
+      },
     },
   },
 
@@ -101,8 +102,7 @@ export default {
           newOld.push(history[i]);
         }
       }
-      console.log('NEW OLD');
-      console.log(newOld);
+ 
       this.olderPolicies = newOld;
     },
   },

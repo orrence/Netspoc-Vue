@@ -39,7 +39,7 @@ export default {
     calcHeight() {
       let restheight =
         window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
-      this.tabheight = restheight - 3;
+      this.tabheight = restheight - 10;
     }
   }
 };
