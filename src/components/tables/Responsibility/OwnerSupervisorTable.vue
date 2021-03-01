@@ -4,7 +4,7 @@
       :name="`Verantwortliche`"
       :tableconfig="{
         reactiveData: true,
-        selectable: 20,
+        selectable: 1,
         index: 'name',
         rowSelectionChanged: passOnSelectionUpdate,
        
