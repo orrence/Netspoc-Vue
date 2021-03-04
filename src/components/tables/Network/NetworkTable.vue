@@ -7,11 +7,10 @@
         selectable: 20,
         index: 'name',
         rowSelectionChanged: passOnSelectionUpdate,
-       
       }"
       :columns="[
         {
-           formatter: 'rowSelection',
+          formatter: 'rowSelection',
           //formatter: 'tickCross',
           // titleFormatter: 'rowSelection',
           hozAlign: 'center',
@@ -38,7 +37,7 @@
       :selectedNetworks="networks"
       :groupBy="''"
       :rowClickableFn="true"
-      :height="height"
+      :variableHeight="parseInt(height)"
     />
   </div>
 </template>
@@ -73,7 +72,7 @@ export default {
     },
   },
   mounted() {
-     this.loadNetworks();
+    this.loadNetworks();
   },
   methods: {
     ...mapActions("networks", ["getNetworks"]),

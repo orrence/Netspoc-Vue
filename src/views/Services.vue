@@ -23,11 +23,11 @@
       width="500"
     >
       <netselection-bar
+        v-if="netselectiondrawer"
         @closeSearch="netselectiondrawer = !netselectiondrawer"
         @changeBadgeVal="toggleBatchValue"
       />
     </v-navigation-drawer>
-
 
     <v-container fluid class="pt-0">
       <v-row no-gutters class="fill-height">
@@ -72,7 +72,7 @@ export default {
     ...mapState("services", ["searchInput", "serviceTabNumber"]),
   },
   created() {
-    console.log('SERVICE AREA GETS LOADEWD');
+    console.log("SERVICE AREA GETS LOADEWD");
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {
@@ -110,7 +110,11 @@ export default {
     clearSearchFilter() {
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
+      this.$store.commit("services/SET_NETWORK_SELECTION", {
+        search_networks: [],
+      });
       this.$store.dispatch("services/getServicesList");
+      this.networkCount = 0;
       window.location.hash = "";
     },
   },

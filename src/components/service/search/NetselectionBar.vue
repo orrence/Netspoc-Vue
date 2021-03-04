@@ -12,11 +12,16 @@
         </v-tabs>
         <v-tabs-items v-model="networkselection">
           <v-tab-item>
-            <NetworkTable @selectionUpdate="captureSelectionUpdate" />
+            <div ref="networkselection">
+              <NetworkTable
+                :height="tableHeight"
+                @selectionUpdate="captureSelectionUpdate"
+              />
+            </div>
           </v-tab-item>
         </v-tabs-items>
 
-        <v-row dense :justify="'end'">
+        <v-row ref="searchbtn" dense :justify="'end'">
           <v-col>
             <v-btn block color="success" @click="searchUpdate">Auswählen</v-btn>
           </v-col>
@@ -39,12 +44,16 @@ export default {
     cluster: {},
     networkselection: 0,
     search_networks: [],
+    tableHeight: 100,
   }),
   computed: {
     ...mapState("services", ["searchInput"]),
     isLoadingComplete: function () {
       return this.active.owner != null && this.active.policy != null;
     },
+  },
+  mounted() {
+    this.calcHeight();
   },
   methods: {
     setSearchParams() {
@@ -53,7 +62,15 @@ export default {
     changeTab(num) {
       this.cluster.tabname = this.tabnames[num];
     },
-
+    calcHeight() {
+      console.log("REFS", this.$refs.networkselection.getBoundingClientRect().top);
+      console.log('HEIGHT ',this.$refs.searchbtn.clientHeight);
+      let tabheight =
+        window.innerHeight -
+        this.$refs.networkselection.getBoundingClientRect().top -
+        this.$refs.searchbtn.clientHeight -40;
+      this.tableHeight = tabheight;
+    },
     searchUpdate() {
       this.$emit("closeSearch");
       this.$store.commit("services/SET_LOADING_CIRCLE", true);

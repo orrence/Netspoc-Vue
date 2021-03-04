@@ -138,9 +138,9 @@ export default {
       this.tabulator = new Tabulator(this.$refs.table, this.config);
     },
     calcHeight() {
+      console.log('VARIABLE HEIGHT IS', this.variableHeight);
       if (typeof this.variableHeight != "number") {
-        console.log(window.innerHeight);
-        console.log(this.$refs.tablecontainer.getBoundingClientRect().top);
+    
         let tabheight =
           window.innerHeight -
           this.$refs.tablecontainer.getBoundingClientRect().top -
