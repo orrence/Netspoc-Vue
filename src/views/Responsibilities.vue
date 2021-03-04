@@ -43,8 +43,6 @@ export default {
   methods: {
     captureSelectionUpdate(data) {
       this.selection = data
-      console.log("SEL UPDATE!")
-      console.dir(this.selection)
     },
   },
 }

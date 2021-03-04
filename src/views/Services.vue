@@ -72,7 +72,6 @@ export default {
     ...mapState("services", ["searchInput", "serviceTabNumber"]),
   },
   created() {
-    console.log('SERVICE AREA GETS LOADEWD');
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {

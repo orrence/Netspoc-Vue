@@ -7,6 +7,7 @@ export default {
         ownerWatchersData: [],
         ownerSupervisorsData: [],
         ownerSupervisorAdminsData: [],
+        supervisorSelection : []
     },
     mutations: {
         RECEIVED_OWNERADMINSDATA(state, payload) {
@@ -20,6 +21,9 @@ export default {
         },
         RECEIVED_OWNERSUPERVISORADMINSDATA(state, payload) {
             state.ownerSupervisorAdminsData = payload.records;
+        },
+        UPDATE_SUPERVISOR_SELECTION(state, payload) {
+            state.supervisorSelection = payload;
         },
     },
     actions: {
@@ -54,6 +58,9 @@ export default {
                 commit('RECEIVED_OWNERSUPERVISORADMINSDATA', res.data);
                 return res.data;
             })
+        },
+        updateSupervisorSelection({ commit }, payload) {
+            commit('UPDATE_SUPERVISOR_SELECTION', payload);
         },
     }
 }

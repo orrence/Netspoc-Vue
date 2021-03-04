@@ -2,6 +2,7 @@
   <div id="table_supervisors">
     <Tabulator
       :name="`Verantwortliche`"
+      selectfirstrow="true"
       :tableconfig="{
         reactiveData: true,
         selectable: 1,
@@ -50,18 +51,16 @@ export default {
         this.loadOwnerSupervisors();
       },
     },
-    /*
     ownerSupervisorsData: {
       handler() {
-        if (this.ownerSuperVisorsData.length > 0) {
-          //this.updateSupertvisorSelection([this.ownerSupervisorsData[0]]);
+        if (this.ownerSupervisorsData.length > 0) {
+          this.updateSupervisorSelection([this.ownerSupervisorsData[0]]);
         } 
       },
     },
-    */
   },
   methods: {
-    ...mapActions("responsibilities", ["getOwnerSupervisors"]),
+    ...mapActions("responsibilities", ["getOwnerSupervisors", "updateSupervisorSelection"]),
     loadOwnerSupervisors() {
       var vm = this;
 
@@ -71,6 +70,12 @@ export default {
       };
       this.getOwnerSupervisors(params);
     },
+/*    
+    passOnSelectionUpdate(row) {
+      console.dir(row)
+      this.updateSupervisorSelection([row.getData()]);
+    },
+    */
     passOnSelectionUpdate(data) {
       this.$emit(
         "selectionUpdate",
@@ -80,3 +85,4 @@ export default {
   },
 }
 </script>
+

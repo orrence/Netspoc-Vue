@@ -16,6 +16,10 @@ const routes = [
 		redirect: '/login'
 	},
 	{
+		path: '/vue-*',
+		redirect: '/login'
+	},
+	{
 		path: '/',
 		redirect: '/services',
 	},
