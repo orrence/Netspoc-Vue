@@ -13,7 +13,7 @@ import store from '../store'
 
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
-  baseURL: '/netspocvue/backend/',
+  baseURL: '/backend/',
   timeout: 30 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };

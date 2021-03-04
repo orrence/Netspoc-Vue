@@ -57,6 +57,7 @@ export default {
     ...mapActions("services", ["getServicesList", "updateServiceSelection"]),
 
     passOnSelectionUpdate(row) {
+      console.log('SERVICETALBEDATA', row);
       this.updateServiceSelection([row.getData()]);
     },
   },

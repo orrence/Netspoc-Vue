@@ -8,7 +8,6 @@
         selectable: 1,
         index: 'name',
         rowSelectionChanged: passOnSelectionUpdate,
-       
       }"
       :columns="[
         {
@@ -55,12 +54,15 @@ export default {
       handler() {
         if (this.ownerSupervisorsData.length > 0) {
           this.updateSupervisorSelection([this.ownerSupervisorsData[0]]);
-        } 
+        }
       },
     },
   },
   methods: {
-    ...mapActions("responsibilities", ["getOwnerSupervisors", "updateSupervisorSelection"]),
+    ...mapActions("responsibilities", [
+      "getOwnerSupervisors",
+      "updateSupervisorSelection",
+    ]),
     loadOwnerSupervisors() {
       var vm = this;
 
@@ -70,19 +72,22 @@ export default {
       };
       this.getOwnerSupervisors(params);
     },
-/*    
-    passOnSelectionUpdate(row) {
-      console.dir(row)
-      this.updateSupervisorSelection([row.getData()]);
-    },
-    */
+
     passOnSelectionUpdate(data) {
+      console.log('RESPONSIBVLEDATA', data);
+      if (data[0] != undefined) {
+        this.updateSupervisorSelection([data[0]]);
+      }
+    },
+
+    /*passOnSelectionUpdate(data) {
+      console.log('SELECTED');
       this.$emit(
         "selectionUpdate",
         data.map((row) => row.name)
       );
-    },
+    }, */
   },
-}
+};
 </script>
 

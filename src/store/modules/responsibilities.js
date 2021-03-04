@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '../'
 
 export default {
     namespaced: true,
@@ -51,7 +52,13 @@ export default {
                 return res.data;
             })
         },
-        getOwnerSupervisorAdmins({ commit }, payload) {
+        getOwnerSupervisorAdmins({ commit, state }) {
+    
+            const payload = {
+                active_owner: store.getters.getActiveOwner,
+                history: store.getters.getActivePolicy,
+                owner: state.supervisorSelection[0].name,
+              };
             return Vue.axios.get('/get_admins_watchers', {
                 params: payload
             }).then(res => {

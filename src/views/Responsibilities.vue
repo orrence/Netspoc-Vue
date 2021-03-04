@@ -2,19 +2,18 @@
 <v-container fluid>
     <v-row dense :justify="'center'">
         <v-col cols="3">
-            <OwnerAdminTable  v-if="getActiveLoaded"/>
+            <OwnerAdminTable />
         </v-col>
         <v-col cols="3">
-            <OwnerWatcherTable v-if="getActiveLoaded"/>
+            <OwnerWatcherTable />
         </v-col>
         <v-col cols="3">
             <OwnerSupervisorTable
-               v-if="getActiveLoaded"
                @selectionUpdate="captureSelectionUpdate"
             />			
         </v-col>
         <v-col cols="3">
-            <OwnerSupervisorAdminTable v-if="getActiveLoaded" :selection="selection"/>
+            <OwnerSupervisorAdminTable :selection="selection"/>
         </v-col>
     </v-row>
 </v-container>

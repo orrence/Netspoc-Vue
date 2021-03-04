@@ -20,6 +20,7 @@ export default {
   data: () => ({
     data: [],
   }),
+  props: ['selection'],
   watch: {
     supervisorSelection: function () {
       this.loadOwnerSupervisorAdmins();
@@ -51,13 +52,8 @@ export default {
       if (!vm.supervisorSelection[0]) {
         return;
       }
-      const params = {
-        active_owner: vm.getActiveOwner,
-        history: vm.getActivePolicy,
-        owner: vm.supervisorSelection[0].name,
-      };
-      //console.dir(params);
-      this.getOwnerSupervisorAdmins(params);
+     
+      this.getOwnerSupervisorAdmins();
     },
   },
 };
