@@ -72,7 +72,6 @@ export default {
     ...mapState("services", ["searchInput", "serviceTabNumber"]),
   },
   created() {
-    console.log("SERVICE AREA GETS LOADEWD");
     if (this.$route.hash == "") {
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
     } else {
@@ -97,16 +96,7 @@ export default {
         this.netselectiondrawer = !this.netselectiondrawer;
       }
     },
-    getElementsByClassName(className) {
-      if (document.getElementsByClassName) {
-        return document.getElementsByClassName(className);
-      } else {
-        return document.querySelectorAll("." + className);
-      }
-    },
-    recieveSearchInput(newInput) {
-      this.search_input = newInput;
-    },
+
     clearSearchFilter() {
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);

@@ -58,12 +58,16 @@ export default {
   methods: {
     expandUserChange(val) {
       this.$emit("expandUserChanged", val);
+      this.$store.commit('services/SET_EXPAND_USER',val);
     },
     IPAsNameChange(val) {
       this.$emit("IPAsNameChanged", val);
+      this.$store.commit('services/SET_IPASNAME',val);
     },
     filterBySearchChange(val) {
       this.$emit("filterBySearchChanged", val);
+      this.$store.commit('services/FILTER_BY_SEARCH',val);
+
     },
   },
 };

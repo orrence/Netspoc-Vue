@@ -77,7 +77,6 @@ export default {
   }),
   computed: mapGetters(["getActiveOwner", "getActivePolicy"]),
   watch: {
-    //update table if data changes
     variableHeight: {
       handler: function () {
         // TO-DO Dynamisch berechnen
@@ -138,9 +137,7 @@ export default {
       this.tabulator = new Tabulator(this.$refs.table, this.config);
     },
     calcHeight() {
-      console.log('VARIABLE HEIGHT IS', this.variableHeight);
       if (typeof this.variableHeight != "number") {
-    
         let tabheight =
           window.innerHeight -
           this.$refs.tablecontainer.getBoundingClientRect().top -
@@ -153,19 +150,14 @@ export default {
     },
     onResize() {
       if (this.isVisible) {
-        console.log('CALC HEIGHT OF TABULATOR');
         this.calcHeight();
       }
-    },
-    deselectAll() {
-      this.tabulator.deselectRow();
     },
     emitSelectionUpdate() {
       this.$emit("selectionUpdate", this.selected);
     },
     visibilityChanged(isVisible) {
       this.isVisible = isVisible;
-      // this.$emit("resizeTab");
     },
     downloadAsPDF() {
       this.tabulator.download("pdf", `${this.name}.pdf`, {
@@ -174,7 +166,6 @@ export default {
       });
     },
     downloadAsExcel() {
-      console.log(this.tabulator.download());
       this.tabulator.download(
         "xlsx",
         `${this.name}_${this.getActiveOwner}_${this.getActivePolicy}.xlsx`,

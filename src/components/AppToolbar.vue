@@ -1,6 +1,12 @@
 <template>
-  <v-app-bar absolute id="apptoolbar"  color="primary" dark v-if="getLoggedIn && getActiveLoaded">
-    <v-tabs  slider-color="orange">
+  <v-app-bar
+    absolute
+    id="apptoolbar"
+    color="primary"
+    dark
+    v-if="getLoggedIn && getActiveLoaded"
+  >
+    <v-tabs slider-color="orange">
       <v-tab id="tab_services" to="/services">Dienste</v-tab>
 
       <v-tab id="tab_networks" to="/networks">Netze</v-tab>
@@ -29,18 +35,14 @@ export default {
   },
   computed: {
     ...mapGetters("auth", ["getLoggedIn"]),
-    ...mapGetters(['getActiveLoaded']),
+    ...mapGetters(["getActiveLoaded"]),
   },
   methods: {
     ...mapActions("auth", ["requestLoggedIn", "setLoggedIn", "logoutUser"]),
-
     logout() {
       this.logoutUser();
     },
   },
-  mounted() {
-    console.log('TOOLBAR IS LOADED');
-  }
 };
 </script>
 

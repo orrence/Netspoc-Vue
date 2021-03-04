@@ -49,14 +49,6 @@ export default {
       "serviceTabNumber",
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
-  },
-
-  methods: {
-    onChangeTab(data) {
-      if (data == 0) {
-        // this.$store.dispatch("services/getAdminsData", "");
-      }
-    },
-  },
+  }
 };
 </script>

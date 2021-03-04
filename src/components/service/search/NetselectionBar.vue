@@ -63,8 +63,6 @@ export default {
       this.cluster.tabname = this.tabnames[num];
     },
     calcHeight() {
-      console.log("REFS", this.$refs.networkselection.getBoundingClientRect().top);
-      console.log('HEIGHT ',this.$refs.searchbtn.clientHeight);
       let tabheight =
         window.innerHeight -
         this.$refs.networkselection.getBoundingClientRect().top -
@@ -82,8 +80,6 @@ export default {
     },
     captureSelectionUpdate(data) {
       this.search_networks = data;
-
-      // this.$store.commit("services/SET_NETWORK_SELECTION", { ...this.cluster.search_networks });
     },
     emitSearchInputToParent() {
       this.$store.commit("services/SET_NETWORK_SELECTION", {
