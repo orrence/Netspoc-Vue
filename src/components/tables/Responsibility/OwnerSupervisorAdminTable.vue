@@ -56,7 +56,7 @@ export default {
         history: vm.getActivePolicy,
         owner: vm.supervisorSelection[0].name,
       };
-      //console.dir(params);
+      console.dir("PARAMS", params);
       this.getOwnerSupervisorAdmins(params);
     },
   },

@@ -70,17 +70,9 @@ export default {
       };
       this.getOwnerSupervisors(params);
     },
-/*    
-    passOnSelectionUpdate(row) {
-      console.dir(row)
-      this.updateSupervisorSelection([row.getData()]);
-    },
-    */
     passOnSelectionUpdate(data) {
-      this.$emit(
-        "selectionUpdate",
-        data.map((row) => row.name)
-      );
+      console.dir("DATA", data[0])
+      this.updateSupervisorSelection(data[0]);
     },
   },
 }
