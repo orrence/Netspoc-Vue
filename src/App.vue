@@ -83,6 +83,7 @@ export default {
 
       me.dialog = true;
     });
+
   },
 };
 </script>

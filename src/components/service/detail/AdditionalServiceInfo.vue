@@ -70,14 +70,20 @@ export default {
   },
   watch: {
     serviceSelection: function () {
+      console.log('SERVICES IS ', this.serviceSelection);
       if (this.serviceSelection.length > 0) {
-        let myowner = "";
         this.name = this.serviceSelection[0].name;
         this.description = this.serviceSelection[0].description;
-        this.serviceSelection[0].owner.forEach((param) => {
-          myowner = param.name + "," + myowner;
-        });
-        this.owner = myowner;
+        this.owner = this.serviceSelection[0].owner.map(owner => owner.name).join(', ');
+        this.disabled = this.serviceSelection[0].disabled ? this.serviceSelection[0].disabled : '';
+        this.disable_at = this.serviceSelection[0].disable_at ? this.serviceSelection[0].disable_at : '';
+
+      } else {
+        this.name = '';
+        this.description = '';
+        this.owner = '';
+        this.disabled = '';
+        this.disable_at = '';
       }
     },
   },

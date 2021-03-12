@@ -4,7 +4,7 @@
     id="apptoolbar"
     color="primary"
     dark
-    v-if="getLoggedIn && getActiveLoaded"
+    v-if="loggedIn && getActiveLoaded"
   >
     <v-tabs slider-color="orange">
       <v-tab id="tab_services" to="/services">Dienste</v-tab>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import comboPolicy from "./combos/Policy";
 import comboOwner from "./combos/Owner";
 export default {
@@ -34,7 +34,7 @@ export default {
     comboOwner,
   },
   computed: {
-    ...mapGetters("auth", ["getLoggedIn"]),
+    ...mapState("auth", ["loggedIn"]),
     ...mapGetters(["getActiveLoaded"]),
   },
   methods: {

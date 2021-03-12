@@ -1,4 +1,5 @@
 import Vue from 'vue'
+
 export const requestOwners = ({ commit }) => {
     return Vue.axios.get('/get_owners')
         .then(function (response) {
@@ -9,14 +10,14 @@ export const requestOwners = ({ commit }) => {
             commit('setOwners', recurare);
         })
         .catch(function () {
-           
+
         });
 };
 
 export const requestActive = ({ commit, dispatch, state }) => {
     return Vue.axios.get('/get_owner')
         .then(function (response) {
-            
+
             let newActiveOwner = response.data.records[0].name;
             return dispatch('requestHistory', newActiveOwner)
                 .then(() => {
@@ -29,7 +30,7 @@ export const requestActive = ({ commit, dispatch, state }) => {
                 })
                 .catch(function () {
                 });
-            
+
         })
         .catch(function () {
         });
@@ -45,7 +46,7 @@ export const setActive = ({ commit, dispatch, state }, newActiveOwner) => {
             if (response.data.success) {
                 dispatch('requestHistory', newActiveOwner)
                     .then(() => {
-                      
+
                         commit('setActive',
                             {
                                 owner: newActiveOwner,
@@ -79,8 +80,10 @@ export const requestHistory = ({ commit }, owner) => {
         });
 };
 
-export const initApp = ({dispatch, commit}) => {
+export const initApp = ({ dispatch, commit }) => {
     dispatch('requestOwners');
+    commit('services/RESET_SEARCH_STATE');
+   
     return dispatch('requestActive').then(() => {
         commit('auth/SET_LOGGED_IN', true);
         return true;

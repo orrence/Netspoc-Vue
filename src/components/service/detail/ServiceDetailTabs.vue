@@ -1,7 +1,6 @@
 <template>
   <v-card tile class="fill-height" elevation="1">
     <v-tabs
-      @change="onChangeTab"
       background-color="lightgray"
       v-model="tab_details"
       slider-color="orange"
@@ -45,7 +44,6 @@ export default {
   computed: {
     ...mapState("services", [
       "searchInput",
-      "serviceSelection",
       "serviceTabNumber",
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),

@@ -80,8 +80,10 @@ export default {
         true
       );
 
-      this.networkCount = filters.search_networks.length;
+      console.log("FITLERS ARE ", filters);
 
+      this.networkCount = filters.search_networks.length;
+      this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 3);
     }
   },
@@ -100,9 +102,7 @@ export default {
     clearSearchFilter() {
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 1);
-      this.$store.commit("services/SET_NETWORK_SELECTION", {
-        search_networks: [],
-      });
+      this.$store.commit("services/RESET_SEARCH_STATE");
       this.$store.dispatch("services/getServicesList");
       this.networkCount = 0;
       window.location.hash = "";

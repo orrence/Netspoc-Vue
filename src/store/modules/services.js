@@ -1,6 +1,33 @@
 import Vue from 'vue'
 import store from '../'
 
+const getDefaultState = () => {
+    return {
+        rules: {
+            search_ip1: "",
+            search_ip2: "",
+            search_proto: "",
+            search_supernet: false,
+            search_subnet: true,
+            search_range: false,
+        },
+        textsearch: {
+            search_string: "",
+            search_in_desc: true,
+        },
+        general: {
+            search_own: true,
+            search_used: true,
+            search_visible: false,
+            search_limited: false,
+            search_case_sensitive: false,
+            search_exact: false,
+        },
+        search_networks: [],
+
+    }
+}
+
 export default {
     namespaced: true,
     state: {
@@ -12,31 +39,9 @@ export default {
         showLoadingCircle: true,
         filterBySearch: false,
         expandUser: false,
-        IPAsName:false,
-        relations: ["owner", "user","visible"],
-        searchInput: {
-            rules: {
-                search_ip1: "",
-                search_ip2: "",
-                search_proto: "",
-                search_supernet: false,
-                search_subnet: true,
-                search_range: false,
-            },
-            textsearch: {
-                search_string: "",
-                search_in_desc: true,
-            },
-            general: {
-                search_own: true,
-                search_used: true,
-                search_visible: false,
-                search_limited: false,
-                search_case_sensitive: false,
-                search_exact: false,
-            },
-            search_networks: [],
-        },
+        IPAsName: false,
+        relations: ["owner", "user", "visible"],
+        searchInput: {},
         usersData: [],
         serviceSelection: [],
     },
@@ -65,11 +70,14 @@ export default {
             state.usersAdminsData = payload;
         },
         SEARCH_UPDATE(state, payload) {
-            payload.search_networks = state.searchInput.search_networks
+            payload.search_networks = state.searchInput.search_networks;
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
         SET_NETWORK_SELECTION(state, payload) {
             state.searchInput = Object.assign({}, state.searchInput, payload);
+        },
+        RESET_SEARCH_STATE(state) {
+            Object.assign(state.searchInput, getDefaultState())
         },
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;
@@ -86,27 +94,30 @@ export default {
         UPDATE_SEARCH_FROM_URLHASH(state, payload) {
             let temp = state.searchInput;
             for (const [key] of Object.entries(state.searchInput.rules)) {
+                console.log('RULES PAYLOAD KEY IS ', key);
                 temp.rules[key] = payload[key];
             }
             for (const [key] of Object.entries(state.searchInput.textsearch)) {
-                temp.rules[key] = payload[key];
+                console.log('RULES PAYLOAD KEY IS ', key);
+                temp.textsearch[key] = payload[key];
             }
             for (const [key] of Object.entries(state.searchInput.general)) {
-                temp.rules[key] = payload[key];
+                console.log('RULES PAYLOAD KEY IS ', key);
+                temp.general[key] = payload[key];
             }
             temp.search_networks = payload.search_networks;
-            state.searchInput = temp;
+            Object.assign( state.searchInput, temp);
         },
-        SET_IPASNAME(state,payload) {
+        SET_IPASNAME(state, payload) {
             state.IPAsName = payload;
         },
-        SET_EXPAND_USER(state,payload) {
+        SET_EXPAND_USER(state, payload) {
             state.expandUser = payload;
         },
-        FILTER_BY_SEARCH(state,payload) {
+        FILTER_BY_SEARCH(state, payload) {
             state.filterBySearch = payload;
         },
-    
+
     },
 
     actions: {
@@ -137,7 +148,7 @@ export default {
                 basepayload = {
                     chosen_networks: chosen_networks,
                     active_owner: active_owner,
-                    history:history,
+                    history: history,
                     relation: "",
                     ...rulepayload,
                     ...textsearch_payload,
@@ -150,10 +161,14 @@ export default {
             }).then(res => {
 
                 commit('RECEIVED_SERVICESDATA', res.data);
-        
+
                 if (res.data.totalCount == 0) {
-                    commit('services/RECEIVED_RULESDATA', [], {root: true});
-                    commit('services/RECEIVED_USERS_ADMINSDATA', [], {root: true});
+                    commit('services/UPDATE_SERVICE_SELECTION', [], { root: true });
+                    commit('services/RECEIVED_RULES_ADMINSDATA', [], { root: true });
+
+
+                    commit('services/RECEIVED_RULESDATA', [], { root: true });
+                    commit('services/RECEIVED_USERS_ADMINSDATA', [], { root: true });
                 }
 
             })
@@ -166,26 +181,26 @@ export default {
             let rulepayload = {};
             let textsearch_payload = {};
             let generalpayload = {};
-                  
+
             if (state.filterBySearch && state.serviceTabNumber === 3) {
-              rulepayload = this.createPayloadElement(state.searchInput.rules);
-              textsearch_payload = this.createPayloadElement(
-                state.searchInput.textsearch
-              );
-              generalpayload = this.createPayloadElement(state.searchInput.general);
+                rulepayload = createPayloadElement(state.searchInput.rules);
+                textsearch_payload = createPayloadElement(
+                    state.searchInput.textsearch
+                );
+                generalpayload = createPayloadElement(state.searchInput.general);
             }
-      
+
             const payload = {
-              expand_users: state.expandUser ? 1 : 0,
-              display_property: state.IPAsName ? "name" : "ip",
-              active_owner: store.getters.getActiveOwner,
-              history: store.getters.getActivePolicy,
-              service: state.serviceSelection.map((row) => row.name).join(","),
-              filter_rules: store.state.filterBySearch ? 1 : 0,
-              ...rulepayload,
-              ...textsearch_payload,
-              ...generalpayload,
-              chosen_networks: state.searchInput.search_networks.join(","),
+                expand_users: state.expandUser ? 1 : 0,
+                display_property: state.IPAsName ? "name" : "ip",
+                active_owner: store.getters.getActiveOwner,
+                history: store.getters.getActivePolicy,
+                service: state.serviceSelection.map((row) => row.name).join(","),
+                filter_rules: store.state.filterBySearch ? 1 : 0,
+                ...rulepayload,
+                ...textsearch_payload,
+                ...generalpayload,
+                chosen_networks: state.searchInput.search_networks.join(","),
             };
 
             return Vue.axios.get('/get_rules', {

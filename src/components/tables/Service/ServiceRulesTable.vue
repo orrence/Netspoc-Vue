@@ -34,14 +34,12 @@
         :tableconfig="{}"
         :variableHeight="tabheight"
         :data="rulesData"
-         @resizeTab="onResizeTab"
+        @resizeTab="onResizeTab"
         :selectable="false"
         :groupBy="serviceSelection.length > 1 ? 'service' : ''"
       />
     </div>
-    <AdminsTable
-      :data="rulesAdminsData"
-    />
+    <AdminsTable :data="rulesAdminsData" />
   </div>
 </template>
 
@@ -55,8 +53,7 @@ export default {
   components: {
     Tabulator,
     AdditionalServiceInfo,
-    AdminsTable
-
+    AdminsTable,
   },
   props: ["search_input"],
   data: () => ({
@@ -72,15 +69,18 @@ export default {
       "rulesAdminsData",
       "IPAsName",
       "expandUser",
-      "filterBySearch"
+      "filterBySearch",
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
     serviceSelection: function () {
-      this.getRules();
+      if (this.serviceSelection.length > 0) {
+        this.getRules();
+      }
     },
     expandUser: function () {
+      console.log("EXPAND USER");
       this.getRules();
     },
     IPAsName: function () {
@@ -106,9 +106,6 @@ export default {
       this.calcHeight();
     },
     getRules() {
-      /*if (this.serviceSelection.length !== 1) {
-        return;
-      }*/
       this.getServiceRules();
     },
   },

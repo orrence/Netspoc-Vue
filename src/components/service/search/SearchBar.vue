@@ -199,9 +199,10 @@ export default {
     ...mapState("services", ["searchInput"]),
   },
   mounted() {
+    console.log("ROUTE HASH IS ", this.searchInput);
     if (this.$route.hash != "") {
-      this.setSearchParams();
-
+      // this.setSearchParams();
+      this.cluster = this.searchInput;
       if (this.cluster.rules.search_string != "") {
         this.tabsearchArea = 1;
       } else {
@@ -212,6 +213,7 @@ export default {
     }
   },
   beforeRouteUpdate() {
+    console.log("ROUTE IS UPDATING");
     if (this.$route.hash != "") {
       this.setSearchParams();
       if (this.cluster.rules.search_string != "") {
@@ -227,25 +229,32 @@ export default {
         this.$store.getters["services/getsearchInputPlain"],
         true
       );
+      console.log("FILTERS ARE ", filters);
 
-      this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
+    //  this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
       this.cluster = this.searchInput;
     },
 
     searchUpdate() {
       this.$emit("closeSearch");
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
+      this.$store.commit("services/RESET_SEARCH_STATE");
+      if (this.tabsearchArea == 0) {
+        this.cluster.textsearch.search_string = "";
+      } else {
+        this.cluster.rules.search_ip1 = "";
+        this.cluster.rules.search_ip2 = "";
+        this.cluster.rules.search_proto = "";
+      }
+      this.$store.commit("services/SEARCH_UPDATE", this.cluster);
 
       this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
-      this.emitSearchInputToParent();
+
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 3);
       this.$store.dispatch("services/getServicesList");
     },
     captureSelectionUpdate(data) {
       this.cluster.search_networks = data;
-    },
-    emitSearchInputToParent() {
-      this.$store.commit("services/SEARCH_UPDATE", this.cluster);
     },
   },
 };
