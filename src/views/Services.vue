@@ -80,8 +80,6 @@ export default {
         true
       );
 
-      console.log("FITLERS ARE ", filters);
-
       this.networkCount = filters.search_networks.length;
       this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 3);

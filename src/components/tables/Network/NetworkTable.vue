@@ -86,12 +86,14 @@ export default {
       };
 
       this.getNetworks(params).then(function () {
-        let filters = vm.getFiltersFromUrl(
-          vm.$store.getters["services/getsearchInputPlain"],
-          true
-        );
+        this.$store.dispatch("services/loadPlainSearch").then((cbdata) => {
+          let filters = vm.getFiltersFromUrl(
+            cbdata,
+            true
+          );
 
-        vm.networks = filters.search_networks;
+          vm.networks = filters.search_networks;
+        });
       });
     },
     cellclicked(e, cell) {

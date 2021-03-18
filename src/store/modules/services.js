@@ -73,6 +73,17 @@ export default {
             payload.search_networks = state.searchInput.search_networks;
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
+        SEARCH_UPDATE_RULES(state, payload) {
+            console.log('RULES ARE ', payload);
+            state.searchInput.rules = Object.assign({}, state.searchInput.rules, payload);
+            console.log(state.searchInput.rules);
+        },
+        SEARCH_UPDATE_GENERAL(state, payload) {
+            state.searchInput.general = Object.assign({}, state.searchInput.general, payload);
+        },
+        SEARCH_UPDATE_TEXTSEARCH(state, payload) {
+            state.searchInput.textsearch = Object.assign({}, state.searchInput.textsearch, payload);
+        },
         SET_NETWORK_SELECTION(state, payload) {
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
@@ -94,15 +105,12 @@ export default {
         UPDATE_SEARCH_FROM_URLHASH(state, payload) {
             let temp = state.searchInput;
             for (const [key] of Object.entries(state.searchInput.rules)) {
-                console.log('RULES PAYLOAD KEY IS ', key);
                 temp.rules[key] = payload[key];
             }
             for (const [key] of Object.entries(state.searchInput.textsearch)) {
-                console.log('RULES PAYLOAD KEY IS ', key);
                 temp.textsearch[key] = payload[key];
             }
             for (const [key] of Object.entries(state.searchInput.general)) {
-                console.log('RULES PAYLOAD KEY IS ', key);
                 temp.general[key] = payload[key];
             }
             temp.search_networks = payload.search_networks;
@@ -264,6 +272,16 @@ export default {
         },
         updateServiceSelection({ commit }, payload) {
             commit('UPDATE_SERVICE_SELECTION', payload);
+        },
+        loadPlainSearch({ state }) {
+            let retpayload = {
+                ...state.searchInput.rules,
+                ...state.searchInput.textsearch,
+                ...state.searchInput.general,
+                search_networks: state.searchInput.search_networks
+            }
+            return retpayload;
+        
         },
 
 

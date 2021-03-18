@@ -8,6 +8,10 @@ body {
   .v-tab {
       font-weight: 600 !important;
   }
+
+  html {
+    overflow:auto;
+  }
 @font-face {
     font-family: 'Roboto';
     font-style: normal;

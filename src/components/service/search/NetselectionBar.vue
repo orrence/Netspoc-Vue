@@ -70,10 +70,15 @@ export default {
       this.tableHeight = tabheight;
     },
     searchUpdate() {
+      let me = this;
       this.$emit("closeSearch");
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
       this.emitSearchInputToParent();
-      this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
+
+      this.$store.dispatch("services/loadPlainSearch").then((cbdata) => {
+        window.location.hash = "";
+        me.updateUrlHash(cbdata);
+      });
 
       this.$emit("changeBadgeVal", this.search_networks);
       this.$store.dispatch("services/getServicesList");

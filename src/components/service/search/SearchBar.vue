@@ -2,7 +2,7 @@
   <div id="searchbar">
     <v-row dense>
       <v-col>
-        <v-container fluid v-if="Object.keys(cluster).length > 0">
+        <v-container fluid>
           <v-tabs
             background-color="lightgray"
             v-model="tabsearchArea"
@@ -23,7 +23,7 @@
                     outlined
                     dense
                     label="IP 1"
-                    v-model="cluster.rules.search_ip1"
+                    v-model="search_ip1"
                     id="txtf_search_ip1"
                     color="orange"
                   />
@@ -33,7 +33,7 @@
                     outlined
                     dense
                     label="IP 2"
-                    v-model="cluster.rules.search_ip2"
+                    v-model="search_ip2"
                     id="txtf_search_ip2"
                     color="orange"
                   />
@@ -43,7 +43,7 @@
                     outlined
                     dense
                     label="Protokoll"
-                    v-model="cluster.rules.search_proto"
+                    v-model="search_proto"
                     id="txtf_search_proto"
                     color="orange"
                   />
@@ -54,21 +54,21 @@
                 <v-col>
                   <v-checkbox
                     id="cb_search_supernet"
-                    v-model="cluster.rules.search_supernet"
+                    v-model="search_supernet"
                     label="Übergeordnete Netze einbeziehen"
                   ></v-checkbox>
                 </v-col>
                 <v-col>
                   <v-checkbox
                     id="cb_search_subnet"
-                    v-model="cluster.search_subnet"
+                    v-model="search_subnet"
                     label="Enthaltene Netze einbeziehen"
                   ></v-checkbox>
                 </v-col>
                 <v-col>
                   <v-checkbox
                     id="cb_search_range"
-                    v-model="cluster.rules.search_range"
+                    v-model="search_range"
                     label="Port-Ranges einbeziehen"
                   ></v-checkbox>
                 </v-col>
@@ -83,7 +83,7 @@
                     outlined
                     dense
                     label="Suchbegriff"
-                    v-model="cluster.textsearch.search_string"
+                    v-model="search_string"
                     id="search_string"
                   />
                 </v-col>
@@ -91,7 +91,7 @@
               <v-row dense>
                 <v-col>
                   <v-checkbox
-                    v-model="cluster.textsearch.search_in_desc"
+                    v-model="search_in_desc"
                     id="cb_search_description"
                     label="Suche auch in Dienstbeschreibungen"
                   />
@@ -112,7 +112,7 @@
                   <v-checkbox
                     class="mt-0"
                     id="cb_search_own"
-                    v-model="cluster.general.search_own"
+                    v-model="search_own"
                     label="Eigene"
                   />
                 </v-col>
@@ -120,7 +120,7 @@
                   <v-checkbox
                     id="cb_search_used"
                     class="mt-0"
-                    v-model="cluster.general.search_used"
+                    v-model="search_used"
                     label="Genutzte"
                   />
                 </v-col>
@@ -131,7 +131,7 @@
                   <v-checkbox
                     class="mt-0"
                     id="cb_search_usable"
-                    v-model="cluster.general.search_visible"
+                    v-model="search_visible"
                     label="Nutzbare"
                   />
                 </v-col>
@@ -139,7 +139,7 @@
                   <v-checkbox
                     class="mt-0"
                     id="cb_search_limited"
-                    v-model="cluster.general.search_limited"
+                    v-model="search_limited"
                     label="Nur befristete Dienste suchen"
                   />
                 </v-col>
@@ -149,7 +149,7 @@
               <v-row dense :align="'center'">
                 <v-col>
                   <v-checkbox
-                    v-model="cluster.general.search_case_sensitive"
+                    v-model="search_case_sensitive"
                     id="cb_search_case_sensitive"
                     label="Groß-/Kleinschreibung beachten"
                     class="mt-0"
@@ -157,7 +157,7 @@
                 </v-col>
                 <v-col>
                   <v-checkbox
-                    v-model="cluster.general.search_exact"
+                    v-model="search_exact"
                     id="cb_search_exact"
                     label="Suchergebnisse nur mit exakter Übereinstimmung"
                     class="mt-0"
@@ -192,31 +192,139 @@ export default {
 
   data: () => ({
     tabnames: ["regeln", "beschreibung"],
-    cluster: {},
     tabsearchArea: 0,
   }),
   computed: {
     ...mapState("services", ["searchInput"]),
+
+    search_ip1: {
+      set(search_ip1) {
+        console.log("IP IOS ", search_ip1);
+        this.$store.commit("services/SEARCH_UPDATE_RULES", { search_ip1 });
+      },
+      get() {
+        return this.searchInput.rules.search_ip1;
+      },
+    },
+    search_ip2: {
+      set(search_ip2) {
+        this.$store.commit("services/SEARCH_UPDATE_RULES", { search_ip2 });
+      },
+      get() {
+        return this.searchInput.rules.search_ip2;
+      },
+    },
+    search_proto: {
+      set(search_proto) {
+        this.$store.commit("services/SEARCH_UPDATE_RULES", { search_proto });
+      },
+      get() {
+        return this.searchInput.rules.search_proto;
+      },
+    },
+    search_supernet: {
+      set(search_supernet) {
+        this.$store.commit("services/SEARCH_UPDATE_RULES", { search_supernet });
+      },
+      get() {
+        return this.searchInput.rules.search_supernet;
+      },
+    },
+    search_subnet: {
+      set(search_subnet) {
+        this.$store.commit("services/SEARCH_UPDATE_RULES", { search_subnet });
+      },
+      get() {
+        return this.searchInput.rules.search_subnet;
+      },
+    },
+    search_range: {
+      set(search_range) {
+        this.$store.commit("services/SEARCH_UPDATE_RULES", { search_range });
+      },
+      get() {
+        return this.searchInput.rules.search_range;
+      },
+    },
+    search_string: {
+      set(search_string) {
+        console.log("SEARCH STRIN IS SET", search_string);
+        this.$store.commit("services/SEARCH_UPDATE_TEXTSEARCH", {
+          search_string,
+        });
+      },
+      get() {
+        return this.searchInput.textsearch.search_string;
+      },
+    },
+    search_in_desc: {
+      set(search_in_desc) {
+        this.$store.commit("services/SEARCH_UPDATE_TEXTSEARCH", {
+          search_in_desc,
+        });
+      },
+      get() {
+        return this.searchInput.textsearch.search_in_desc;
+      },
+    },
+    search_own: {
+      set(search_own) {
+        this.$store.commit("services/SEARCH_UPDATE_GENERAL", { search_own });
+      },
+      get() {
+        return this.searchInput.general.search_own;
+      },
+    },
+    search_used: {
+      set(search_used) {
+        this.$store.commit("services/SEARCH_UPDATE_GENERAL", { search_used });
+      },
+      get() {
+        return this.searchInput.general.search_used;
+      },
+    },
+    search_visible: {
+      set(search_visible) {
+        this.$store.commit("services/SEARCH_UPDATE_GENERAL", {
+          search_visible,
+        });
+      },
+      get() {
+        return this.searchInput.general.search_visible;
+      },
+    },
+    search_limited: {
+      set(search_limited) {
+        this.$store.commit("services/SEARCH_UPDATE_GENERAL", {
+          search_limited,
+        });
+      },
+      get() {
+        return this.searchInput.general.search_limited;
+      },
+    },
+    search_case_sensitive: {
+      set(search_case_sensitive) {
+        this.$store.commit("services/SEARCH_UPDATE_GENERAL", {
+          search_case_sensitive,
+        });
+      },
+      get() {
+        return this.searchInput.general.search_case_sensitive;
+      },
+    },
+    search_exact: {
+      set(search_exact) {
+        this.$store.commit("services/SEARCH_UPDATE_GENERAL", { search_exact });
+      },
+      get() {
+        return this.searchInput.general.search_exact;
+      },
+    },
   },
   mounted() {
-    console.log("ROUTE HASH IS ", this.searchInput);
     if (this.$route.hash != "") {
-      // this.setSearchParams();
-      this.cluster = this.searchInput;
-      if (this.cluster.rules.search_string != "") {
-        this.tabsearchArea = 1;
-      } else {
-        this.tabsearchArea = 0;
-      }
-    } else {
-      this.cluster = this.searchInput;
-    }
-  },
-  beforeRouteUpdate() {
-    console.log("ROUTE IS UPDATING");
-    if (this.$route.hash != "") {
-      this.setSearchParams();
-      if (this.cluster.rules.search_string != "") {
+      if (this.searchInput.rules.search_string != undefined) {
         this.tabsearchArea = 1;
       } else {
         this.tabsearchArea = 0;
@@ -224,37 +332,25 @@ export default {
     }
   },
   methods: {
-    setSearchParams() {
-      let filters = this.getFiltersFromUrl(
-        this.$store.getters["services/getsearchInputPlain"],
-        true
-      );
-      console.log("FILTERS ARE ", filters);
-
-    //  this.$store.commit("services/UPDATE_SEARCH_FROM_URLHASH", filters);
-      this.cluster = this.searchInput;
-    },
-
     searchUpdate() {
-      this.$emit("closeSearch");
+      let me = this;
       this.$store.commit("services/SET_LOADING_CIRCLE", true);
-      this.$store.commit("services/RESET_SEARCH_STATE");
       if (this.tabsearchArea == 0) {
-        this.cluster.textsearch.search_string = "";
+        this.search_string = "";
       } else {
-        this.cluster.rules.search_ip1 = "";
-        this.cluster.rules.search_ip2 = "";
-        this.cluster.rules.search_proto = "";
+        this.search_ip1 = "";
+        this.search_ip2 = "";
+        this.search_proto = "";
       }
-      this.$store.commit("services/SEARCH_UPDATE", this.cluster);
 
-      this.updateUrlHash(this.$store.getters["services/getsearchInputPlain"]);
+      this.$store.dispatch("services/loadPlainSearch").then((cbdata) => {
+        window.location.hash = "";
+        me.updateUrlHash(cbdata);
+      });
 
+      this.$emit("closeSearch");
       this.$store.commit("services/UPDATE_SERVICE_TAB_NUMBER", 3);
       this.$store.dispatch("services/getServicesList");
-    },
-    captureSelectionUpdate(data) {
-      this.cluster.search_networks = data;
     },
   },
 };

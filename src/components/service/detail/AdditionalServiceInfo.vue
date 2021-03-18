@@ -2,8 +2,37 @@
   <v-row dense ref="additionalfilter">
     <v-col>
       <v-row class="ma-2" dense :justify="'start'">
-        <v-col cols="12">
+        <v-col :cols="disable_at != '' ? 8 : 12">
           <v-text-field :value="name" label="Name" dense outlined readonly />
+        </v-col>
+        <v-col v-if="disable_at != ''" cols="4">
+          <v-text-field
+            :value="disable_at"
+            label="Befristet bis:"
+            dense
+            outlined
+            readonly
+          />
+        </v-col>
+      </v-row>
+       <v-row class="mx-2" dense :justify="'start'">
+        <v-col :cols="disabled != '' ? 8 : 12">
+          <v-text-field
+            :value="owner"
+            label="Verantwortung"
+            dense
+            outlined
+            readonly
+          />
+        </v-col>
+        <v-col v-if="disabled != ''" cols="4">
+          <v-text-field
+            value="Disabled"
+            label="Status:"
+            dense
+            outlined
+            readonly
+          />
         </v-col>
       </v-row>
       <v-row class="mx-2" dense :justify="'start'">
@@ -17,39 +46,7 @@
           />
         </v-col>
       </v-row>
-      <v-row class="mx-2" dense :justify="'start'">
-        <v-col cols="12">
-          <v-text-field
-            :value="owner"
-            label="Verantwortung"
-            dense
-            outlined
-            readonly
-          />
-        </v-col>
-      </v-row>
-      <v-row class="mx-2" v-if="disable_at != ''" dense :justify="'start'">
-        <v-col cols="12">
-          <v-text-field
-            :value="disable_at"
-            label="Befristet bis:"
-            dense
-            outlined
-            readonly
-          />
-        </v-col>
-      </v-row>
-      <v-row class="mx-2" v-if="disabled != ''" dense :justify="'start'">
-        <v-col cols="12">
-          <v-text-field
-            value="Disabled"
-            label="Status:"
-            dense
-            outlined
-            readonly
-          />
-        </v-col>
-      </v-row>
+
     </v-col>
   </v-row>
 </template>
