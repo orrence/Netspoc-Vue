@@ -40,7 +40,6 @@ _axios.interceptors.response.use(
   function(error) {
     // Do something with response error
     const response = error.response;
-    console.log('THERE IS AN ERROR');
     store.dispatch('auth/setLoggedIn', false);
     let loginpath = store.state.loginpath;
     if(response.data.msg == 'Login required' || response.data.msg == 'Login failed' ) {

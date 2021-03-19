@@ -74,9 +74,7 @@ export default {
             state.searchInput = Object.assign({}, state.searchInput, payload);
         },
         SEARCH_UPDATE_RULES(state, payload) {
-            console.log('RULES ARE ', payload);
             state.searchInput.rules = Object.assign({}, state.searchInput.rules, payload);
-            console.log(state.searchInput.rules);
         },
         SEARCH_UPDATE_GENERAL(state, payload) {
             state.searchInput.general = Object.assign({}, state.searchInput.general, payload);
@@ -184,6 +182,9 @@ export default {
         setUsersAdminData({ commit }, payload) {
             commit('RECEIVED_USERS_ADMINSDATA', payload);
         },
+        setRulesAdminsData({ commit }, payload) {
+            commit('RECEIVED_RULES_ADMINSDATA', payload);
+        },
         getServiceRules({ commit, state, dispatch }) {
 
             let rulepayload = {};
@@ -228,7 +229,6 @@ export default {
                             resdata[j].src = "User";
                             break;
                         case "dst":
-                            resdata[j].src = "User";
                             resdata[j].dst = "User";
                             break;
                         default:

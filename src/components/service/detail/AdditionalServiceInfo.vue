@@ -15,11 +15,11 @@
           />
         </v-col>
       </v-row>
-       <v-row class="mx-2" dense :justify="'start'">
+      <v-row class="mx-2" dense :justify="'start'">
         <v-col :cols="disabled != '' ? 8 : 12">
           <v-text-field
-            :value="owner"
-            label="Verantwortung"
+            :value="description"
+            label="Beschreibung"
             dense
             outlined
             readonly
@@ -36,17 +36,26 @@
         </v-col>
       </v-row>
       <v-row class="mx-2" dense :justify="'start'">
-        <v-col cols="12">
+        <v-col v-if="items.length > 1" cols="3">
+          <v-overflow-btn
+            @change="onChangeResponsible"
+            class="my-0 switchresponse_btn"
+            :items="items"
+            v-model="selected"
+            autoSelectFirst
+            dense
+          ></v-overflow-btn>
+        </v-col>
+        <v-col :cols="items.length > 1 ? 9 : 12">
           <v-text-field
-            :value="description"
-            label="Beschreibung"
+            :value="owner"
+            label="Verantwortung"
             dense
             outlined
             readonly
           />
         </v-col>
       </v-row>
-
     </v-col>
   </v-row>
 </template>
@@ -61,28 +70,52 @@ export default {
     disable_at: "",
     disabled: "",
     owner: "",
+    items: [],
+    selected: null,
   }),
   computed: {
     ...mapState("services", ["serviceSelection"]),
   },
   watch: {
     serviceSelection: function () {
-      console.log('SERVICES IS ', this.serviceSelection);
+      let me = this;
       if (this.serviceSelection.length > 0) {
         this.name = this.serviceSelection[0].name;
         this.description = this.serviceSelection[0].description;
-        this.owner = this.serviceSelection[0].owner.map(owner => owner.name).join(', ');
-        this.disabled = this.serviceSelection[0].disabled ? this.serviceSelection[0].disabled : '';
-        this.disable_at = this.serviceSelection[0].disable_at ? this.serviceSelection[0].disable_at : '';
-
+      
+        this.items = [];
+        this.serviceSelection[0].owner.forEach(element => {
+          me.items.push(element.name)
+        });
+    
+        this.owner = this.serviceSelection[0].owner[0].name;
+        this.selected = this.serviceSelection[0].owner[0].name;
+        this.disabled = this.serviceSelection[0].disabled
+          ? this.serviceSelection[0].disabled
+          : "";
+        this.disable_at = this.serviceSelection[0].disable_at
+          ? this.serviceSelection[0].disable_at
+          : "";
       } else {
-        this.name = '';
-        this.description = '';
-        this.owner = '';
-        this.disabled = '';
-        this.disable_at = '';
+        this.name = "";
+        this.description = "";
+        this.owner = "";
+        this.disabled = "";
+        this.disable_at = "";
       }
     },
   },
+  methods: {
+    onChangeResponsible(item) {
+      let me = this;
+      this.selected = item;
+      this.$store
+        .dispatch("services/getAdminsData", item)
+        .then((response) => {
+      
+          me.$store.dispatch('services/setRulesAdminsData',response.data.records)
+        });
+    }
+  }
 };
 </script>

@@ -199,7 +199,6 @@ export default {
 
     search_ip1: {
       set(search_ip1) {
-        console.log("IP IOS ", search_ip1);
         this.$store.commit("services/SEARCH_UPDATE_RULES", { search_ip1 });
       },
       get() {
@@ -248,7 +247,6 @@ export default {
     },
     search_string: {
       set(search_string) {
-        console.log("SEARCH STRIN IS SET", search_string);
         this.$store.commit("services/SEARCH_UPDATE_TEXTSEARCH", {
           search_string,
         });

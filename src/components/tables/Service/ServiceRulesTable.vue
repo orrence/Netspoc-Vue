@@ -80,7 +80,6 @@ export default {
       }
     },
     expandUser: function () {
-      console.log("EXPAND USER");
       this.getRules();
     },
     IPAsName: function () {

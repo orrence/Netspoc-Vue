@@ -119,3 +119,7 @@ body {
     top: 40%;
     margin: 0 auto;
   }
+
+  .v-input--dense > .v-input__control > .v-input__slot {
+    margin-bottom: 1px !important;
+  }

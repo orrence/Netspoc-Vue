@@ -9,8 +9,7 @@ export const setHistory = (state, history) => {
     state.history = history;
 };
 export const setActivePolicy = (state, activePolicy) => {
-    console.log('POLICY I NOW');
-    console.log(activePolicy);
+   
     state.active.policy = activePolicy;
 };
 export const setLoginpath = (state, path) => {

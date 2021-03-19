@@ -19,7 +19,6 @@ export default {
     },
     mutations: {
         SET_LOGGED_IN: (state, loggedIn) => {
-            console.log('SET LOGGED IN NOW');
             state.loggedIn = loggedIn;
         },
         SET_LOGIN_ERROR: (state, loginError) => {

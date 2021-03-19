@@ -21,7 +21,6 @@ export const requestActive = ({ commit, dispatch, state }) => {
             let newActiveOwner = response.data.records[0].name;
             return dispatch('requestHistory', newActiveOwner)
                 .then(() => {
-                    console.log('POLICY LOADING IS', state.history[0]);
                     commit('setActive',
                         {
                             owner: newActiveOwner,
