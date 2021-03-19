@@ -8,6 +8,11 @@
           field: 'email',
         },
       ]"
+      :tableconfig="{
+        reactiveData: true,
+        selectable: 1,
+        rowSelected: passOnSelectionUpdate,
+      }"
       reactiveData="true"
       :variableHeight="tabheight"
       :data="data"
@@ -40,7 +45,10 @@ export default {
       let restheight =
         window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
       this.tabheight = restheight - 10;
-    }
-  }
+    },
+    passOnSelectionUpdate(row) {
+      window.location.href = "mailto:"+row.getData().email;
+    },
+  },
 };
 </script>
