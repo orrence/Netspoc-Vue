@@ -80,6 +80,7 @@ export default {
     variableHeight: {
       handler: function () {
         // TO-DO Dynamisch berechnen
+        console.log('VARAIBLE HEIGHT IS DA', this.variableHeight);
         this.tabulatorheight = this.variableHeight - 36;
       },
     },
@@ -137,7 +138,7 @@ export default {
       this.tabulator = new Tabulator(this.$refs.table, this.config);
     },
     calcHeight() {
-      if (typeof this.variableHeight != "number") {
+      if (typeof this.variableHeight != "number" || this.variableHeight == 0) {
         let tabheight =
           window.innerHeight -
           this.$refs.tablecontainer.getBoundingClientRect().top -

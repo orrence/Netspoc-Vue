@@ -49,7 +49,12 @@ import urlSearchParams from "../c../../../mixins/urlSearchParams";
 
 export default {
   mixins: [urlSearchParams],
-  props: ["height"],
+  props: {
+    height: {
+      type: Number,
+      default: 0,
+    },
+  },
   components: {
     Tabulator,
   },
@@ -87,10 +92,7 @@ export default {
 
       this.getNetworks(params).then(function () {
         vm.$store.dispatch("services/loadPlainSearch").then((cbdata) => {
-          let filters = vm.getFiltersFromUrl(
-            cbdata,
-            true
-          );
+          let filters = vm.getFiltersFromUrl(cbdata, true);
 
           vm.networks = filters.search_networks;
         });
