@@ -80,11 +80,16 @@ export const requestHistory = ({ commit }, owner) => {
 };
 
 export const initApp = ({ dispatch, commit }) => {
-    dispatch('requestOwners');
-    commit('services/RESET_SEARCH_STATE');
-   
-    return dispatch('requestActive').then(() => {
-        commit('auth/SET_LOGGED_IN', true);
-        return true;
-    })
+    return dispatch('auth/requestLoggedIn').then((response) => {
+        if (response) {
+            dispatch('requestOwners');
+            commit('services/RESET_SEARCH_STATE');
+
+            return dispatch('requestActive').then(() => {
+                commit('auth/SET_LOGGED_IN', true);
+                return true;
+            })
+        }
+    });
+
 };

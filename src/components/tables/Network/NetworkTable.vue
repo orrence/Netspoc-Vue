@@ -86,7 +86,7 @@ export default {
       };
 
       this.getNetworks(params).then(function () {
-        this.$store.dispatch("services/loadPlainSearch").then((cbdata) => {
+        vm.$store.dispatch("services/loadPlainSearch").then((cbdata) => {
           let filters = vm.getFiltersFromUrl(
             cbdata,
             true

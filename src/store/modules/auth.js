@@ -37,9 +37,11 @@ export default {
                     let recurare = response.data.success;
                   
                     commit('SET_LOGGED_IN', recurare);
+                    return true;
                 })
                 .catch(function () {
                     commit('SET_LOGGED_IN', false);
+                    return false;
                 }); 
         },
         loginUser({ commit }, creds) {
@@ -52,6 +54,7 @@ export default {
                 if(res.data.success) {
                     commit('SET_LOGGED_IN', true);
                     commit('SET_LOGIN_ERROR',false);
+                   // localStorage.set('loggendin',true);
                     router.push('/services');
                 } else {
                     commit('SET_LOGIN_ERROR',true);
@@ -65,7 +68,8 @@ export default {
             return Vue.axios.get('/logout'
             ).then(function () {
                 dispatch('setLoggedIn', false);
-                dispatch('services/')
+                dispatch('services/');
+             //   localStorage.set('loggendin',false);
                 router.push('/login');
             }).catch(function () {
             });

@@ -19,7 +19,7 @@ const getDefaultState = () => {
             search_own: true,
             search_used: true,
             search_visible: false,
-            search_limited: false,
+            search_disable_at: false,
             search_case_sensitive: false,
             search_exact: false,
         },
@@ -87,6 +87,7 @@ export default {
         },
         RESET_SEARCH_STATE(state) {
             Object.assign(state.searchInput, getDefaultState())
+            console.log('SEARCH STATE RESTT',state.searchInput );
         },
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;

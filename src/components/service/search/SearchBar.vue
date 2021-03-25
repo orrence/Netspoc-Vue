@@ -139,7 +139,7 @@
                   <v-checkbox
                     class="mt-0"
                     id="cb_search_limited"
-                    v-model="search_limited"
+                    v-model="search_disable_at"
                     label="Nur befristete Dienste suchen"
                   />
                 </v-col>
@@ -291,14 +291,14 @@ export default {
         return this.searchInput.general.search_visible;
       },
     },
-    search_limited: {
-      set(search_limited) {
+    search_disable_at: {
+      set(search_disable_at) {
         this.$store.commit("services/SEARCH_UPDATE_GENERAL", {
-          search_limited,
+          search_disable_at,
         });
       },
       get() {
-        return this.searchInput.general.search_limited;
+        return this.searchInput.general.search_disable_at;
       },
     },
     search_case_sensitive: {

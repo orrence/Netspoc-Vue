@@ -36,7 +36,7 @@
         </v-col>
       </v-row>
       <v-row class="mx-2" dense :justify="'start'">
-        <v-col v-if="items.length > 1" cols="3">
+        <v-col v-if="items.length > 1" cols="12">
           <v-overflow-btn
             @change="onChangeResponsible"
             class="my-0 switchresponse_btn"
@@ -46,7 +46,7 @@
             dense
           ></v-overflow-btn>
         </v-col>
-        <v-col :cols="items.length > 1 ? 9 : 12">
+        <v-col v-else cols="12">
           <v-text-field
             :value="owner"
             label="Verantwortung"
