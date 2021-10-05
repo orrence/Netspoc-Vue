@@ -14,7 +14,7 @@
         rowSelected: passOnSelectionUpdate,
       }"
       reactiveData="true"
-      :variableHeight="tabheight"
+      :variableHeight="variableHeight"
       :data="data"
       @resizeTab="calcHeight"
       :showCountHeader="false"
@@ -30,12 +30,20 @@ export default {
   components: {
     Tabulator,
   },
-  props: ["data"],
+  props: ["data","adminheight"],
   data: () => ({
     tabheight: 100,
   }),
   computed: {
     ...mapState("services", ["adminsData"]),
+    variableHeight() {
+      console.log('ADMIN HEIGHT ', this.adminheight);
+      if(this.adminheight) {
+        return this.adminheight
+      } else {
+        return this.tabheight;
+      }
+    }
   },
   mounted() {
     this.calcHeight();
@@ -44,7 +52,7 @@ export default {
     calcHeight() {
       let restheight =
         window.innerHeight - this.$refs.adminstable.getBoundingClientRect().top;
-      this.tabheight = restheight - 10;
+      this.tabheight = restheight - 20;
     },
     passOnSelectionUpdate(row) {
       window.location.href = "mailto:"+row.getData().email;

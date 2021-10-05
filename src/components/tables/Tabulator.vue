@@ -81,7 +81,8 @@ export default {
       handler: function () {
         // TO-DO Dynamisch berechnen
         console.log('VARAIBLE HEIGHT IS DA', this.variableHeight);
-        this.tabulatorheight = this.variableHeight - 36;
+        this.tabulatorheight = this.variableHeight - 38;
+        console.log(this.tabulatorheight);
       },
     },
     data: {
@@ -145,7 +146,7 @@ export default {
           12;
         this.tabulatorheight = tabheight;
       } else {
-        this.tabulatorheight = this.variableHeight;
+        this.tabulatorheight = this.variableHeight -38;
         this.$emit("resizeTab");
       }
     },

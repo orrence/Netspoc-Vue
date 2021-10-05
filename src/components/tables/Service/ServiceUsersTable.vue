@@ -29,7 +29,7 @@
       :variableHeight="tabheight"
       :groupBy="serviceSelection.length > 1 ? 'service' : ''"
     />
-    <AdminsTable :data="usersAdminsData" />
+    <AdminsTable v-if="heightCalculated" :adminheight="tabheight" :data="usersAdminsData" />
   </div>
 </template>
 
@@ -43,10 +43,10 @@ export default {
     Tabulator,
     AdminsTable,
   },
-  props: ["filterBySearch"],
   data: () => ({
     data: [],
     tabheight: 100,
+    heightCalculated: false,
   }),
   computed: {
     ...mapState("services", [
@@ -54,6 +54,7 @@ export default {
       "searchInput",
       "serviceSelection",
       "usersAdminsData",
+      "filterBySearch"
     ]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
@@ -83,6 +84,7 @@ export default {
         0.5;
 
       this.tabheight = restheight;
+      this.heightCalculated = true;
     },
     getUsers() {
       var vm = this;
