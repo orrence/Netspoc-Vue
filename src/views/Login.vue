@@ -4,7 +4,7 @@
 
     <v-card :loading="false" class="mx-auto">
       <v-card-title primary-title>
-        <h4>Login</h4>
+        <h4>{{loginTitle}}</h4>
       </v-card-title>
 
       <v-system-bar v-if="loginError" color="error" id="bar_login_failed"
@@ -30,7 +30,7 @@
           v-model="login"
           :rules="[(v) => !!v || 'Darf nicht leer sein']"
           required
-          label="Benutzername / E-Mail"
+          :label="isLDAPLogin ? 'Benutzername' : 'E-Mail-Adresse'"
           prepend-icon="person"
         ></v-text-field>
 
@@ -87,6 +87,7 @@ export default {
     valid: true,
     show: false,
     isLDAPLogin: false,
+    loginTitle : 'Login mit Email-Adresse und Kennwort'
   }),
   computed: {
     ...mapState("auth", ["loginError"]),
@@ -100,8 +101,10 @@ export default {
     $route(to) {
       if (to.path == this.$LDAPLOGIN) {
         this.isLDAPLogin = true;
+        this.loginTitle = 'Anmeldung über Verzeichnisdienst';
       } else if (to.path == this.$STANDARDLOGIN) {
         this.isLDAPLogin = false;
+        this.loginTitle = 'Login mit Email-Adresse und Kennwort';
       }
     },
   },
