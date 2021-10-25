@@ -75,7 +75,7 @@ const routes = [
 const router = new VueRouter({
 	routes,
 	mode: 'history',
-	base: '/netspocvue/'
+	base: process.env.BASE_URL || '/netspocvue/'
 });
 
 router.beforeEach((to, from, next) => {
