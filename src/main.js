@@ -18,16 +18,16 @@ Vue.prototype.$LDAPLOGIN = '/ldap_login';
 Vue.prototype.$STANDARDLOGIN = '/login';
 
 Tabulator.prototype.extendModule("sort", "sorters", {
-    ip:function(a, b){
-        var ip2numeric = function(dot) {
+    ip: function (a, b) {
+        var ip2numeric = function (dot) {
             var rex = /[a-zA-Z]/;
             var d;
-            if ( rex.test(dot) === true ) {
+            if (rex.test(dot) === true) {
                 return 0xFFFFFFFF;
             }
             dot = dot.split(/[-/]/)[0]
             d = dot.split('.');
-            return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
+            return ((((((+d[0]) * 256) + (+d[1])) * 256) + (+d[2])) * 256) + (+d[3]);
         };
         a = ip2numeric(a);
         b = ip2numeric(b);
@@ -37,9 +37,38 @@ Tabulator.prototype.extendModule("sort", "sorters", {
 
 Vue.config.productionTip = true
 
+
+Vue.mixin(
+    {
+        methods: {
+            loadScript: (src) => {
+                /**
+                *  Loads a JavaScript file and returns a Promise for when it is loaded
+                */
+                if (document.getElementById(src) === null) {
+                    return new Promise((resolve, reject) => {
+                        const script = document.createElement('script')
+                        script.setAttribute('id', src)
+                        script.setAttribute('type', 'text/javascript')
+                        script.onload = resolve
+                        script.onerror = reject
+                        script.src = src
+                        document.head.append(script)
+                    })
+                }
+                else {
+                    return Promise.resolve(true)
+                }
+            }
+        }
+    }
+)
+
+
 new Vue({
     router,
     store,
     vuetify,
     render: h => h(App)
 }).$mount('#app')
+

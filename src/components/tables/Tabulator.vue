@@ -12,9 +12,7 @@
       </v-col>
 
       <v-col v-if="showCountHeader" cols="auto">
-        <div v-if="selectedRows > 1">
-          {{ selectedRows }} {{ name }} ausgewählt
-        </div>
+        <div v-if="selectedRows > 1">{{ selectedRows }} {{ name }} ausgewählt</div>
         <div v-else>{{ data.length }} {{ name }} verfügbar</div>
       </v-col>
     </v-row>
@@ -80,9 +78,8 @@ export default {
     variableHeight: {
       handler: function () {
         // TO-DO Dynamisch berechnen
-        console.log('VARAIBLE HEIGHT IS DA', this.variableHeight);
+        //console.log("VARIABLE HEIGHT IS DA", this.variableHeight);
         this.tabulatorheight = this.variableHeight - 38;
-        console.log(this.tabulatorheight);
       },
     },
     data: {
@@ -146,7 +143,7 @@ export default {
           12;
         this.tabulatorheight = tabheight;
       } else {
-        this.tabulatorheight = this.variableHeight -38;
+        this.tabulatorheight = this.variableHeight - 38;
         this.$emit("resizeTab");
       }
     },
@@ -162,17 +159,31 @@ export default {
       this.isVisible = isVisible;
     },
     downloadAsPDF() {
-      this.tabulator.download("pdf", `${this.name}.pdf`, {
-        orientation: "portrait", //set page orientation to portrait
-        title: this.name, //add title to report
-      });
+      this.loadScript("/js/jspdf.min.js")
+        .then(() => this.loadScript("/js/jspdf.plugin.autotable.js"))
+        .then(() => {
+          this.tabulator.download("pdf", `${this.name}.pdf`, {
+            orientation: "portrait", //set page orientation to portrait
+            title: this.name, //add title to report
+          });
+        })
+        .catch(() =>
+          console.error("Something went wrong loading PDF export plugins.")
+        );
     },
     downloadAsExcel() {
-      this.tabulator.download(
-        "xlsx",
-        `${this.name}_${this.getActiveOwner}_${this.getActivePolicy}.xlsx`,
-        { sheetName: this.name }
-      );
+      this.loadScript("/js/xlsx.full.min.js")
+        .then(() => {
+          // now safe to use xlsx download feature
+          this.tabulator.download(
+            "xlsx",
+            `${this.name}_${this.getActiveOwner}_${this.getActivePolicy}.xlsx`,
+            { sheetName: this.name }
+          );
+        })
+        .catch(() =>
+          console.error("Something went wrong loading Excel export plugin.")
+        );
     },
   },
 };
