@@ -37,7 +37,7 @@ export default {
   computed: {
     ...mapState("services", ["adminsData"]),
     variableHeight() {
-      console.log('ADMIN HEIGHT ', this.adminheight);
+      //console.log('ADMIN HEIGHT ', this.adminheight);
       if(this.adminheight) {
         return this.adminheight
       } else {

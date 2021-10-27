@@ -12,7 +12,7 @@ import store from '../store'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let baseURL = process.env.BASE_URL ? process.env.BASE_URL + '/backend/' : '/netspocvue/backend/';
-console.log('baseURL: ' + baseURL);
+//console.log('baseURL: ' + baseURL);
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   baseURL: baseURL,
