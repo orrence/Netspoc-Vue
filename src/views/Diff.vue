@@ -16,7 +16,7 @@
           label="Vergleichsstand"
           :items="olderPolicies"
           v-model="oldPolicy"
-          item-text="date"
+          :item-text="genDateTimeString"
           return-object
           outlined
           dense
@@ -67,7 +67,7 @@ export default {
         return "Keine älteren Stände verfügbar.";
       else if (this.olderPolicies && this.olderPolicies.length === 1)
         return "1 älterer Stand verfügbar.";
-      else return this.olderPolicies.length + "ältere Stände verfügbar.";
+      else return this.olderPolicies.length + " ältere Stände verfügbar.";
     },
   },
   watch: {
@@ -102,8 +102,10 @@ export default {
           newOld.push(history[i]);
         }
       }
- 
       this.olderPolicies = newOld;
+    },
+    genDateTimeString(val) {
+      return val.date + " " + val.time;
     },
   },
 };

@@ -37,7 +37,7 @@ export default {
   methods: {
     ...mapActions(["setActivePolicy"]),
     show(val) {
-      return val.date + " | " + val.policy;
+      return val.date + " " + val.time + " | " + val.policy;
     },
   }
 };
