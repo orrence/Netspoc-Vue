@@ -26,6 +26,7 @@
                     v-model="search_ip1"
                     id="txtf_search_ip1"
                     color="orange"
+                    @keydown.enter.prevent="searchUpdate"
                   />
                 </v-col>
                 <v-col>
@@ -36,6 +37,7 @@
                     v-model="search_ip2"
                     id="txtf_search_ip2"
                     color="orange"
+                    @keydown.enter.prevent="searchUpdate"
                   />
                 </v-col>
                 <v-col>
@@ -46,6 +48,7 @@
                     v-model="search_proto"
                     id="txtf_search_proto"
                     color="orange"
+                    @keydown.enter.prevent="searchUpdate"
                   />
                 </v-col>
               </v-row>
@@ -85,6 +88,7 @@
                     label="Suchbegriff"
                     v-model="search_string"
                     id="search_string"
+                    @keydown.enter.prevent="searchUpdate"
                   />
                 </v-col>
               </v-row>
