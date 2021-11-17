@@ -15,10 +15,10 @@
     </v-tabs>
 
     <v-spacer />
-    <v-col cols="5" sm="6" md="3">
+    <v-col cols="5" sm="5" md="3">
       <combo-policy id="comb_policy" class="mx-1 pt-1" />
     </v-col>
-    <v-col cols="4" sm="6" md="3">
+    <v-col cols="4" sm="4" md="3">
       <combo-owner id="comb_owner" class="mr-1 pt-1" />
     </v-col>
 
