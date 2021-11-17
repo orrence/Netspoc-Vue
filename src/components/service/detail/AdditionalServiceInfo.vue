@@ -43,7 +43,9 @@
             :items="items"
             v-model="selected"
             autoSelectFirst
+            filled
             dense
+            outlined
           ></v-overflow-btn>
         </v-col>
         <v-col v-else cols="12">
