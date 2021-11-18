@@ -79,7 +79,9 @@
             </v-tab-item>
 
             <v-tab-item :key="1">
-              <v-subheader>Suchbegriff</v-subheader>
+              <v-subheader class="body-1 pl-0 mb-1">
+                Wonach soll gesucht werden?
+              </v-subheader>
               <v-row dense>
                 <v-col>
                   <v-text-field
