@@ -28,5 +28,5 @@ export default new Vuex.Store({
 		auth,
 		networks,
 		diff
-    },
+	},
 });

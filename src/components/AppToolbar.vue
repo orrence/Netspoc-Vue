@@ -12,6 +12,8 @@
       <v-tab id="tab_networks" to="/networks">Netze</v-tab>
 
       <v-tab id="tab_diff" to="/diff">Unterschiede</v-tab>
+
+      <v-tab id="tab_responsibilities" to="/responsibilities">Verantwortlichkeiten</v-tab>
     </v-tabs>
 
     <v-spacer />

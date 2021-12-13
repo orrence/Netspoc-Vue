@@ -12,7 +12,9 @@
       </v-col>
 
       <v-col v-if="showCountHeader" cols="auto">
-        <div v-if="selectedRows > 1">{{ selectedRows }} {{ name }} ausgewählt</div>
+        <div v-if="selectedRows > 1">
+          {{ selectedRows }} {{ name }} ausgewählt
+        </div>
         <div v-else>{{ data.length }} {{ name }} verfügbar</div>
       </v-col>
     </v-row>
@@ -106,6 +108,11 @@ export default {
         this.selectedNetworks.forEach((param) => {
           this.tabulator.selectRow(param);
         });
+      },
+    },
+    columns: {
+      handler: function () {
+        this.tabulator.setColumns(this.columns);
       },
     },
   },

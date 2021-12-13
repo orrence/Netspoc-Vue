@@ -105,7 +105,7 @@ export default {
     passOnSelectionUpdate(data) {
       this.$emit(
         "selectionUpdate",
-        data.map((row) => row.name)
+        data.map((row) => row.email)
       );
     },
   },
