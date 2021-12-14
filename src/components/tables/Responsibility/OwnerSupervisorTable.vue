@@ -1,14 +1,13 @@
 <template>
   <div id="table_supervisors">
     <Tabulator
-      :name="`Verantwortliche`"
+      :name="`Supervisors`"
       selectfirstrow="true"
       :tableconfig="{
         reactiveData: true,
         selectable: 1,
         index: 'name',
-        rowSelectionChanged: passOnSelectionUpdate,
-       
+        rowSelected: passOnSelectionUpdate,
       }"
       :columns="[
         {
@@ -16,15 +15,16 @@
           field: 'name',
         },
       ]"
-      :data="ownerSupervisorsData"
+      :data="data"
     />
   </div>
 </template>
 
 <script>
 import Tabulator from "../Tabulator";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import urlSearchParams from "../c../../../mixins/urlSearchParams";
+import Vue from "vue";
 
 export default {
   mixins: [urlSearchParams],
@@ -41,7 +41,6 @@ export default {
   },
   computed: {
     ...mapState(["active"]),
-    ...mapState("responsibilities", ["ownerSupervisorsData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
@@ -51,30 +50,33 @@ export default {
         this.loadOwnerSupervisors();
       },
     },
-    ownerSupervisorsData: {
-      handler() {
-        if (this.ownerSupervisorsData.length > 0) {
-          this.updateSupervisorSelection([this.ownerSupervisorsData[0]]);
-        } 
-      },
-    },
   },
   methods: {
-    ...mapActions("responsibilities", ["getOwnerSupervisors", "updateSupervisorSelection"]),
     loadOwnerSupervisors() {
       var vm = this;
-
-      const params = {
-        active_owner: vm.getActiveOwner,
-        history: vm.getActivePolicy,
-      };
-      this.getOwnerSupervisors(params);
+      const formData = new FormData();
+      formData.append("active_owner", vm.getActiveOwner);
+      formData.append("history", vm.getActivePolicy);
+      Vue.axios
+        .post("get_supervisors", formData)
+        .then((res) => {
+          let records = res.data.records;
+          if (records.length > 0) {
+            this.data = records;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    passOnSelectionUpdate(data) {
-      console.dir("DATA", data[0])
-      this.updateSupervisorSelection(data[0]);
+    passOnSelectionUpdate(row) {
+      const payload = {
+        selectedSupervisor: row.getData().name,
+      };
+
+      this.$emit("supervisorSelected", payload);
     },
   },
-}
+};
 </script>
 

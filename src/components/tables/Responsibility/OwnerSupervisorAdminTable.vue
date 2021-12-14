@@ -4,64 +4,66 @@
       :name="`Supervisoradmins`"
       :reactiveData="true"
       :columns="tabletitle"
-      :data="ownerSupervisorAdminsData"
+      :data="data"
       :selectable="false"
     />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import Tabulator from "../Tabulator";
+import Vue from "vue";
+
 export default {
   components: {
     Tabulator,
   },
+  props: ["selection"],
   data: () => ({
     data: [],
   }),
   watch: {
-    supervisorSelection: function () {
+    selection: function () {
+      this.data = [];
       this.loadOwnerSupervisorAdmins();
-    }
-  },computed: {
-    ...mapState("responsibilities", ["ownerSupervisorAdminsData", "supervisorSelection"]),
+    },
+  },
+  computed: {
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
     tabletitle() {
-      var vm = this;
-      let selectionname = vm.supervisorSelection[0] ? vm.supervisorSelection[0].name : '';
       return [
         {
-          title: "Verantwortliche für " + selectionname,
+          title: "Verantwortliche für " + this.selection.selectedSupervisor,
           field: "email",
         },
       ];
     },
   },
   mounted() {
-    this.loadOwnerSupervisorAdmins();
+    if (this.data.length > 0) {
+      this.tabulator.selectRow(this.data[0].email);
+    }
   },
   methods: {
-    ...mapActions("responsibilities", ["getOwnerSupervisorAdmins"]),
     loadOwnerSupervisorAdmins() {
       var vm = this;
-      if (vm.supervisorSelection.length !== 1) {
-        return;
-      }
-      if (!vm.supervisorSelection[0]) {
-        return;
-      }
-      const params = {
-        active_owner: vm.getActiveOwner,
-        history: vm.getActivePolicy,
-        owner: vm.supervisorSelection[0].name,
-      };
-      console.dir("PARAMS", params);
-      this.getOwnerSupervisorAdmins(params);
+      const formData = new FormData();
+      // We need both, owner (for get_admins_watchers) and active_owner (for validate_owner)
+      formData.append("owner", vm.selection.selectedSupervisor);
+      formData.append("active_owner", vm.selection.selectedSupervisor);
+      Vue.axios
+        .post("get_admins_watchers", formData)
+        .then((res) => {
+          let records = res.data.records;
+          if (records.length > 0) {
+            this.data = records;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
 </script>
-
-<style>
-</style>

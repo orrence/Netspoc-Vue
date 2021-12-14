@@ -12,7 +12,7 @@
           field: 'email',
         },
       ]"
-      :data="ownerWatchersData"
+      :data="data"
       :height="height"
     />
   </div>
@@ -20,8 +20,9 @@
 
 <script>
 import Tabulator from "../Tabulator";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import urlSearchParams from "../c../../../mixins/urlSearchParams";
+import Vue from "vue";
 
 export default {
   mixins: [urlSearchParams],
@@ -38,7 +39,6 @@ export default {
   },
   computed: {
     ...mapState(["active"]),
-    ...mapState("responsibilities", ["ownerWatchersData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
@@ -48,18 +48,26 @@ export default {
         this.loadOwnerWatchers();
       },
     },
-  },  created() {},
+  },
+  created() {},
   methods: {
-    ...mapActions("responsibilities", ["getOwnerWatchers"]),
-      loadOwnerWatchers() {
+    loadOwnerWatchers() {
       var vm = this;
-
-      const params = {
-        active_owner: vm.getActiveOwner,
-        history: vm.getActivePolicy,
-      };
-      this.getOwnerWatchers(params);
+      const formData = new FormData();
+      formData.append("active_owner", vm.getActiveOwner);
+      formData.append("history", vm.getActivePolicy);
+      Vue.axios
+        .post("get_watchers", formData)
+        .then((res) => {
+          let records = res.data.records;
+          if (records.length > 0) {
+            this.data = records;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
-}
+};
 </script>

@@ -10,11 +10,14 @@
       <v-col cols="3">
         <OwnerSupervisorTable
           v-if="getActiveLoaded"
-          @selectionUpdate="captureSelectionUpdate"
+          @supervisorSelected="captureSelectionUpdate"
         />
       </v-col>
       <v-col cols="3">
-        <OwnerSupervisorAdminTable v-if="getActiveLoaded" />
+        <OwnerSupervisorAdminTable
+          v-if="getActiveLoaded"
+          :selection="selection"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -35,10 +38,15 @@ export default {
     OwnerSupervisorAdminTable,
   },
   data: () => ({
-    selection: null,
+    selection: "",
   }),
   computed: {
     ...mapGetters(["getActiveLoaded"]),
+  },
+  methods: {
+    captureSelectionUpdate(data) {
+      this.selection = data;
+    },
   },
 };
 </script>
