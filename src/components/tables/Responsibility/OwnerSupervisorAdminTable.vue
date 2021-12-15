@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Tabulator from "../Tabulator";
 import Vue from "vue";
 
@@ -28,22 +28,26 @@ export default {
       this.data = [];
       this.loadOwnerSupervisorAdmins();
     },
+    active: {
+      deep: true,
+      handler() {
+        this.data = [];
+        this.loadOwnerSupervisorAdmins();
+      },
+    },
   },
   computed: {
+    ...mapState(["active"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
     tabletitle() {
+      let s = this.selection.selectedSupervisor;
       return [
         {
-          title: "Verantwortliche für " + this.selection.selectedSupervisor,
+          title: "Verantwortliche für " + (s ? s : ""),
           field: "email",
         },
       ];
     },
-  },
-  mounted() {
-    if (this.data.length > 0) {
-      this.tabulator.selectRow(this.data[0].email);
-    }
   },
   methods: {
     loadOwnerSupervisorAdmins() {

@@ -35,7 +35,7 @@ export default {
     selectionModel: "",
     ownerAdmins: "",
   }),
-  mounted() {
+  created() {
     this.loadOwnerAdmins();
   },
   watch: {

@@ -1,5 +1,5 @@
 <template>
-  <div id="table_supervisors">
+  <div v-if="dataIsLoaded" id="table_supervisors">
     <Tabulator
       :name="`Supervisors`"
       selectfirstrow="true"
@@ -35,8 +35,9 @@ export default {
   data: () => ({
     data: [],
     selectionModel: "",
+    dataIsLoaded: false,
   }),
-  mounted() {
+  created() {
     this.loadOwnerSupervisors();
   },
   computed: {
@@ -47,6 +48,7 @@ export default {
     active: {
       deep: true,
       handler() {
+        this.dataIsLoaded = false;
         this.loadOwnerSupervisors();
       },
     },
@@ -63,6 +65,7 @@ export default {
           let records = res.data.records;
           if (records.length > 0) {
             this.data = records;
+            this.dataIsLoaded = true;
           }
         })
         .catch((err) => {
@@ -73,7 +76,7 @@ export default {
       const payload = {
         selectedSupervisor: row.getData().name,
       };
-
+      console.log("EMIT SIG");
       this.$emit("supervisorSelected", payload);
     },
   },
