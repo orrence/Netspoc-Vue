@@ -32,6 +32,7 @@ export default {
     namespaced: true,
     state: {
         servicesData: [],
+        servicesOverviewData: [],
         rulesData: [],
         rulesAdminsData: [],
         usersAdminsData: [],
@@ -57,6 +58,9 @@ export default {
         },
     },
     mutations: {
+        RECEIVED_SERVICESOVERVIEW_DATA(state, payload) {
+            state.servicesOverviewData = payload.records;
+        },
         RECEIVED_SERVICESDATA(state, payload) {
             state.servicesData = payload.records;
         },
@@ -87,7 +91,7 @@ export default {
         },
         RESET_SEARCH_STATE(state) {
             Object.assign(state.searchInput, getDefaultState())
-            console.log('SEARCH STATE RESTT',state.searchInput );
+            console.log('SEARCH STATE RESTT', state.searchInput);
         },
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;
@@ -113,7 +117,7 @@ export default {
                 temp.general[key] = payload[key];
             }
             temp.search_networks = payload.search_networks;
-            Object.assign( state.searchInput, temp);
+            Object.assign(state.searchInput, temp);
         },
         SET_IPASNAME(state, payload) {
             state.IPAsName = payload;
@@ -176,6 +180,53 @@ export default {
 
                     commit('services/RECEIVED_RULESDATA', [], { root: true });
                     commit('services/RECEIVED_USERS_ADMINSDATA', [], { root: true });
+                }
+
+            })
+        },
+        getServicesOverview({ commit, state }) {
+
+            let chosen_networks = state.searchInput.search_networks.join(",");
+            let active_owner = store.getters.getActiveOwner;
+            let history = store.getters.getActivePolicy;
+
+            let basepayload;
+
+            if (typeof state.relations[state.serviceTabNumber] !== "undefined") {
+                basepayload = {
+                    chosen_networks: chosen_networks,
+                    active_owner: active_owner,
+                    history: history,
+                    relation: state.relations[state.serviceTabNumber],
+                };
+            } else {
+                let rulepayload = {};
+                let textsearch_payload = {};
+                let generalpayload = {};
+
+                rulepayload = createPayloadElement(state.searchInput.rules);
+                textsearch_payload = createPayloadElement(state.searchInput.textsearch);
+                generalpayload = createPayloadElement(state.searchInput.general);
+
+                basepayload = {
+                    chosen_networks: chosen_networks,
+                    active_owner: active_owner,
+                    history: history,
+                    relation: "",
+                    ...rulepayload,
+                    ...textsearch_payload,
+                    ...generalpayload,
+                };
+            }
+
+            return Vue.axios.get('/get_services_and_rules', {
+                params: basepayload,
+            }).then(res => {
+
+                commit('RECEIVED_SERVICESOVERVIEW_DATA', res.data);
+
+                if (res.data.totalCount == 0) {
+                    console.log("EMPTY SERVICE LIST IN OVERVIEW!")
                 }
 
             })
@@ -282,7 +333,7 @@ export default {
                 search_networks: state.searchInput.search_networks
             }
             return retpayload;
-        
+
         },
 
 

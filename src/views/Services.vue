@@ -17,6 +17,15 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer
+      v-model="overviewdrawer"
+      absolute
+      temporary
+      width="500"
+    >
+      <services-overview-bar @closeSearch="overviewdrawer = !overviewdrawer" />
+    </v-navigation-drawer>
+
+    <v-navigation-drawer
       v-model="netselectiondrawer"
       absolute
       temporary
@@ -46,6 +55,7 @@ import ServiceTabs from "../components/service/ServiceTabs";
 import ServiceDetailTabs from "../components/service/detail/ServiceDetailTabs";
 import SearchBar from "../components/service/search/SearchBar";
 import NetselectionBar from "../components/service/search/NetselectionBar";
+import ServicesOverviewBar from "../components/service/search/ServicesOverviewBar";
 import { mapState } from "vuex";
 import urlSearchParams from "../components/mixins/urlSearchParams";
 import ServiceFilters from "../components/service/ServiceFilters.vue";
@@ -58,10 +68,12 @@ export default {
     ServiceDetailTabs,
     NetselectionBar,
     ServiceFilters,
+    ServicesOverviewBar,
   },
   data: () => ({
     pnl_search: 0,
     drawer: false,
+    overviewdrawer: false,
     netselectiondrawer: false,
     admins: {},
     containerheight: 500,
@@ -92,6 +104,8 @@ export default {
     openNavDrawer(type) {
       if (type == "search") {
         this.drawer = !this.drawer;
+      } else if (type == "serviceoverview") {
+        this.overviewdrawer = !this.overviewdrawer;
       } else {
         this.netselectiondrawer = !this.netselectiondrawer;
       }

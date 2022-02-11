@@ -31,6 +31,16 @@
       </v-badge>
     </div>
     <v-btn
+      elevation="2"
+      class="mr-4 ml-0"
+      raised
+      id="btn_open_service_overview"
+      color="secondary"
+      @click.stop="openNav('serviceoverview')"
+    >
+      <v-icon left>mdi-search-web</v-icon> Dienstübersicht
+    </v-btn>
+    <v-btn
       :disabled="isSearchActive"
       elevation="2"
       raised
@@ -50,9 +60,9 @@ export default {
   },
   computed: {
     isSearchActive: function () {
-      if(this.$route.hash != "") {
+      if (this.$route.hash != "") {
         return false;
-      } 
+      }
       return true;
     },
   },
