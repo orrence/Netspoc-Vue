@@ -32,6 +32,7 @@
       :data="servicesOverviewData"
       :selectable="false"
       :groupBy="'service'"
+      :groupHeader="this.setGroupHeader"
     />
   </div>
 </template>
@@ -65,6 +66,12 @@ export default {
         history: vm.getActivePolicy,
       };
       this.getServicesOverview(params);
+    },
+    setGroupHeader(value, count) {
+      //value - the value all members of this group share
+      //count - the number of rows in this group
+      let what = count == 1 ? "Regel" : "Regeln";
+      return value + " (" + count + " " + what + ")"; //return the header contents
     },
   },
 };
