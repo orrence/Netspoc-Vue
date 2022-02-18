@@ -4,22 +4,24 @@
       :name="`Netzressourcen`"
       reactiveData="true"
       :columns="[
-	{
-		title: 'IP-Addresse',
-		field: 'child_ip', sorter:'ip'
-	},
-	{
-		title: 'Name',
-		field: 'child_name'
-	},
-	{
-		title: 'Verantwortungsbereich',
-		field: 'child_owner'
-	}
-]"
+        {
+          title: 'IP-Addresse',
+          field: 'child_ip',
+          sorter: 'ip',
+        },
+        {
+          title: 'Name',
+          field: 'child_name',
+        },
+        {
+          title: 'Verantwortungsbereich',
+          field: 'child_owner',
+        },
+      ]"
       :data="networkResourcesData"
       :selectable="false"
       :groupBy="'name'"
+      :groupHeader="this.setGroupHeader"
     />
   </div>
 </template>
@@ -59,6 +61,12 @@ export default {
         selected_networks: vm.selection.join(","),
       };
       this.getNetworkResources(params);
+    },
+    setGroupHeader(value, count) {
+      //value - the value all members of this group share
+      //count - the number of rows in this group
+      let what = count == 1 ? "Netz" : "Netze";
+      return value + " (" + count + " " + what + ")"; //return the header contents
     },
   },
 };
