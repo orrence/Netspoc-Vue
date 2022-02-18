@@ -30,16 +30,31 @@
         </v-btn>
       </v-badge>
     </div>
-    <v-btn
-      elevation="2"
-      class="mr-4 ml-0"
-      raised
-      id="btn_open_service_overview"
-      color="secondary"
-      @click.stop="openNav('serviceoverview')"
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+      @openServiceOverviewCard="dialog = !dialog"
     >
-      <v-icon left>mdi-search-web</v-icon> Dienstübersicht
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          elevation="2"
+          class="mr-4 ml-0"
+          raised
+          id="btn_open_service_overview"
+          color="secondary"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon left>mdi-search-web</v-icon> Dienstübersicht
+        </v-btn>
+      </template>
+      <div>
+        <ServicesOverviewTable :height="tableHeight" />
+      </div>
+    </v-dialog>
+
     <v-btn
       :disabled="isSearchActive"
       elevation="2"
@@ -52,12 +67,21 @@
 </template>
 
 <script>
+import ServicesOverviewTable from "../tables/Service/ServicesOverviewTable";
+
 export default {
+  components: {
+    ServicesOverviewTable,
+  },
   props: {
     networkCount: {
       required: true,
     },
   },
+  data: () => ({
+    dialog: false,
+    tableHeight: 100,
+  }),
   computed: {
     isSearchActive: function () {
       if (this.$route.hash != "") {
@@ -67,6 +91,17 @@ export default {
     },
   },
   methods: {
+    calcHeight() {
+      let tabheight =
+        window.innerHeight -
+        //this.$refs.servicesoverview.getBoundingClientRect().top -
+        40;
+      this.tableHeight = tabheight;
+    },
+    openServiceOverviewCard() {
+      this.$emit("openServiceOverviewCard");
+    },
+
     openNav(type) {
       this.$emit("openNavDrawer", type);
     },
