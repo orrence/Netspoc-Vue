@@ -39,6 +39,7 @@ export default {
   props: {
     tableconfig: Object,
     groupBy: String,
+    groupHeader: Function,
     showCountHeader: Boolean,
     columns: Array,
     data: Array,
@@ -70,6 +71,12 @@ export default {
       columns: [],
       data: [],
       groupBy: "",
+      groupHeader: function (value, count) {
+        //value - the value all members of this group share
+        //count - the number of rows in this group
+        let what = count == 1 ? "FOO" : "FOOS";
+        return value + " (" + count + " " + what + ")"; //return the header contents
+      },
       layout: "fitColumns",
       layoutColumnsOnNewData: true,
       placeholder: "No Data Available",
@@ -90,6 +97,17 @@ export default {
         this.tabulator.setData(this.config.data);
 
         this.isLoaded = true;
+      },
+    },
+    groupHeader: {
+      handler: function () {
+        if (this.isVisible) {
+          this.config.groupHeader = this.groupHeader;
+          this.tabulator.setGroupHeader(this.groupHeader);
+          this.newConfig = false;
+        } else {
+          this.newConfig = true;
+        }
       },
     },
     groupBy: {
@@ -121,6 +139,7 @@ export default {
     this.config.columns = this.columns;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
+    this.config.groupHeader = this.groupHeader;
 
     this.config.maxHeight = "100%";
     this.config.height = "100%";
