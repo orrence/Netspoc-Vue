@@ -65,7 +65,7 @@ export default {
     setGroupHeader(value, count) {
       //value - the value all members of this group share
       //count - the number of rows in this group
-      let what = count == 1 ? "Netz" : "Netze";
+      let what = count == 1 ? "Host/Interface" : "Hosts/Interfaces";
       return value + " (" + count + " " + what + ")"; //return the header contents
     },
   },
