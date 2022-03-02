@@ -193,9 +193,9 @@ export default {
             title: this.name, //add title to report
           });
         })
-        .catch(() =>
-          console.error("Something went wrong loading PDF export plugins.")
-        );
+        .catch((reason) => {
+          console.error("Error: " + reason.message);
+        });
     },
     downloadAsExcel() {
       this.loadScript("/js/xlsx.full.min.js")
