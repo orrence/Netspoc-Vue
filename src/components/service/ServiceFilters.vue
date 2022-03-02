@@ -50,9 +50,16 @@
           <v-icon left>mdi-search-web</v-icon> Dienstübersicht
         </v-btn>
       </template>
-      <div>
+      <v-card color="#ccc">
+        <v-card-title
+          >Gesamtübersicht über Dienste und Regeln
+          <v-spacer></v-spacer>
+          <v-btn icon @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
         <ServicesOverviewTable :height="tableHeight" />
-      </div>
+      </v-card>
     </v-dialog>
 
     <v-btn
