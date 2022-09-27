@@ -194,7 +194,7 @@ export default {
           });
         })
         .catch((reason) => {
-          console.error("Error: " + reason.message);
+          console.error("Error loading jspdf plugin: " + reason.message);
         });
     },
     downloadAsExcel() {

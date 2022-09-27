@@ -91,7 +91,7 @@ export default {
         },
         RESET_SEARCH_STATE(state) {
             Object.assign(state.searchInput, getDefaultState())
-            console.log('SEARCH STATE RESTT', state.searchInput);
+            console.log('SEARCH STATE RESET', state.searchInput);
         },
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;

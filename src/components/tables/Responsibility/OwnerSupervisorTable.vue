@@ -45,7 +45,14 @@ export default {
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
   watch: {
-    active: {
+    data: {
+      handler() {
+        if (this.data.length > 0) {
+          this.passOnSelectionUpdate(this.data[0]);
+        }
+      },
+    },
+       active: {
       deep: true,
       handler() {
         this.dataIsLoaded = false;
@@ -73,10 +80,13 @@ export default {
         });
     },
     passOnSelectionUpdate(row) {
+      let name = row.name;
+      if (name === undefined ) {
+        name = row.getData().name;
+      }
       const payload = {
-        selectedSupervisor: row.getData().name,
+        selectedSupervisor: name,
       };
-      console.log("EMIT SIG");
       this.$emit("supervisorSelected", payload);
     },
   },
