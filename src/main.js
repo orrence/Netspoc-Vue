@@ -33,6 +33,12 @@ Tabulator.prototype.extendModule("sort", "sorters", {
         b = ip2numeric(b);
         return a - b;
     },
+    caseinsensitive: function (a, b) {
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+        if (a == b) return 0;
+        return a < b ? -1 : 1;
+    }
 });
 
 Vue.config.productionTip = true

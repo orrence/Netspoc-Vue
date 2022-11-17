@@ -2,6 +2,9 @@
   <div :id="compID" ref="tableBox"> 
     <div v-if="!showLoadingCircle" >
       <Tabulator
+        :initialSort="[
+            {column: 'name', dir: 'asc'}
+        ]"
         selectfirstrow="true"
         :tableconfig="{
           reactiveData: true,
@@ -15,6 +18,7 @@
           {
             title: 'Name',
             field: 'name',
+            sorter: 'caseinsensitive'
           },
         ]"
         :groupBy="''"

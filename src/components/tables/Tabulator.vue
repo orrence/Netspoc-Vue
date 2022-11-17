@@ -42,6 +42,7 @@ export default {
     groupHeader: Function,
     showCountHeader: Boolean,
     columns: Array,
+    initialSort: Array,
     data: Array,
     height: String,
     name: String,
@@ -69,6 +70,7 @@ export default {
     lastClick: 0,
     config: {
       columns: [],
+      initialSort: [],
       data: [],
       groupBy: "",
       groupHeader: function (value, count) {
@@ -137,6 +139,7 @@ export default {
   mounted() {
     let me = this;
     this.config.columns = this.columns;
+    this.config.initialSort = this.initialSort;
     this.config.data = this.data;
     this.config.groupBy = this.groupBy;
     this.config.groupHeader = this.groupHeader;
