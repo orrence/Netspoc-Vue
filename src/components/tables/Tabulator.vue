@@ -185,8 +185,8 @@ export default {
       this.isVisible = isVisible;
     },
     downloadAsPDF() {
-      this.loadScript("/js/jspdf.min.js")
-        .then(() => this.loadScript("/js/jspdf.plugin.autotable.js"))
+      this.loadScript("/netspocvue/js/jspdf.min.js")
+        .then(() => this.loadScript("/netspocvue/js/jspdf.plugin.autotable.js"))
         .then(() => {
           this.tabulator.download("pdf", `${this.name}.pdf`, {
             orientation: "portrait", //set page orientation to portrait
@@ -198,7 +198,7 @@ export default {
         });
     },
     downloadAsExcel() {
-      this.loadScript("/js/xlsx.full.min.js")
+      this.loadScript("/netspocvue/js/xlsx.full.min.js")
         .then(() => {
           // now safe to use xlsx download feature
           this.tabulator.download(
