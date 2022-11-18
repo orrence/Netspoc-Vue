@@ -1,6 +1,9 @@
 <template>
   <div id="table_networks">
     <Tabulator
+      :initialSort="[
+        {column: 'ip', dir: 'asc'}
+      ]"
       :name="`Netze`"
       :tableconfig="{
         reactiveData: true,
