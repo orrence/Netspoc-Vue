@@ -28,6 +28,8 @@
         <v-text-field
           id="txt_login"
           v-model="login"
+          autofocus
+          ref="userInputField"
           :rules="[(v) => !!v || 'Darf nicht leer sein']"
           required
           :label="isLDAPLogin ? 'Benutzername' : 'E-Mail-Adresse'"
@@ -130,6 +132,7 @@ export default {
       this.password = null;
     },
     goToLDAPLogin() {
+      this.$refs.userInputField.focus();
       this.isLDAPLogin = true;
       this.$router.push({ path: "ldap_login" });
     },
