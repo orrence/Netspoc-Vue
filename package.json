@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vue/cli-upgrade": "^3.12.1",
+    "@vue/compiler-dom": "^3.2.45",
     "axios": "^0.21.1",
     "core-js": "^3.8.3",
     "lodash.debounce": "^4.0.8",
