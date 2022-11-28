@@ -73,7 +73,8 @@
     <br />
 
     <v-card>
-      <v-card-title primary-title>Hier koennte ihr Wiki stehen</v-card-title>
+      <iframe src="/pwvue/pwvue/doku.php" width="100%" height="400" frameborder="0">
+      </iframe>
     </v-card>
   </v-container>
 </template>
