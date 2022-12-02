@@ -73,7 +73,7 @@
     <br />
 
     <v-card>
-      <iframe src="/pwvue/pwvue/doku.php" width="100%" height="400" frameborder="0">
+      <iframe src="/pwvue/pwvue/doku.php?id=neuigkeiten&do=export_html" width="100%" height="800" frameborder="0">
       </iframe>
     </v-card>
   </v-container>
