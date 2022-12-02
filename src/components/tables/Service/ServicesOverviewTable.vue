@@ -52,7 +52,6 @@ export default {
     ...mapState("services", ["servicesOverviewData"]),
     ...mapGetters(["getActiveOwner", "getActivePolicy"]),
   },
-  watch: {},
   mounted() {
     this.loadServicesOverview();
   },
