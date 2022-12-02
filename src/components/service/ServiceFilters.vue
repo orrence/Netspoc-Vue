@@ -35,7 +35,6 @@
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
-      @openServiceOverviewCard="dialog = !dialog"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -46,8 +45,10 @@
           color="secondary"
           v-bind="attrs"
           v-on="on"
+          @click.stop="openNav('serviceoverview')"
         >
-          <v-icon left>mdi-search-web</v-icon> Dienstübersicht
+          <v-icon left>mdi-search-web</v-icon>
+          Dienstübersicht
         </v-btn>
       </template>
       <v-card color="#ccc">
@@ -105,10 +106,6 @@ export default {
         40;
       this.tableHeight = tabheight;
     },
-    openServiceOverviewCard() {
-      this.$emit("openServiceOverviewCard");
-    },
-
     openNav(type) {
       this.$emit("openNavDrawer", type);
     },

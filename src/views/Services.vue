@@ -22,7 +22,10 @@
       temporary
       width="500"
     >
-      <services-overview-bar @closeSearch="overviewdrawer = !overviewdrawer" />
+      <services-overview-bar
+        v-if="overviewdrawer"
+        @closeSearch="overviewdrawer = !overviewdrawer"
+      />
     </v-navigation-drawer>
 
     <v-navigation-drawer
