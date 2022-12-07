@@ -185,17 +185,19 @@ export default {
             })
         },
         getServicesOverview({ commit, state }) {
-
             let chosen_networks = state.searchInput.search_networks.join(",");
             let active_owner = store.getters.getActiveOwner;
             let history = store.getters.getActivePolicy;
-
+            let expand_users = state.expandUser ? 1 : 0;
+            let display_property = state.IPAsName ? "name" : "ip";
             let basepayload;
 
             if (typeof state.relations[state.serviceTabNumber] !== "undefined") {
                 basepayload = {
                     chosen_networks: chosen_networks,
                     active_owner: active_owner,
+                    expand_users: expand_users,
+                    display_property: display_property,
                     history: history,
                     relation: state.relations[state.serviceTabNumber],
                 };
@@ -211,6 +213,8 @@ export default {
                 basepayload = {
                     chosen_networks: chosen_networks,
                     active_owner: active_owner,
+                    expand_users: expand_users,
+                    display_property: display_property,
                     history: history,
                     relation: "",
                     ...rulepayload,
