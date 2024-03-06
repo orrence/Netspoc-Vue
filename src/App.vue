@@ -87,7 +87,7 @@ export default {
   },
 };
 </script>
- 
+
 <style>
 @import "./assets/style.css";
 
@@ -95,9 +95,4 @@ export default {
 .v-text-field__details {
   display: none;
 }
-.v-application--wrap {
-  /* display: block;
-  min-height: 100% */
-}
 </style>
-	

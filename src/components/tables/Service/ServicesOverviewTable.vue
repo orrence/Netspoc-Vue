@@ -1,39 +1,30 @@
 <template>
   <div id="table_servicesoverview">
-    <Tabulator
-      layout="fitColumns"
-      :name="`Diensteübersicht`"
-      reactiveData="true"
-      :columns="[
-        {
-          title: 'Aktion',
-          field: 'action',
-          formatter: 'textarea',
-          width: 50,
-        },
-        {
-          title: 'Quelle',
-          field: 'src',
-          formatter: 'textarea',
-          sorter: 'ip',
-        },
-        {
-          title: 'Ziel',
-          field: 'dst',
-          formatter: 'textarea',
-          sorter: 'ip',
-        },
-        {
-          title: 'Protokoll',
-          field: 'proto',
-          formatter: 'textarea',
-        },
-      ]"
-      :data="servicesOverviewData"
-      :selectable="false"
-      :groupBy="'service'"
-      :groupHeader="this.setGroupHeader"
-    />
+    <Tabulator layout="fitColumns" :name="`Diensteübersicht`" reactiveData="true" :columns="[
+      {
+        title: 'Aktion',
+        field: 'action',
+        formatter: 'textarea',
+        width: 50,
+      },
+      {
+        title: 'Quelle',
+        field: 'src',
+        formatter: 'textarea',
+        sorter: 'ip',
+      },
+      {
+        title: 'Ziel',
+        field: 'dst',
+        formatter: 'textarea',
+        sorter: 'ip',
+      },
+      {
+        title: 'Protokoll',
+        field: 'proto',
+        formatter: 'textarea',
+      },
+    ]" :data="servicesOverviewData" :selectable="false" :groupBy="'service'" :groupHeader="this.setGroupHeader" />
   </div>
 </template>
 
@@ -76,5 +67,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
