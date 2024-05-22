@@ -5,7 +5,7 @@
     <br>
     <div>
       Hier geht es zur <a href="/pwdoku/index.html">Dokumentation</a>.
-      Dort finden Sie auch einen Link zum <a href="/pwdoku/index.html">Handbuch</a>.
+      Dort finden Sie auch einen Link zum <a href="/pwdoku/handbuch/">Handbuch</a>.
     </div>
     <br>
 
