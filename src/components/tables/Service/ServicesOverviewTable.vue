@@ -24,7 +24,7 @@
         field: 'proto',
         formatter: 'textarea',
       },
-    ]" :data="servicesOverviewData" :selectable="false" :groupBy="'service'" :groupHeader="this.setGroupHeader" />
+    ]" :data="servicesOverviewData" :selectableRows="false" :groupBy="'service'" :groupHeader="this.setGroupHeader" />
   </div>
 </template>
 

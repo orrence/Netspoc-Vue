@@ -1,22 +1,16 @@
 <template>
   <div v-if="dataIsLoaded" id="table_supervisors">
-    <Tabulator
-      :name="`Supervisors`"
-      selectfirstrow="true"
-      :tableconfig="{
-        reactiveData: true,
-        selectable: 1,
-        index: 'name',
-        rowSelected: passOnSelectionUpdate,
-      }"
-      :columns="[
-        {
-          title: 'Übergeordnete',
-          field: 'name',
-        },
-      ]"
-      :data="data"
-    />
+    <Tabulator :name="`Supervisors`" selectfirstrow="true" :tableconfig="{
+    reactiveData: true,
+    selectableRows: true,
+    index: 'name',
+    rowSelected: passOnSelectionUpdate,
+  }" :columns="[
+    {
+      title: 'Übergeordnete',
+      field: 'name',
+    },
+  ]" :data="data" />
   </div>
 </template>
 
@@ -52,7 +46,7 @@ export default {
         }
       },
     },
-       active: {
+    active: {
       deep: true,
       handler() {
         this.dataIsLoaded = false;
@@ -81,7 +75,7 @@ export default {
     },
     passOnSelectionUpdate(row) {
       let name = row.name;
-      if (name === undefined ) {
+      if (name === undefined) {
         name = row.getData().name;
       }
       const payload = {
@@ -92,4 +86,3 @@ export default {
   },
 };
 </script>
-

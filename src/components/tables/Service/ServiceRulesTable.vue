@@ -2,42 +2,33 @@
   <div id="table_services_rules">
     <additional-service-info />
     <div ref="servicerulestable">
-      <Tabulator
-        :name="`Dienstdetails`"
-        :columns="[
-          {
-            title: 'Aktion',
-            field: 'action',
-            formatter: 'textarea',
-            width: 77,
-          },
-          {
-            title: 'Quelle',
-            field: 'src',
-            formatter: 'textarea',
-            sorter: 'ip',
-          },
-          {
-            title: 'Ziel',
-            field: 'dst',
-            formatter: 'textarea',
-            sorter: 'ip',
-          },
-          {
-            title: 'Protokoll',
-            field: 'prt',
-            formatter: 'textarea',
-            width: 92,
-          },
-        ]"
-        reactiveData="true"
-        :tableconfig="{}"
-        :variableHeight="tabheight"
-        :data="rulesData"
-        @resizeTab="onResizeTab"
-        :selectable="false"
-        :groupBy="serviceSelection.length > 1 ? 'service' : ''"
-      />
+      <Tabulator :name="`Dienstdetails`" :columns="[
+        {
+          title: 'Aktion',
+          field: 'action',
+          formatter: 'textarea',
+          width: 77,
+        },
+        {
+          title: 'Quelle',
+          field: 'src',
+          formatter: 'textarea',
+          sorter: 'ip',
+        },
+        {
+          title: 'Ziel',
+          field: 'dst',
+          formatter: 'textarea',
+          sorter: 'ip',
+        },
+        {
+          title: 'Protokoll',
+          field: 'prt',
+          formatter: 'textarea',
+          width: 92,
+        },
+      ]" reactiveData="true" :tableconfig="{}" :variableHeight="tabheight" :data="rulesData" @resizeTab="onResizeTab"
+        :selectableRows="false" :groupBy="serviceSelection.length > 1 ? 'service' : ''" />
     </div>
     <AdminsTable :data="rulesAdminsData" />
   </div>
@@ -111,5 +102,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

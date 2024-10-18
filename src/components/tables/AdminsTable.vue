@@ -1,24 +1,16 @@
 <template>
   <div id="table_admins" ref="adminstable">
-    <Tabulator
-      :name="`Verantwortliche`"
-      :columns="[
-        {
-          title: 'Verantwortung',
-          field: 'email',
-        },
-      ]"
-      :tableconfig="{
-        reactiveData: true,
-        selectable: 1,
-        rowSelected: passOnSelectionUpdate,
-      }"
-      reactiveData="true"
-      :variableHeight="variableHeight"
-      :data="data"
-      @resizeTab="calcHeight"
-      :showCountHeader="false"
-    />
+    <Tabulator :name="`Verantwortliche`" :columns="[
+      {
+        title: 'Verantwortung',
+        field: 'email',
+      },
+    ]" :tableconfig="{
+      reactiveData: true,
+      selectableRows: true,
+      rowSelected: passOnSelectionUpdate,
+    }" reactiveData="true" :variableHeight="variableHeight" :data="data" @resizeTab="calcHeight"
+      :showCountHeader="false" />
   </div>
 </template>
 
@@ -30,7 +22,7 @@ export default {
   components: {
     Tabulator,
   },
-  props: ["data","adminheight"],
+  props: ["data", "adminheight"],
   data: () => ({
     tabheight: 100,
   }),
@@ -38,7 +30,7 @@ export default {
     ...mapState("services", ["adminsData"]),
     variableHeight() {
       //console.log('ADMIN HEIGHT ', this.adminheight);
-      if(this.adminheight) {
+      if (this.adminheight) {
         return this.adminheight
       } else {
         return this.tabheight;
@@ -55,7 +47,7 @@ export default {
       this.tabheight = restheight - 20;
     },
     passOnSelectionUpdate(row) {
-      window.location.href = "mailto:"+row.getData().email;
+      window.location.href = "mailto:" + row.getData().email;
     },
   },
 };

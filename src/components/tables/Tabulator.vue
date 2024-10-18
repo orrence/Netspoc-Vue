@@ -18,14 +18,8 @@
         <div v-else>{{ data.length }} {{ name }} verfügbar</div>
       </v-col>
     </v-row>
-    <v-container
-      fluid
-      class="pa-1"
-      ref="tablecontainer"
-      v-observe-visibility="visibilityChanged"
-      v-resize="onResize"
-      :style="{ height: tabulatorheight + 'px' }"
-    >
+    <v-container fluid class="pa-1" ref="tablecontainer" v-observe-visibility="visibilityChanged" v-resize="onResize"
+      :style="{ height: tabulatorheight + 'px' }">
       <div ref="table" />
     </v-container>
   </div>
@@ -33,7 +27,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Tabulator from "tabulator-tables";
+import { TabulatorFull as Tabulator } from 'tabulator-tables';
 
 export default {
   props: {
@@ -96,8 +90,7 @@ export default {
     data: {
       handler: function () {
         this.config.data = this.data;
-        this.tabulator.setData(this.config.data);
-
+        //this.tabulator.setData(this.config.data);
         this.isLoaded = true;
       },
     },
@@ -132,7 +125,11 @@ export default {
     },
     columns: {
       handler: function () {
-        this.tabulator.setColumns(this.columns);
+        //update columns after it is built
+        let me = this;
+        this.tabulator.on("tableBuilt", function () {
+          me.tabulator.setColumns(me.columns);
+        });
       },
     },
   },
@@ -155,10 +152,17 @@ export default {
     }
 
     this.newTable();
-
-    if (this.data.length > 0 && this.selectfirstrow) {
-      this.tabulator.selectRow(this.config.data[0].name);
-    }
+    this.tabulator.on("tableBuilt",
+      function selectFirstRowIfConfigured() {
+        if (me.data.length > 0 && me.selectfirstrow) {
+          me.tabulator.selectRow(me.config.data[0].name);
+        }
+      });
+    /*
+        if (this.data.length > 0 && this.selectfirstrow) {
+          this.tabulator.selectRow(this.config.data[0].name);
+        }
+              */
   },
   methods: {
     newTable() {

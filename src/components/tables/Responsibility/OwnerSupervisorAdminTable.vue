@@ -1,12 +1,7 @@
 <template>
   <div id="table_supervisor_admins">
-    <Tabulator
-      :name="`Supervisoradmins`"
-      :reactiveData="true"
-      :columns="tabletitle"
-      :data="data"
-      :selectable="false"
-    />
+    <Tabulator :name="`Supervisoradmins`" :reactiveData="true" :columns="tabletitle" :data="data"
+      :selectableRows="false" />
   </div>
 </template>
 

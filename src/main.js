@@ -11,13 +11,13 @@ import VueResizeObserver from 'vue-resize-observer';
 Vue.use(VueResizeObserver);
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 import 'tabulator-tables/dist/css/tabulator.min.css'
-import Tabulator from 'tabulator-tables';
+import { TabulatorFull as Tabulator } from 'tabulator-tables';
 import App from './App.vue'
 
 Vue.prototype.$LDAPLOGIN = '/ldap_login';
 Vue.prototype.$STANDARDLOGIN = '/login';
 
-Tabulator.prototype.extendModule("sort", "sorters", {
+Tabulator.extendModule("sort", "sorters", {
     ip: function (a, b) {
         var ip2numeric = function (dot) {
             var rex = /[a-zA-Z]/;

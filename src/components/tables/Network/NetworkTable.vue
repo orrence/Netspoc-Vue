@@ -1,47 +1,38 @@
 <template>
   <div id="table_networks">
-    <Tabulator
-      :initialSort="[
-        {column: 'ip', dir: 'asc'}
-      ]"
-      :name="`Netze`"
-      :tableconfig="{
-        reactiveData: true,
-        selectable: 20,
-        index: 'name',
-        rowSelectionChanged: passOnSelectionUpdate,
-      }"
-      :columns="[
-        {
-          formatter: 'rowSelection',
-          //formatter: 'tickCross',
-          // titleFormatter: 'rowSelection',
-          hozAlign: 'center',
-          width: 10,
-          headerSort: false,
-          field: 'selected',
-          cellClick: (e, cell) => this.cellclicked(e, cell),
-        },
-        {
-          title: 'IP-Addresse',
-          field: 'ip',
-          sorter: 'ip',
-        },
-        {
-          title: 'Name',
-          field: 'name',
-        },
-        {
-          title: 'Verantwortungsbereich',
-          field: 'owner',
-        },
-      ]"
-      :data="networksData"
-      :selectedNetworks="networks"
-      :groupBy="''"
-      :rowClickableFn="true"
-      :variableHeight="parseInt(height)"
-    />
+    <Tabulator :initialSort="[
+      { column: 'ip', dir: 'asc' }
+    ]" :name="`Netze`" :tableconfig="{
+      reactiveData: true,
+      selectableRows: 20,
+      index: 'name',
+      rowSelectionChanged: passOnSelectionUpdate,
+    }" :columns="[
+      {
+        formatter: 'rowSelection',
+        //formatter: 'tickCross',
+        // titleFormatter: 'rowSelection',
+        hozAlign: 'center',
+        width: 10,
+        headerSort: false,
+        field: 'selected',
+        cellClick: (e, cell) => this.cellclicked(e, cell),
+      },
+      {
+        title: 'IP-Addresse',
+        field: 'ip',
+        sorter: 'ip',
+      },
+      {
+        title: 'Name',
+        field: 'name',
+      },
+      {
+        title: 'Verantwortungsbereich',
+        field: 'owner',
+      },
+    ]" :data="networksData" :selectedNetworks="networks" :groupBy="''" :rowClickableFn="true"
+      :variableHeight="parseInt(height)" />
   </div>
 </template>
 

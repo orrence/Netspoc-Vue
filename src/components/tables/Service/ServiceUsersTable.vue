@@ -1,34 +1,26 @@
 <template>
   <div id="table_services_user" ref="serviceuserstable">
-    <Tabulator
-      selectfirstrow="true"
-      :tableconfig="{
-        reactiveData: true,
-        selectable: 1,
+    <Tabulator selectfirstrow="true" :tableconfig="{
+      reactiveData: true,
+      selectableRows: true,
 
-        rowSelected: passOnSelectionUpdate,
-      }"
-      :name="`Dienstbenutzer`"
-      :columns="[
-        {
-          title: 'Name',
-          field: 'name',
-        },
-        {
-          title: 'IP-Adressen',
-          field: 'ip',
-          sorter: 'ip',
-        },
-        {
-          title: 'Verantwortungsbereich',
-          field: 'owner',
-        },
-      ]"
-      :data="usersData"
-      @resizeTab="calcHeight"
-      :variableHeight="tabheight"
-      :groupBy="serviceSelection.length > 1 ? 'service' : ''"
-    />
+      rowSelected: passOnSelectionUpdate,
+    }" :name="`Dienstbenutzer`" :columns="[
+      {
+        title: 'Name',
+        field: 'name',
+      },
+      {
+        title: 'IP-Adressen',
+        field: 'ip',
+        sorter: 'ip',
+      },
+      {
+        title: 'Verantwortungsbereich',
+        field: 'owner',
+      },
+    ]" :data="usersData" @resizeTab="calcHeight" :variableHeight="tabheight"
+      :groupBy="serviceSelection.length > 1 ? 'service' : ''" />
     <AdminsTable v-if="heightCalculated" :adminheight="tabheight" :data="usersAdminsData" />
   </div>
 </template>
@@ -73,8 +65,8 @@ export default {
       this.$store
         .dispatch("services/getAdminsData", data.getData().owner)
         .then((response) => {
-      
-          me.$store.dispatch('services/setUsersAdminData',response.data.records)
+
+          me.$store.dispatch('services/setUsersAdminData', response.data.records)
         });
     },
     calcHeight() {
@@ -106,5 +98,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

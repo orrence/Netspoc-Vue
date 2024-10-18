@@ -1,28 +1,20 @@
 <template>
   <div id="table_networks_resource">
-    <Tabulator
-      :name="`Netzressourcen`"
-      reactiveData="true"
-      :columns="[
-        {
-          title: 'IP-Addresse',
-          field: 'child_ip',
-          sorter: 'ip',
-        },
-        {
-          title: 'Name',
-          field: 'child_name',
-        },
-        {
-          title: 'Verantwortungsbereich',
-          field: 'child_owner',
-        },
-      ]"
-      :data="networkResourcesData"
-      :selectable="false"
-      :groupBy="'name'"
-      :groupHeader="this.setGroupHeader"
-    />
+    <Tabulator :name="`Netzressourcen`" reactiveData="true" :columns="[
+      {
+        title: 'IP-Addresse',
+        field: 'child_ip',
+        sorter: 'ip',
+      },
+      {
+        title: 'Name',
+        field: 'child_name',
+      },
+      {
+        title: 'Verantwortungsbereich',
+        field: 'child_owner',
+      },
+    ]" :data="networkResourcesData" :selectableRows="false" :groupBy="'name'" :groupHeader="this.setGroupHeader" />
   </div>
 </template>
 
@@ -72,5 +64,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
