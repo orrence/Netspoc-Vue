@@ -91,7 +91,7 @@ export default {
         },
         RESET_SEARCH_STATE(state) {
             Object.assign(state.searchInput, getDefaultState())
-            console.log('SEARCH STATE RESET', state.searchInput);
+            //console.log('SEARCH STATE RESET', state.searchInput);
         },
         RECEIVED_USERSDATA(state, payload) {
             state.usersData = payload;
@@ -276,18 +276,20 @@ export default {
                     resdata[j].src = resdata[j].src.join("\n");
                     resdata[j].dst = resdata[j].dst.join("\n");
                     resdata[j].prt = resdata[j].prt.join("\n");
-                    switch (resdata[j].has_user) {
-                        case "both":
-                            resdata[j].src = "User";
-                            resdata[j].dst = "User";
-                            break;
-                        case "src":
-                            resdata[j].src = "User";
-                            break;
-                        case "dst":
-                            resdata[j].dst = "User";
-                            break;
-                        default:
+                    if (state.expandUser === false) {
+                        switch (resdata[j].has_user) {
+                            case "both":
+                                resdata[j].src = "User";
+                                resdata[j].dst = "User";
+                                break;
+                            case "src":
+                                resdata[j].src = "User";
+                                break;
+                            case "dst":
+                                resdata[j].dst = "User";
+                                break;
+                            default:
+                        }
                     }
                 }
                 var owner = state.serviceSelection[0].owner.map((owner) => owner.name);
