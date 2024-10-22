@@ -43,6 +43,12 @@ _axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+_axios.defaults.validateStatus = function () {
+  return true; // this wont throw error whatever the response code is
+  // the default is `return status >= 200 && status < 300;`
+};
+
 Plugin.install = function (Vue) {
   Vue.axios = _axios;
   window.axios = _axios;
