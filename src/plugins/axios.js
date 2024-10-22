@@ -2,8 +2,6 @@
 
 import Vue from 'vue';
 import axios from "axios";
-import router from '../router';
-import EventBus from './event-bus';
 import store from '../store'
 
 // Full config:  https://github.com/axios/axios#request-config
