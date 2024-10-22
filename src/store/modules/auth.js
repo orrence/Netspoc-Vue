@@ -29,37 +29,37 @@ export default {
         setLoggedIn({ commit }, bool) {
             commit('SET_LOGGED_IN', bool);
         },
-        requestLoggedIn({ commit}) {
-           
-          //  return getters.getLoggedIn;
-             return Vue.axios.get('/set')
+        requestLoggedIn({ commit }) {
+
+            //  return getters.getLoggedIn;
+            return Vue.axios.get('/set')
                 .then(function (response) {
                     let recurare = response.data.success;
-                  
+
                     commit('SET_LOGGED_IN', recurare);
                     return true;
                 })
                 .catch(function () {
                     commit('SET_LOGGED_IN', false);
                     return false;
-                }); 
+                });
         },
         loginUser({ commit }, creds) {
             let loginpath = store.state.loginpath;
             let backendlogin = '/login_vue';
-            if(loginpath == '/ldap_login') {
+            if (loginpath == '/ldap_login') {
                 backendlogin = '/ldap_login_vue';
             }
-            return Vue.axios.post(backendlogin, creds.data).then(res => {  
-                if(res.data.success) {
+            return Vue.axios.post(backendlogin, creds.data).then(res => {
+                if (res.data.success) {
                     commit('SET_LOGGED_IN', true);
-                    commit('SET_LOGIN_ERROR',false);
-                   // localStorage.set('loggendin',true);
+                    commit('SET_LOGIN_ERROR', false);
+                    // localStorage.set('loggendin',true);
                     router.push('/services');
                 } else {
-                    commit('SET_LOGIN_ERROR',true);
+                    commit('SET_LOGIN_ERROR', true);
                 }
-                
+
             }).catch(err => {
                 console.log(err);
             })
@@ -69,7 +69,7 @@ export default {
             ).then(function () {
                 dispatch('setLoggedIn', false);
                 dispatch('services/');
-             //   localStorage.set('loggendin',false);
+                //   localStorage.set('loggendin',false);
                 router.push('/login');
             }).catch(function () {
             });

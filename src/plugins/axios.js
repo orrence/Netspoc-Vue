@@ -41,19 +41,7 @@ _axios.interceptors.response.use(
   },
   function (error) {
     // Do something with response error
-    const response = error.response;
     store.dispatch('auth/setLoggedIn', false);
-    let loginpath = store.state.loginpath;
-    if (response.data.msg == 'Login required' || response.data.msg == 'Login failed') {
-      router.replace({
-        path: loginpath,
-      })
-    } else {
-      router.replace({
-        path: loginpath,
-      });
-      EventBus.$emit('httperror', response);
-    }
     return Promise.reject(error);
   }
 );
