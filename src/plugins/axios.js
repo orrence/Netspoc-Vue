@@ -2,6 +2,8 @@
 
 import Vue from 'vue';
 import axios from "axios";
+import router from '../router';
+import EventBus from './event-bus';
 import store from '../store'
 
 // Full config:  https://github.com/axios/axios#request-config
@@ -39,16 +41,26 @@ _axios.interceptors.response.use(
   },
   function (error) {
     // Do something with response error
+    const response = error.response;
     store.dispatch('auth/setLoggedIn', false);
+    let loginpath = store.state.loginpath;
+    if (response.data.msg == 'Login required' || response.data.msg == 'Login failed') {
+      if (router.currentRoute.path !== '/login') {
+        router.replace({
+          path: loginpath,
+        })
+      }
+    } else {
+      if (router.currentRoute.path !== '/login') {
+        router.replace({
+          path: loginpath,
+        });
+      }
+      EventBus.$emit('httperror', response);
+    }
     return Promise.reject(error);
   }
 );
-
-_axios.defaults.validateStatus = function () {
-  return true; // this wont throw error whatever the response code is
-  // the default is `return status >= 200 && status < 300;`
-};
-
 Plugin.install = function (Vue) {
   Vue.axios = _axios;
   window.axios = _axios;
